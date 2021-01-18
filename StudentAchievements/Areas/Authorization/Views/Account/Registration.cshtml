@@ -1,0 +1,27 @@
+﻿@model RegistrationViewModel;
+@{ Layout = "_IdentityLayout"; }
+
+<div class="col-sm-6 mx-auto card-body">
+    <h5 class="card-title">Регистрация</h5>
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <form asp-action="Registration" asp-controller="Account" asp-area="Authorization" method="post">
+        <div class="form-group">
+            <div><span asp-validation-for="Email" class="text-danger"></span></div>
+            <input placeholder="Email" asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <div><span asp-validation-for="Password" class="text-danger"></span></div>
+            <input placeholder="Пароль" asp-for="Password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <div><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
+            <input placeholder="Подтверждение пароля" asp-for="ConfirmPassword" class="form-control" />
+        </div>
+        <div class="form-group">
+            <div><span asp-validation-for="UserName" class="text-danger"></span></div>
+            <input placeholder="Название компании" asp-for="UserName" class="form-control" />
+        </div>
+        <a asp-action="Login">Назад</a>
+        <button class="btn btn-primary float-sm-right" type="submit">Регистрация</button>
+    </form>
+</div>

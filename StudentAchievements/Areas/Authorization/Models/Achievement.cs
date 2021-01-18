@@ -1,6 +1,6 @@
 ﻿namespace StudentAchievements.Areas.Authorization.Models
 {
-    public class Achievements
+    public class Achievement
     {
         public int Id { get; set; }
         public string Name { get; set; }

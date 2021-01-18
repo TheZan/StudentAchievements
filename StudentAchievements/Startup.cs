@@ -24,11 +24,14 @@ namespace StudentAchievements
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<IdentityDbContext>(options =>
+                options.UseSqlServer(Configuration["Data:StudentAchievementsIdentity:ConnectionString"]));
+            
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration["Data:StudentAchievementsData:ConnectionString"]));
+                options.UseSqlServer(Configuration["Data:StudentAchievements:ConnectionString"]));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddTransient<IUserRepository, UserRepository>();
@@ -60,6 +63,11 @@ namespace StudentAchievements
 
             app.UseMvc(routes =>
             {
+                routes.MapAreaRoute(
+                    name: null,
+                    areaName: "Admin",
+                    template: "admin/{controller=Admin}/{action=Index}/{id?}");
+                
                 routes.MapAreaRoute(
                     name: null,
                     areaName: "Authorization",

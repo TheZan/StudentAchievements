@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudentAchievements.Areas.Authorization.Models.ViewModels
 {
@@ -8,7 +9,7 @@ namespace StudentAchievements.Areas.Authorization.Models.ViewModels
         public string Email { get; set; }
 
         [Required]
-        [UIHint("password")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         public string ReturnUrl { get; set; } = "/";

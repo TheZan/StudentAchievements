@@ -15,15 +15,19 @@ namespace StudentAchievements.Areas.Authorization.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private ApplicationDbContext context;
-        private UserManager<User> userManager;
-        private SignInManager<User> signInManager;
+        private IdentityDbContext context;
+        private UserManager<IdentityUser> userManager;
+        private SignInManager<IdentityUser> signInManager;
+        private RoleManager<IdentityRole> roleManager;
+        private IUserRepository userRepository;
 
-        public AccountController(ApplicationDbContext _context, UserManager<User> _userManager, SignInManager<User> _signInManager)
+        public AccountController(IdentityDbContext _context, UserManager<IdentityUser> _userManager, SignInManager<IdentityUser> _signInManager, RoleManager<IdentityRole> _roleManager, IUserRepository _userRepository)
         {
             context = _context;
             userManager = _userManager;
             signInManager = _signInManager;
+            roleManager = _roleManager;
+            userRepository = _userRepository;
         }
 
         [AllowAnonymous]
@@ -44,7 +48,7 @@ namespace StudentAchievements.Areas.Authorization.Controllers
 
                     if ((await signInManager.PasswordSignInAsync(user, loginModel.Password, false, false)).Succeeded)
                     {
-                        return Redirect(loginModel?.ReturnUrl ?? "/Admin/Index");
+                        return Redirect(loginModel?.ReturnUrl ?? "/admin");
                     }
                 }
             }
@@ -52,6 +56,43 @@ namespace StudentAchievements.Areas.Authorization.Controllers
             ModelState.AddModelError("", "Неверный Email или пароль.");
 
             return View(loginModel);
+        }
+
+        [AllowAnonymous]
+        public ViewResult Registration() => View();
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Registration(RegistrationViewModel registrationModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser()
+                {
+                    UserName = registrationModel.UserName,
+                    Email = registrationModel.Email
+                };
+
+                var result = await userRepository.AddUser(user, registrationModel.Password,
+                    new Employer() {Name = registrationModel.UserName, Email = registrationModel.Email});
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Employer");
+                    await signInManager.SignInAsync(user, false);
+
+                    return RedirectToAction();
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            return View(registrationModel);
         }
 
         public async Task<RedirectResult> Logout(string returnUrl = "/")

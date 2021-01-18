@@ -24,7 +24,7 @@ namespace StudentAchievements
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var userManager = services.GetRequiredService<UserManager<User>>();
+                    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await InitIdentity.InitializeAsync(userManager, rolesManager);
                 }
@@ -40,9 +40,7 @@ namespace StudentAchievements
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                .UseDefaultServiceProvider(options => options.ValidateScopes = false);
     }
 }

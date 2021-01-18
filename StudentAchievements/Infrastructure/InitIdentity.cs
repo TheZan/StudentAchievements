@@ -10,13 +10,13 @@ namespace StudentAchievements.Infrastructure
 {
     public class InitIdentity
     {
-        public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //string adminEmail = configuration["Data:AdministratorAccount:Login"];
             //string password = configuration["Data:AdministratorAccount:Password"];
             
             string adminEmail = "admin@test.ru";
-            string password = "QhS@}TWH";
+            string password = "QhS@78TWH";
 
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
@@ -37,8 +37,10 @@ namespace StudentAchievements.Infrastructure
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                User admin = new User { Email = adminEmail, UserName = adminEmail };
+                IdentityUser admin = new IdentityUser() { Email = adminEmail, UserName = adminEmail };
+
                 IdentityResult result = await userManager.CreateAsync(admin, password);
+
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, "Admin");

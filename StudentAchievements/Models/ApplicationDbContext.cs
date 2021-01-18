@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Authorization.Models;
 
 namespace StudentAchievements.Models
@@ -15,9 +11,13 @@ namespace StudentAchievements.Models
             Database.EnsureCreated();
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Assessments> Assessments { get; set; }
-        public DbSet<Achievements> Achievements { get; set; }
-        public DbSet<StudentGroup> StudentGroups { get; set; }
+        public DbSet<Employer> Employers { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Assessment> Assessments { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<Group> Groups { get; set; }
     }
 }

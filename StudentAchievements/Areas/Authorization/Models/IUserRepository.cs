@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
     public interface IUserRepository
     {
-        IQueryable<User> Users { get; }
+        IQueryable<IdentityUser> Users { get; }
 
-        void AddUser(User user);
-        void EditUser(User user);
-        void DeleteUser(User user);
+        Task<IdentityResult> AddUser(IdentityUser user, string password, IUser userType);
+        void EditUser(IdentityUser user);
+        void DeleteUser(IdentityUser user);
     }
 }
