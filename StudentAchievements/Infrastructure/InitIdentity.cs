@@ -44,6 +44,8 @@ namespace StudentAchievements.Infrastructure
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, "Admin");
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(admin);
+                    await userManager.ConfirmEmailAsync(admin, token);
                 }
             }
         }
