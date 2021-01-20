@@ -34,6 +34,10 @@ namespace StudentAchievements
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options => {
+                options.Password.RequireNonAlphanumeric = true;
+            });
+
             services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
@@ -67,11 +71,11 @@ namespace StudentAchievements
                     name: null,
                     areaName: "Admin",
                     template: "admin/{controller=Admin}/{action=Index}/{id?}");
-                
+
                 routes.MapAreaRoute(
                     name: null,
                     areaName: "Authorization",
-                    template: "sign-in/{controller=Account}/{action=Login}/{id?}");
+                    template: "{area:exists}/{controller=Account}/{action=Login}");
 
                 routes.MapRoute(
                     name: null,

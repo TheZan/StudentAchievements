@@ -10,6 +10,7 @@ namespace StudentAchievements.Areas.Authorization.Models.ViewModels
     public class RegistrationViewModel
     {
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

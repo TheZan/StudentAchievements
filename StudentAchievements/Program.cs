@@ -26,7 +26,9 @@ namespace StudentAchievements
                 {
                     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    await InitIdentity.InitializeAsync(userManager, rolesManager);
+                    var configuration = services.GetRequiredService<IConfiguration>();
+                    var identity = new InitIdentity(configuration);
+                    await identity.InitializeAsync(userManager, rolesManager);
                 }
                 catch (Exception ex)
                 {

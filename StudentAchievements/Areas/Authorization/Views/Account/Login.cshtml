@@ -1,5 +1,8 @@
 ﻿@model LoginViewModel
-@{ Layout = "_IdentityLayout"; }
+@{
+    ViewData["Title"] = "Авторизация";
+    Layout = "_IdentityLayout";
+}
 
 <div class="col-sm-6 mx-auto card-body">
     <h5 class="card-title">Авторизация</h5>
@@ -15,8 +18,8 @@
             <input placeholder="Пароль" asp-for="Password" class="form-control" />
         </div>
         <button class="btn btn-primary float-sm-right" type="submit">Войти</button>
-        <a asp-action="Registration">Зарегистрироваться</a>
+        <a asp-action="Registration" asp-controller="Account" asp-area="Authorization">Зарегистрироваться</a>
         <span>|</span>
-        <a href="/">Забыли пароль?</a>
+        <a asp-action="ForgotPassword" asp-controller="Account" asp-area="Authorization">Забыли пароль?</a>
     </form>
 </div>

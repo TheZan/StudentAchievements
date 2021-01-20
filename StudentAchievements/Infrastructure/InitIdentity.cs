@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using StudentAchievements.Areas.Authorization.Models;
 
 namespace StudentAchievements.Infrastructure
 {
     public class InitIdentity
     {
-        public static async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        private IConfiguration configuration;
+
+        public InitIdentity(IConfiguration _configuration)
         {
-            //string adminEmail = configuration["Data:AdministratorAccount:Login"];
-            //string password = configuration["Data:AdministratorAccount:Password"];
-            
-            string adminEmail = "admin@test.ru";
-            string password = "QhS@78TWH";
+            configuration = _configuration;
+        }
+
+        public async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            string adminEmail = configuration["Data:AdministratorAccount:Login"];
+            string password = configuration["Data:AdministratorAccount:Password"];
 
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
