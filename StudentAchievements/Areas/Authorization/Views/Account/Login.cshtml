@@ -8,7 +8,6 @@
     <h5 class="card-title">Авторизация</h5>
     <div class="text-danger" asp-validation-summary="All"></div>
     <form asp-action="Login" asp-controller="Account" asp-area="Authorization" method="post">
-        <input type="hidden" asp-for="ReturnUrl" />
         <div class="form-group">
             <div><span asp-validation-for="Email" class="text-danger"></span></div>
             <input placeholder="Email" asp-for="Email" class="form-control" />

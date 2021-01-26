@@ -9,7 +9,6 @@
     <Folder Include="Areas\Student\" />
     <Folder Include="Areas\Teacher\" />
     <Folder Include="Areas\Employer\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using StudentAchievements.Areas.Admin.Controllers;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Areas.Authorization.Models.ViewModels;
 using StudentAchievements.Infrastructure;
@@ -35,7 +36,7 @@ namespace StudentAchievements.Areas.Authorization.Controllers
         }
 
         [AllowAnonymous]
-        public ViewResult Login(string returnUrl) => View(new LoginViewModel() { ReturnUrl = returnUrl });
+        public ViewResult Login() => View(new LoginViewModel());
 
         [HttpPost]
         [AllowAnonymous]
@@ -64,13 +65,13 @@ namespace StudentAchievements.Areas.Authorization.Controllers
                         switch (firstRole)
                         {
                             case "Admin":
-                                return Redirect(loginModel?.ReturnUrl ?? "/admin");
+                                return RedirectToAction("Index", "Admin", new {area = "Admin"});
                             case "Employer":
-                                return Redirect(loginModel?.ReturnUrl ?? "/employer");
+                                return RedirectToAction("Index", "Admin", new { area = "Employer" });
                             case "Teacher":
-                                return Redirect(loginModel?.ReturnUrl ?? "/teacher");
+                                return RedirectToAction("Index", "Admin", new { area = "Teacher" });
                             case "Student":
-                                return Redirect(loginModel?.ReturnUrl ?? "/student");
+                                return RedirectToAction("Index", "Admin", new { area = "Student" });
                         }
                     }
                 }
@@ -154,11 +155,13 @@ namespace StudentAchievements.Areas.Authorization.Controllers
                 return View("Error");
         }
 
-        public async Task<RedirectResult> Logout(string returnUrl = "/")
+
+
+        public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
 
-            return Redirect(returnUrl);
+            return RedirectToAction("Login");
         }
 
         [HttpGet]

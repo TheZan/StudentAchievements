@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace StudentAchievements.Migrations
+namespace StudentAchievements.Migrations.IdentityDb
 {
-    public partial class InitialIdentity : Migration
+    public partial class IdentityInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
