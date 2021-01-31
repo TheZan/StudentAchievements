@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentAchievements.Models;
 
-namespace StudentAchievements.Migrations.IdentityDb
+namespace StudentAchievements.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20210125143729_IdentityInit")]
-    partial class IdentityInit
+    partial class IdentityDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

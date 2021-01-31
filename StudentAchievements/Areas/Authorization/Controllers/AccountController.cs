@@ -221,5 +221,23 @@ namespace StudentAchievements.Areas.Authorization.Controllers
             }
             return View(model);
         }
+
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                var result = await userRepository.DeleteUser(user);
+                if (result.Succeeded)
+                    return RedirectToAction("Index", "Admin", new {area = "Admin"});
+            }
+            else
+            {
+                ModelState.AddModelError("", "Пользователь не найден.");
+            }
+
+            return RedirectToAction("Index", "Admin", new { area = "Admin" });
+        }
     }
 }

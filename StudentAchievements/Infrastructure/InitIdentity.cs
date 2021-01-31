@@ -1,22 +1,26 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using StudentAchievements.Areas.Authorization.Models;
 
 namespace StudentAchievements.Infrastructure
 {
     public class InitIdentity
     {
         private IConfiguration configuration;
+        private IUserRepository repository;
 
-        public InitIdentity(IConfiguration _configuration)
+        public InitIdentity(IConfiguration _configuration, IUserRepository _repository)
         {
             configuration = _configuration;
+            repository = _repository;
         }
 
         public async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             string adminEmail = configuration["Data:AdministratorAccount:Login"];
             string password = configuration["Data:AdministratorAccount:Password"];
+            string adminName = configuration["Data:AdministratorAccount:Name"];
 
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
@@ -39,7 +43,11 @@ namespace StudentAchievements.Infrastructure
             {
                 IdentityUser admin = new IdentityUser() { Email = adminEmail, UserName = adminEmail };
 
-                IdentityResult result = await userManager.CreateAsync(admin, password);
+                var result = await repository.AddUser(admin, password, new Administrator()
+                {
+                    Name = adminName,
+                    Email = adminEmail
+                });
 
                 if (result.Succeeded)
                 {

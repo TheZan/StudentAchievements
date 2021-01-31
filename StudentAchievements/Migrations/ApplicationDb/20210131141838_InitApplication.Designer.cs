@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentAchievements.Models;
 
-namespace StudentAchievements.Migrations
+namespace StudentAchievements.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210125143658_AppInit")]
-    partial class AppInit
+    [Migration("20210131141838_InitApplication")]
+    partial class InitApplication
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +42,27 @@ namespace StudentAchievements.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("Achievements");
+                });
+
+            modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.Administrator", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Photo")
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Administrators");
                 });
 
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.Assessment", b =>

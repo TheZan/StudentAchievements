@@ -15,6 +15,7 @@ namespace StudentAchievements.Models
         public DbSet<Student> Students { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Assessment> Assessments { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
