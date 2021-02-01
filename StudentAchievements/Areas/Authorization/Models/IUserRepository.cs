@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using StudentAchievements.Areas.Admin.Models.ViewModels;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -11,7 +12,7 @@ namespace StudentAchievements.Areas.Authorization.Models
         List<IUser> ApplicationUsers { get; }
 
         Task<IdentityResult> AddUser(IdentityUser user, string password, IUser userType);
-        void EditUser(IdentityUser user);
+        Task<IdentityResult> EditUser(IdentityUser user, EditUserViewModel model);
         Task<IdentityResult> DeleteUser(IdentityUser user);
         void AddTestData();
     }

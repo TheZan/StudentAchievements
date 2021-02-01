@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Models;
 
 namespace StudentAchievements.Areas.Authorization.Models
@@ -56,9 +57,54 @@ namespace StudentAchievements.Areas.Authorization.Models
             return result;
         }
 
-        public void EditUser(IdentityUser user)
+        public async Task<IdentityResult> EditUser(IdentityUser user, EditUserViewModel model)
         {
-            throw new NotImplementedException();
+            var applicationUser = ApplicationUsers.FirstOrDefault(u => u.Email == user.Email);
+
+            if (user != null && applicationUser != null)
+            {
+                user.Email = model.Email;
+                user.UserName = model.Email;
+
+                var role = await userManager.GetRolesAsync(user);
+                IUser appUser;
+
+                switch (role.First())
+                {
+                    case "Admin":
+                        appUser = applicationContext.Administrators.FirstOrDefault(u => u.Email == user.Email);
+                        appUser.Email = model.Email;
+                        appUser.Name = model.UserName;
+                        applicationContext.Administrators.Update((Administrator)appUser);
+                        await applicationContext.SaveChangesAsync();
+                        break;
+                    case "Employer":
+                        appUser = applicationContext.Employers.FirstOrDefault(u => u.Email == user.Email);
+                        appUser.Email = model.Email;
+                        appUser.Name = model.UserName;
+                        applicationContext.Employers.Update((Employer)appUser);
+                        await applicationContext.SaveChangesAsync();
+                        break;
+                    case "Teacher":
+                        appUser = applicationContext.Teachers.FirstOrDefault(u => u.Email == user.Email);
+                        appUser.Email = model.Email;
+                        appUser.Name = model.UserName;
+                        applicationContext.Teachers.Update((Teacher)appUser);
+                        await applicationContext.SaveChangesAsync();
+                        break;
+                    case "Student":
+                        appUser = applicationContext.Students.FirstOrDefault(u => u.Email == user.Email);
+                        appUser.Email = model.Email;
+                        appUser.Name = model.UserName;
+                        applicationContext.Students.Update((Student)appUser);
+                        await applicationContext.SaveChangesAsync();
+                        break;
+                }
+
+                return await userManager.UpdateAsync(user);
+            }
+
+            return IdentityResult.Failed();
         }
 
         public async Task<IdentityResult> DeleteUser(IdentityUser user)

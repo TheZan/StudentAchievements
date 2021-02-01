@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Areas.Authorization.Models;
@@ -13,11 +15,13 @@ namespace StudentAchievements.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
+        private UserManager<IdentityUser> userManager;
         private IUserRepository repository;
 
-        public AdminController(IUserRepository _repository)
+        public AdminController(IUserRepository _repository, UserManager<IdentityUser> _userManager)
         {
             repository = _repository;
+            userManager = _userManager;
         }
 
         public ViewResult Index()
@@ -94,6 +98,54 @@ namespace StudentAchievements.Areas.Admin.Controllers
             usersModel.CurrentPageIndex = currentPage;
 
             return usersModel;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var identityUser = await userManager.FindByIdAsync(id);
+            var applicationUser = repository.ApplicationUsers.FirstOrDefault(u => u.Email == identityUser.Email);
+
+
+            if (identityUser != null && applicationUser != null)
+            {
+                var model = new EditUserViewModel()
+                {
+                    UserName = applicationUser.Name,
+                    Email = applicationUser.Email
+                };
+
+                return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Пользователь не найден.");
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            var identityUser = await userManager.FindByEmailAsync(model.Email);
+            var applicationUser = repository.ApplicationUsers.FirstOrDefault(u => u.Email == identityUser.Email);
+
+            if (identityUser != null && applicationUser != null)
+            {
+                var result = await repository.EditUser(identityUser, model);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Пользователь не найден.");
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
         }
     }
 }
