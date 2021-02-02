@@ -1,0 +1,135 @@
+﻿@{ Layout = null; }
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Поиск студентов</title>
+    <link href="https://fonts.googleapis.com/css?family=K2D:300,400,500,700,800" rel="stylesheet">
+    <link rel="stylesheet" asp-href-include="/lib/landing-page/css/bootstrap.css" />
+</head>
+<body>
+<section class="pt-5 pb-6">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex flex-row align-items-center justify-content-between">
+                    <div class="heading-brand">
+                        <img src="/favicons/favicon-32x32.png"/>
+                    </div>
+                    <a asp-controller="Home" asp-action="Login" class="btn btn-primary">Войти</a>
+                </div>
+            </div>
+            <div class="row mt-6">
+                <div class="col-md-8 mx-auto text-center">
+                    <h1>Веб сервис для поиска сотрудников</h1>
+                    <p class="lead mb-5">
+                        Найдите сотрудника на вашу вакансию.
+                    </p>
+                    <a asp-area="Authorization" asp-controller="Account" asp-action="Registration" class="btn btn-primary">
+                        Зарегистрироваться
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-6">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <h2 class="text-center text-md-left">Причины, по которым стоит выбрать наш сервис</h2>
+                    <div class="row feature-grid">
+                        <div class="col-sm-6">
+                            <div class="media">
+                                <div class="icon-box">
+                                    <div class="icon-box-inner">
+                                        <span data-feather="check-circle" width="28" height="28"></span>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    Надежность
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="media">
+                                <div class="icon-box">
+                                    <div class="icon-box-inner">
+                                        <span data-feather="zap" width="28" height="28"></span>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    Скорость работы
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="media">
+                                <div class="icon-box">
+                                    <div class="icon-box-inner">
+                                        <span data-feather="feather" width="28" height="28"></span>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    Интуитивно понятный интерфейс
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="media">
+                                <div class="icon-box">
+                                    <div class="icon-box-inner">
+                                        <span data-feather="users" width="28" height="28"></span>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    Прямое общение со студентами
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="media">
+                                <div class="icon-box">
+                                    <div class="icon-box-inner">
+                                        <span data-feather="thumbs-up" width="28" height="28"></span>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    Возможность просмотра успеваемости студентов
+                                </div>
+                            </div>
+                        </div><div class="col-sm-6">
+                            <div class="media">
+                                <div class="icon-box">
+                                    <div class="icon-box-inner">
+                                        <span data-feather="star" width="28" height="28"></span>
+                                    </div>
+                                </div>
+                                <div class="media-body">
+                                    Возможность просмотра индивидуальных достижений студентов
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<footer class="py-5 bg-light">
+    <div class="container">
+        <div class="row my-2">
+            <div class="col-md-4 mx-auto text-muted text-center small-xl">
+                &copy; 2021 Zan - Все права защищены
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.7.3/feather.min.js"></script>
+<script src="/lib/landing-page/js/scripts.js"></script>
+</body>
+</html>

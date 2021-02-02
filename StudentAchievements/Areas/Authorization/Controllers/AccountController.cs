@@ -22,17 +22,15 @@ namespace StudentAchievements.Areas.Authorization.Controllers
         private IdentityDbContext context;
         private UserManager<IdentityUser> userManager;
         private SignInManager<IdentityUser> signInManager;
-        private RoleManager<IdentityRole> roleManager;
         private IUserRepository userRepository;
         private IConfiguration configuration;
 
-        public AccountController(IConfiguration _configuration, IdentityDbContext _context, UserManager<IdentityUser> _userManager, SignInManager<IdentityUser> _signInManager, RoleManager<IdentityRole> _roleManager, IUserRepository _userRepository)
+        public AccountController(IConfiguration _configuration, IdentityDbContext _context, UserManager<IdentityUser> _userManager, SignInManager<IdentityUser> _signInManager, IUserRepository _userRepository)
         {
             configuration = _configuration;
             context = _context;
             userManager = _userManager;
             signInManager = _signInManager;
-            roleManager = _roleManager;
             userRepository = _userRepository;
         }
 
@@ -162,7 +160,7 @@ namespace StudentAchievements.Areas.Authorization.Controllers
         {
             await signInManager.SignOutAsync();
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home", new {area = ""});
         }
 
         [HttpGet]

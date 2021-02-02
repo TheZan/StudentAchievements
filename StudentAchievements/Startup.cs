@@ -81,7 +81,7 @@ namespace StudentAchievements
 
                 routes.MapRoute(
                     name: null,
-                    template: "{controller=Account}/{action=Login}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
