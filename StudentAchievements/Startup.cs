@@ -26,11 +26,8 @@ namespace StudentAchievements
         {
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseSqlServer(Configuration["Data:StudentAchievementsIdentity:ConnectionString"]));
-            
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration["Data:StudentAchievements:ConnectionString"]));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 

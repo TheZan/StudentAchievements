@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-@model UsersListViewModel
+﻿@model UsersListViewModel
 
 @{
     Layout = "_AdminLayout";
@@ -16,12 +15,15 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var user in Model.IdentityUsers)
+        @foreach (var user in Model.Users)
         {
             <tr>
-                <td class="align-middle">@Model.ApplicationUsers.FirstOrDefault(u => u.Email == user.Email)?.Name</td>
+                <td class="align-middle">
+                    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(user.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true"/>
+                    @user.Name
+                </td>
                 <td class="align-middle">@user.Email</td>
-                <td class="align-middle">@Model.ApplicationUsers.FirstOrDefault(u => u.Email == user.Email)?.GetType().Name</td>
+                <td class="align-middle">@await Model.GetRole(user)</td>
                 <td>
                     <a class="btn btn-warning" asp-area="Admin" asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">Изменить</a>
                 </td>

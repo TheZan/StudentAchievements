@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
-    public interface IUser
+    public class User : IdentityUser
     {
-        public User User { get; set; }
+        public string Name { get; set; }
+        public byte[] Photo { get; set; }
     }
 }

@@ -9,12 +9,22 @@ using StudentAchievements.Areas.Authorization.Models;
 
 namespace StudentAchievements.Models
 {
-    public sealed class IdentityDbContext : IdentityDbContext<IdentityUser>
+    public sealed class IdentityDbContext : IdentityDbContext<User>
     {
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
             : base(options)
         {
             Database.EnsureCreated();
         }
+
+        public DbSet<Employer> Employers { get; set; }
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<Administrator> Administrators { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Assessment> Assessments { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<Group> Groups { get; set; }
     }
 }

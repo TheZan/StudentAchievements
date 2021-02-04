@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -10,334 +9,171 @@ namespace StudentAchievements.Areas.Authorization.Models
 {
     public class UserRepository : IUserRepository
     {
-        private ApplicationDbContext applicationContext;
-        private IdentityDbContext identityContext;
-        private UserManager<IdentityUser> userManager;
+        private UserManager<User> userManager;
+        private RoleManager<IdentityRole> roleManager;
+        private IdentityDbContext context;
 
-        public UserRepository(ApplicationDbContext _applicationContext, IdentityDbContext _identityContext, UserManager<IdentityUser> _userManager)
+        public UserRepository(UserManager<User> _userManager, RoleManager<IdentityRole> _roleManager, IdentityDbContext _context)
         {
-            applicationContext = _applicationContext;
-            identityContext = _identityContext;
             userManager = _userManager;
-
-            GetApplicationUsers();
+            roleManager = _roleManager;
+            context = _context;
         }
 
-
-        public IQueryable<IdentityUser> IdentityUsers => identityContext.Users;
-        public List<IUser> ApplicationUsers { get; set; }
-
-        public async Task<IdentityResult> AddUser(IdentityUser user, string password, IUser userType)
+        public enum Roles
         {
-            var result = await userManager.CreateAsync(user, password);
-
-            if (result.Succeeded)
-            {
-                switch (userType.GetType().Name)
-                {
-                    case nameof(Student):
-                        await applicationContext.Students.AddAsync((Student) userType);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                    case nameof(Employer):
-                        await applicationContext.Employers.AddAsync((Employer)userType);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                    case nameof(Teacher):
-                        await applicationContext.Teachers.AddAsync((Teacher)userType);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                    case nameof(Administrator):
-                        await applicationContext.Administrators.AddAsync((Administrator)userType);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                }
-            }
-
-            return result;
+            Admin,
+            Employer,
+            Teacher,
+            Student
         }
 
-        public async Task<IdentityResult> EditUser(IdentityUser user, EditUserViewModel model)
+        public IQueryable<User> Users => userManager.Users;
+
+        public async Task<IdentityResult> AddUser(User user, string password, IUser userType)
         {
-            var applicationUser = ApplicationUsers.FirstOrDefault(u => u.Email == user.Email);
-
-            if (user != null && applicationUser != null)
+            if (user != null)
             {
-                user.Email = model.Email;
-                user.UserName = model.Email;
+                var addUserResult = await userManager.CreateAsync(user, password);
+                string role = String.Empty;
 
-                var role = await userManager.GetRolesAsync(user);
-                IUser appUser;
-
-                switch (role.First())
+                if (addUserResult.Succeeded)
                 {
-                    case "Admin":
-                        appUser = applicationContext.Administrators.FirstOrDefault(u => u.Email == user.Email);
-                        appUser.Email = model.Email;
-                        appUser.Name = model.UserName;
-                        applicationContext.Administrators.Update((Administrator)appUser);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                    case "Employer":
-                        appUser = applicationContext.Employers.FirstOrDefault(u => u.Email == user.Email);
-                        appUser.Email = model.Email;
-                        appUser.Name = model.UserName;
-                        applicationContext.Employers.Update((Employer)appUser);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                    case "Teacher":
-                        appUser = applicationContext.Teachers.FirstOrDefault(u => u.Email == user.Email);
-                        appUser.Email = model.Email;
-                        appUser.Name = model.UserName;
-                        applicationContext.Teachers.Update((Teacher)appUser);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                    case "Student":
-                        appUser = applicationContext.Students.FirstOrDefault(u => u.Email == user.Email);
-                        appUser.Email = model.Email;
-                        appUser.Name = model.UserName;
-                        applicationContext.Students.Update((Student)appUser);
-                        await applicationContext.SaveChangesAsync();
-                        break;
-                }
+                    switch (userType.GetType().Name)
+                    {
+                        case "Administrator":
+                            role = Roles.Admin.ToString();
+                            break;
+                        case "Employer":
+                            role = Roles.Employer.ToString();
+                            break;
+                        case "Teacher":
+                            role = Roles.Teacher.ToString();
+                            break;
+                        case "Student":
+                            role = Roles.Student.ToString();
+                            break;
+                    }
 
-                return await userManager.UpdateAsync(user);
+                    var addUserRoleResult = await userManager.AddToRoleAsync(user, role);
+
+                    if (addUserRoleResult.Succeeded)
+                    {
+                        try
+                        {
+                            switch (role)
+                            {
+                                case "Admin":
+                                    await context.Administrators.AddAsync((Administrator) userType);
+                                    await context.SaveChangesAsync();
+                                    break;
+                                case "Employer":
+                                    await context.Employers.AddAsync((Employer) userType);
+                                    await context.SaveChangesAsync();
+                                    break;
+                                case "Teacher":
+                                    await context.Teachers.AddAsync((Teacher) userType);
+                                    await context.SaveChangesAsync();
+                                    break;
+                                case "Student":
+                                    await context.Students.AddAsync((Student) userType);
+                                    await context.SaveChangesAsync();
+                                    break;
+                            }
+
+                            return IdentityResult.Success;
+                        }
+                        catch
+                        {
+                            return IdentityResult.Failed();
+                        }
+                    }
+                }
             }
 
             return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> DeleteUser(IdentityUser user)
+        public async Task<IdentityResult> EditUser(User user, IEditViewModel model)
         {
-            var role = await userManager.GetRolesAsync(user);
-            IUser appUser;
-
-            switch (role.First())
+            if (user != null)
             {
-                case "Admin":
-                    appUser = applicationContext.Administrators.FirstOrDefault(u => u.Email == user.Email);
-                    applicationContext.Administrators.Remove((Administrator) appUser);
-                    await applicationContext.SaveChangesAsync();
-                    break;
-                case "Employer":
-                    appUser = applicationContext.Employers.FirstOrDefault(u => u.Email == user.Email);
-                    applicationContext.Employers.Remove((Employer) appUser);
-                    await applicationContext.SaveChangesAsync();
-                    break;
-                case "Teacher":
-                    appUser = applicationContext.Teachers.FirstOrDefault(u => u.Email == user.Email);
-                    applicationContext.Teachers.Remove((Teacher) appUser);
-                    await applicationContext.SaveChangesAsync();
-                    break;
-                case "Student":
-                    appUser = applicationContext.Students.FirstOrDefault(u => u.Email == user.Email);
-                    applicationContext.Students.Remove((Student) appUser);
-                    await applicationContext.SaveChangesAsync();
-                    break;
-            }
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.Name = model.Name;
+                user.Photo = model.Photo;
 
-            return await userManager.DeleteAsync(user);
-        }
+                var userUpdateResult = await userManager.UpdateAsync(user);
+                if (userUpdateResult.Succeeded)
+                {
+                    var role = await userManager.GetRolesAsync(user);
 
-        private void GetApplicationUsers()
-        {
-            ApplicationUsers = new List<IUser>();
-            ApplicationUsers.AddRange(applicationContext.Employers);
-            ApplicationUsers.AddRange(applicationContext.Students);
-            ApplicationUsers.AddRange(applicationContext.Teachers);
-            ApplicationUsers.AddRange(applicationContext.Administrators);
-        }
+                    switch (role.First())
+                    {
+                        case "Employer":
+                            var employer = context.Employers.FirstOrDefault(u => u.User.Email == user.Email);
+                            employer.Description = ((EmployerEditViewModel) model).Description;
+                            await context.SaveChangesAsync();
+                            break;
+                        case "Teacher":
+                            var teacher = context.Teachers.FirstOrDefault(u => u.User.Email == user.Email);
+                            teacher.Department = ((TeacherEditViewModel) model).Department;
+                            await context.SaveChangesAsync();
+                            break;
+                        case "Student":
+                            var student = context.Students.FirstOrDefault(u => u.User.Email == user.Email);
+                            student.Dob = ((StudentEditViewModel) model).Dob;
+                            student.Group = ((StudentEditViewModel) model).Group;
+                            await context.SaveChangesAsync();
+                            break;
+                    }
 
-        public void AddTestData()
-        {
-            var userList = new List<IUser>()
-            {
-                new Employer()
-                {
-                    Email = "1@mail.ru",
-                    Description = "sada",
-                    Name = "rftge"
-                },
-                new Student()
-                {
-                    Name = "sdasdijrtoyo"
-                },
-                new Teacher()
-                {
-                    Email = "sadas",
-                    Name = "asdasdrieio"
-                },
-                new Student()
-                {
-                    Name = "sdasadsdijrtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasdi2j1rtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasdijdsf34rtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasdiasd12jrtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasdij234rtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasdij234rtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasd2311ijrtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasdijrdfgtoyo"
-                },
-                new Student()
-                {
-                    Name = "sdasdijklkrtoyo"
-                },
-                new Student()
-                {
-                    Name = "sadas"
-                },
-                new Student()
-                {
-                    Name = "loiui112"
-                },
-                new Student()
-                {
-                    Name = "fdgh232"
-                },
-                new Student()
-                {
-                    Name = "fdgdfg34"
-                },
-                new Student()
-                {
-                    Name = "erdf2"
-                },
-                new Student()
-                {
-                    Name = "fgh34"
-                },
-                new Student()
-                {
-                    Name = "iu21"
-                },
-                new Student()
-                {
-                    Name = "354"
-                },
-                new Student()
-                {
-                    Name = "345"
-                },
-                new Student()
-                {
-                    Name = "hfg"
-                },
-                new Student()
-                {
-                    Name = "234"
-                },
-                new Student()
-                {
-                    Name = "dfs"
-                },
-                new Student()
-                {
-                    Name = "zxc"
-                },
-                new Student()
-                {
-                    Name = "678"
-                },
-                new Student()
-                {
-                    Name = "zxcfv"
-                },
-                new Student()
-                {
-                    Name = "234"
-                },
-                new Student()
-                {
-                    Name = "qwe"
-                },
-                new Student()
-                {
-                    Name = "dsf"
-                },
-                new Student()
-                {
-                    Name = "32"
-                },
-                new Student()
-                {
-                    Name = "543"
-                },
-                new Student()
-                {
-                    Name = "dfg"
-                },
-                new Student()
-                {
-                    Name = "dfg"
-                },
-                new Student()
-                {
-                    Name = "123"
-                },
-                new Student()
-                {
-                    Name = "23"
-                },
-                new Student()
-                {
-                    Name = "6"
-                },
-                new Student()
-                {
-                    Name = "5"
-                },
-                new Student()
-                {
-                    Name = "4"
-                },
-                new Student()
-                {
-                    Name = "123"
-                },
-                new Student()
-                {
-                    Name = "asd"
-                },
-            };
-
-            foreach (var user in userList)
-            {
-                switch (user.GetType().Name)
-                {
-                    case "Employer":
-                        applicationContext.Employers.Add((Employer) user);
-                        break;
-                    case "Teacher":
-                        applicationContext.Teachers.Add((Teacher)user);
-                        break;
-                    case "Student":
-                        applicationContext.Students.Add((Student)user);
-                        break;
+                    return IdentityResult.Success;
                 }
             }
 
-            applicationContext.SaveChanges();
+            return IdentityResult.Failed();
+        }
+
+        public async Task<IdentityResult> DeleteUser(User user)
+        {
+            if (user != null)
+            {
+                var role = await userManager.GetRolesAsync(user);
+
+                switch (role.First())
+                {
+                    case "Admin":
+                        var admin = context.Administrators.FirstOrDefault(u => u.User.Email == user.Email);
+                        context.Administrators.Remove(admin);
+                        await context.SaveChangesAsync();
+                        break;
+                    case "Employer":
+                        var employer = context.Employers.FirstOrDefault(u => u.User.Email == user.Email);
+                        context.Employers.Remove(employer);
+                        await context.SaveChangesAsync();
+                        break;
+                    case "Teacher":
+                        var teacher = context.Teachers.FirstOrDefault(u => u.User.Email == user.Email);
+                        context.Teachers.Remove(teacher);
+                        await context.SaveChangesAsync();
+                        break;
+                    case "Student":
+                        var student = context.Students.FirstOrDefault(u => u.User.Email == user.Email);
+                        context.Students.Remove(student);
+                        await context.SaveChangesAsync();
+                        break;
+                }
+
+                var deleteResult = await userManager.DeleteAsync(user);
+
+                if (deleteResult.Succeeded)
+                {
+                    return IdentityResult.Success;
+                }
+            }
+
+            return IdentityResult.Failed();
         }
     }
 }

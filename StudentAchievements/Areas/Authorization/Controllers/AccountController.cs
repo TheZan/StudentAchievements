@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -20,12 +21,12 @@ namespace StudentAchievements.Areas.Authorization.Controllers
     public class AccountController : Controller
     {
         private IdentityDbContext context;
-        private UserManager<IdentityUser> userManager;
-        private SignInManager<IdentityUser> signInManager;
+        private UserManager<User> userManager;
+        private SignInManager<User> signInManager;
         private IUserRepository userRepository;
         private IConfiguration configuration;
 
-        public AccountController(IConfiguration _configuration, IdentityDbContext _context, UserManager<IdentityUser> _userManager, SignInManager<IdentityUser> _signInManager, IUserRepository _userRepository)
+        public AccountController(IConfiguration _configuration, IdentityDbContext _context, UserManager<User> _userManager, SignInManager<User> _signInManager, IUserRepository _userRepository)
         {
             configuration = _configuration;
             context = _context;
@@ -90,18 +91,19 @@ namespace StudentAchievements.Areas.Authorization.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser()
+                var user = new User()
                 {
                     UserName = registrationModel.Email,
-                    Email = registrationModel.Email
+                    Email = registrationModel.Email,
+                    Name = registrationModel.UserName,
+                    Photo = UploadedImage(registrationModel)
                 };
 
                 var result = await userRepository.AddUser(user, registrationModel.Password,
-                    new Employer() {Name = registrationModel.UserName, Email = registrationModel.Email});
+                    new Employer() {User = user});
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "Employer");
                     await signInManager.SignInAsync(user, false);
 
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -222,6 +224,7 @@ namespace StudentAchievements.Areas.Authorization.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -239,6 +242,25 @@ namespace StudentAchievements.Areas.Authorization.Controllers
             }
 
             return RedirectToAction("Index", "Admin", new { area = "Admin" });
+        }
+
+        private byte[] UploadedImage(RegistrationViewModel model)
+        {
+            byte[] photo = null;
+
+            if (model.Photo != null)
+            {
+                if (model.Photo.Length > 0)
+                {
+                    using (var binaryReader = new BinaryReader(model.Photo.OpenReadStream()))
+                    {
+                        photo = binaryReader.ReadBytes((int)model.Photo.Length);
+                    }
+
+                    return photo;
+                }
+            }
+            return photo;
         }
     }
 }

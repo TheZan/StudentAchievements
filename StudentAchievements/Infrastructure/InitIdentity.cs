@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using StudentAchievements.Areas.Authorization.Models;
@@ -16,7 +17,7 @@ namespace StudentAchievements.Infrastructure
             repository = _repository;
         }
 
-        public async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             string adminEmail = configuration["Data:AdministratorAccount:Login"];
             string password = configuration["Data:AdministratorAccount:Password"];
@@ -41,17 +42,15 @@ namespace StudentAchievements.Infrastructure
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                IdentityUser admin = new IdentityUser() { Email = adminEmail, UserName = adminEmail };
+                User admin = new User() { Email = adminEmail, UserName = adminEmail, Name = adminName};
 
                 var result = await repository.AddUser(admin, password, new Administrator()
                 {
-                    Name = adminName,
-                    Email = adminEmail
+                    User = admin
                 });
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, "Admin");
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(admin);
                     await userManager.ConfirmEmailAsync(admin, token);
                 }

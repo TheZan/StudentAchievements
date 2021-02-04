@@ -15,10 +15,10 @@ namespace StudentAchievements.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private UserManager<IdentityUser> userManager;
+        private UserManager<User> userManager;
         private IUserRepository repository;
 
-        public AdminController(IUserRepository _repository, UserManager<IdentityUser> _userManager)
+        public AdminController(IUserRepository _repository, UserManager<User> _userManager)
         {
             repository = _repository;
             userManager = _userManager;
@@ -64,10 +64,9 @@ namespace StudentAchievements.Areas.Admin.Controllers
         private UsersListViewModel GetUsers(int currentPage)
         {
             int maxRows = 10;
-            var usersModel = new UsersListViewModel()
+            var usersModel = new UsersListViewModel(userManager)
             {
-                ApplicationUsers = repository.ApplicationUsers,
-                IdentityUsers = repository.IdentityUsers
+                Users = repository.Users
                     .OrderBy(user => user.Id)
                     .Skip((currentPage - 1) * maxRows)
                     .Take(maxRows).ToList()
@@ -92,7 +91,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
             //    usersModel.IdentityUsers = repository.IdentityUsers;
             //}
 
-            double pageCount = (double)(repository.IdentityUsers.Count() / Convert.ToDecimal(maxRows));
+            double pageCount = (double)(repository.Users.Count() / Convert.ToDecimal(maxRows));
             usersModel.PageCount = (int)Math.Ceiling(pageCount);
 
             usersModel.CurrentPageIndex = currentPage;
@@ -103,19 +102,17 @@ namespace StudentAchievements.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
         {
-            var identityUser = await userManager.FindByIdAsync(id);
-            var applicationUser = repository.ApplicationUsers.FirstOrDefault(u => u.Email == identityUser.Email);
+            var user = await userManager.FindByIdAsync(id);
 
-
-            if (identityUser != null && applicationUser != null)
+            if (user != null)
             {
-                var model = new EditUserViewModel()
-                {
-                    UserName = applicationUser.Name,
-                    Email = applicationUser.Email
-                };
+                //var model = new EditUserViewModel()
+                //{
+                //    UserName = applicationUser.Name,
+                //    Email = applicationUser.Email
+                //};
 
-                return View(model);
+                return View();
             }
             else
             {
@@ -125,14 +122,13 @@ namespace StudentAchievements.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        public async Task<IActionResult> EditUser(IEditViewModel model)
         {
-            var identityUser = await userManager.FindByEmailAsync(model.Email);
-            var applicationUser = repository.ApplicationUsers.FirstOrDefault(u => u.Email == identityUser.Email);
+            var user = await userManager.FindByEmailAsync(model.Email);
 
-            if (identityUser != null && applicationUser != null)
+            if (user != null)
             {
-                var result = await repository.EditUser(identityUser, model);
+                var result = await repository.EditUser(user, model);
 
                 if (result.Succeeded)
                 {

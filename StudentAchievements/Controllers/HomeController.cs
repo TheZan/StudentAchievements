@@ -1,14 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using StudentAchievements.Areas.Authorization.Models;
 
 namespace StudentAchievements.Controllers
 {
     public class HomeController : Controller
     {
-        private UserManager<IdentityUser> userManager;
+        private UserManager<User> userManager;
 
-        public HomeController(UserManager<IdentityUser> _userManager)
+        public HomeController(UserManager<User> _userManager)
         {
             userManager = _userManager;
         }

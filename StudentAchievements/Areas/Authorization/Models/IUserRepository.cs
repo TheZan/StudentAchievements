@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
@@ -8,12 +7,10 @@ namespace StudentAchievements.Areas.Authorization.Models
 {
     public interface IUserRepository
     {
-        IQueryable<IdentityUser> IdentityUsers { get; }
-        List<IUser> ApplicationUsers { get; }
+        IQueryable<User> Users { get; }
 
-        Task<IdentityResult> AddUser(IdentityUser user, string password, IUser userType);
-        Task<IdentityResult> EditUser(IdentityUser user, EditUserViewModel model);
-        Task<IdentityResult> DeleteUser(IdentityUser user);
-        void AddTestData();
+        Task<IdentityResult> AddUser(User user, string password, IUser userType);
+        Task<IdentityResult> EditUser(User user, IEditViewModel model);
+        Task<IdentityResult> DeleteUser(User user);
     }
 }
