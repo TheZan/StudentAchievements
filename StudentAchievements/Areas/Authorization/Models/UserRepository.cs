@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -101,8 +102,8 @@ namespace StudentAchievements.Areas.Authorization.Models
                 user.Email = model.Email;
                 user.UserName = model.Email;
                 user.Name = model.Name;
-                user.Photo = model.Photo;
-
+                user.Photo = UploadedImage(model) ?? model.Photo;
+                
                 var userUpdateResult = await userManager.UpdateAsync(user);
                 if (userUpdateResult.Succeeded)
                 {
@@ -174,6 +175,25 @@ namespace StudentAchievements.Areas.Authorization.Models
             }
 
             return IdentityResult.Failed();
+        }
+
+        private byte[] UploadedImage(IEditViewModel model)
+        {
+            byte[] photo = null;
+
+            if (model.UploadPhoto != null)
+            {
+                if (model.UploadPhoto.Length > 0)
+                {
+                    using (var binaryReader = new BinaryReader(model.UploadPhoto.OpenReadStream()))
+                    {
+                        photo = binaryReader.ReadBytes((int)model.UploadPhoto.Length);
+                    }
+
+                    return photo;
+                }
+            }
+            return photo;
         }
     }
 }

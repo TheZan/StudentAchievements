@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
@@ -14,6 +15,12 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         [DisplayName("Email")]
         public string Email { get; set; }
 
+        [DisplayName("Фото")]
         public byte[] Photo { get; set; }
+
+        [DisplayName("Изменить фото")]
+        public IFormFile UploadPhoto { get; set; }
+
+        public byte[] NotFoundUserPhoto { get; set; }
     }
 }

@@ -27,7 +27,10 @@
         <div class="form-group">
             <label asp-for="Photo"></label>
             <div><span asp-validation-for="Photo" class="text-danger"></span></div>
-            <input asp-for="Photo" type="file" class="form-control" />
+            <div class="custom-file">
+                <input asp-for="Photo" type="file" class="custom-file-input" id="customFile">
+                <label class="custom-file-label" for="customFile" data-browse="Выбрать">Выбрать файл</label>
+            </div>
         </div>  
         <a asp-action="Login">Авторизация</a>
         <button class="btn btn-primary float-sm-right" type="submit">Регистрация</button>

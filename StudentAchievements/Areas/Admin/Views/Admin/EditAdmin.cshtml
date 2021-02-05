@@ -1,0 +1,37 @@
+﻿@model AdminEditViewModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Редактирование администратора";
+}
+
+<div class="card">
+    <div class="card-header">
+        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true"/>
+        @Model.Name
+    </div>
+    <div class="card-body">
+        <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="EditAdmin">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <div><span asp-validation-for="Email" class="text-danger"></span></div>
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <div><span asp-validation-for="Name" class="text-danger"></span></div>
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="UploadPhoto"></label>
+                <div><span asp-validation-for="UploadPhoto" class="text-danger"></span></div>
+                <div class="custom-file">
+                    <input asp-for="UploadPhoto" type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile" data-browse="Выбрать">Выбрать файл</label>
+                </div>
+            </div>
+            <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="btn btn-secondary">Отмена</a>
+            <button class="btn btn-primary" type="submit">Обновить</button>
+        </form>
+    </div>
+</div>
