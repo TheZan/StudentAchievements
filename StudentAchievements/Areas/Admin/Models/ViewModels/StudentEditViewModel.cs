@@ -13,9 +13,9 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
     public class StudentEditViewModel : IEditViewModel
     {
-        public IdentityDbContext Context;
+        public StudentAchievementsDbContext Context;
 
-        public StudentEditViewModel(IdentityDbContext _context)
+        public StudentEditViewModel(StudentAchievementsDbContext _context)
         {
             Context = _context;
             NotFoundUserPhoto = GetNotFoundImage();

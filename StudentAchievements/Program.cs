@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Infrastructure;
+using StudentAchievements.Models;
 
 namespace StudentAchievements
 {
@@ -28,7 +29,8 @@ namespace StudentAchievements
                     var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     var configuration = services.GetRequiredService<IConfiguration>();
                     var repository = services.GetRequiredService<IUserRepository>();
-                    var identity = new InitIdentity(configuration, repository);
+                    var context = services.GetRequiredService<StudentAchievementsDbContext>();
+                    var identity = new InitDatabase(configuration, repository, context);
                     await identity.InitializeAsync(userManager, rolesManager);
                 }
                 catch (Exception ex)

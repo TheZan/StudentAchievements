@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
-    public class Department
+    public class Direction
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Direction> Directions { get; set; }
+        public Department Department { get; set; }
+        public ProgramType ProgramType { get; set; }
+        public List<Group> Groups { get; set; }
     }
 }

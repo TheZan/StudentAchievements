@@ -9,9 +9,9 @@ using StudentAchievements.Areas.Authorization.Models;
 
 namespace StudentAchievements.Models
 {
-    public sealed class IdentityDbContext : IdentityDbContext<User>
+    public sealed class StudentAchievementsDbContext : IdentityDbContext<User>
     {
-        public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
+        public StudentAchievementsDbContext(DbContextOptions<StudentAchievementsDbContext> options)
             : base(options)
         {
             Database.EnsureCreated();
@@ -26,5 +26,8 @@ namespace StudentAchievements.Models
         public DbSet<Assessment> Assessments { get; set; }
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<ProgramType> ProgramType { get; set; }
+        public DbSet<Direction> Directions { get; set; }
+        public DbSet<FormEducation> FormEducations { get; set; }
     }
 }

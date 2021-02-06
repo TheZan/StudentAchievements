@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Models;
@@ -15,11 +16,11 @@ namespace StudentAchievements.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private IdentityDbContext context;
+        private StudentAchievementsDbContext context;
         private UserManager<User> userManager;
         private IUserRepository repository;
 
-        public AdminController(IUserRepository _repository, UserManager<User> _userManager, IdentityDbContext _context)
+        public AdminController(IUserRepository _repository, UserManager<User> _userManager, StudentAchievementsDbContext _context)
         {
             context = _context;
             repository = _repository;
@@ -31,7 +32,6 @@ namespace StudentAchievements.Areas.Admin.Controllers
             ViewBag.UsersSelected = "active";
             ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "";
-
             return View(GetUsers(1));
         }
 
@@ -41,7 +41,6 @@ namespace StudentAchievements.Areas.Admin.Controllers
             ViewBag.UsersSelected = "active";
             ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "";
-
             return View(GetUsers(currentPageIndex));
         }
 

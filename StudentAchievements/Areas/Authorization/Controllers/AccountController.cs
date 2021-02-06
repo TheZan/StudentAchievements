@@ -20,13 +20,13 @@ namespace StudentAchievements.Areas.Authorization.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private IdentityDbContext context;
+        private StudentAchievementsDbContext context;
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
         private IUserRepository userRepository;
         private IConfiguration configuration;
 
-        public AccountController(IConfiguration _configuration, IdentityDbContext _context, UserManager<User> _userManager, SignInManager<User> _signInManager, IUserRepository _userRepository)
+        public AccountController(IConfiguration _configuration, StudentAchievementsDbContext _context, UserManager<User> _userManager, SignInManager<User> _signInManager, IUserRepository _userRepository)
         {
             configuration = _configuration;
             context = _context;

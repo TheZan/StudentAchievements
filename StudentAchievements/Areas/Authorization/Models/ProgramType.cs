@@ -2,11 +2,10 @@
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
-    public class Group
+    public class ProgramType
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Direction Direction { get; set; }
-        public List<Student> Students { get; set; }
+        public List<Direction> Directions { get; set; }
     }
 }

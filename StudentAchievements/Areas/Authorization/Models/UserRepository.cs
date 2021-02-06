@@ -12,9 +12,9 @@ namespace StudentAchievements.Areas.Authorization.Models
     {
         private UserManager<User> userManager;
         private RoleManager<IdentityRole> roleManager;
-        private IdentityDbContext context;
+        private StudentAchievementsDbContext context;
 
-        public UserRepository(UserManager<User> _userManager, RoleManager<IdentityRole> _roleManager, IdentityDbContext _context)
+        public UserRepository(UserManager<User> _userManager, RoleManager<IdentityRole> _roleManager, StudentAchievementsDbContext _context)
         {
             userManager = _userManager;
             roleManager = _roleManager;
