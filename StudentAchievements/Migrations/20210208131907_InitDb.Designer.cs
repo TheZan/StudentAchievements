@@ -10,8 +10,8 @@ using StudentAchievements.Models;
 namespace StudentAchievements.Migrations
 {
     [DbContext(typeof(StudentAchievementsDbContext))]
-    [Migration("20210206180758_InitDataBase")]
-    partial class InitDataBase
+    [Migration("20210208131907_InitDb")]
+    partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -345,6 +345,9 @@ namespace StudentAchievements.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("YearOfStudy")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

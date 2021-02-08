@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StudentAchievements.Migrations
 {
-    public partial class InitDataBase : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -327,6 +327,7 @@ namespace StudentAchievements.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: true),
+                    YearOfStudy = table.Column<int>(type: "int", nullable: false),
                     FormEducationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
