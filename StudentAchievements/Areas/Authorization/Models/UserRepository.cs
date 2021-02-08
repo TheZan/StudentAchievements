@@ -102,7 +102,7 @@ namespace StudentAchievements.Areas.Authorization.Models
                 user.Email = model.Email;
                 user.UserName = model.Email;
                 user.Name = model.Name;
-                user.Photo = UploadedImage(model) ?? model.Photo;
+                user.Photo = UploadedImage(model) ?? user.Photo;
                 
                 var userUpdateResult = await userManager.UpdateAsync(user);
                 if (userUpdateResult.Succeeded)
