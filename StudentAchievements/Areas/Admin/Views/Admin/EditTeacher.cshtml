@@ -23,6 +23,15 @@
                 <input asp-for="Name" class="form-control" />
             </div>
             <div class="form-group">
+                <div><span asp-validation-for="Gender" class="text-danger"></span></div>
+                <label asp-for="Gender"></label>
+                <select class="custom-select" asp-for="Gender">
+                    <option disabled selected>Выберите пол</option>
+                    <option>Мужской</option>
+                    <option>Женский</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <div><span asp-validation-for="Department" class="text-danger"></span></div>
                 <label asp-for="Department"></label>
                 <select class="custom-select" asp-for="Department" asp-items="@(new SelectList(Model.GetDepartments(), "Id", "Name"))">

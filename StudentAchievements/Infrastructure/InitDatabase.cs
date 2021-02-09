@@ -27,6 +27,7 @@ namespace StudentAchievements.Infrastructure
             string adminEmail = configuration["Data:AdministratorAccount:Login"];
             string password = configuration["Data:AdministratorAccount:Password"];
             string adminName = configuration["Data:AdministratorAccount:Name"];
+            string adminGender = configuration["Data:AdministratorAccount:Gender"];
 
             if (await roleManager.FindByNameAsync("Admin") == null)
             {
@@ -47,11 +48,12 @@ namespace StudentAchievements.Infrastructure
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                User admin = new User() { Email = adminEmail, UserName = adminEmail, Name = adminName};
+                User admin = new User() { Email = adminEmail, UserName = adminEmail, Name = adminName };
 
                 var result = await repository.AddUser(admin, password, new Administrator()
                 {
-                    User = admin
+                    User = admin,
+                    Gender = adminGender
                 });
 
                 if (result.Succeeded)
@@ -81,6 +83,66 @@ namespace StudentAchievements.Infrastructure
                 };
 
                 context.FormEducations.AddRange(formEducation);
+                context.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool SetGroupNames()
+        {
+            if (!context.GroupNames.Any())
+            {
+                var groupNames = new List<GroupNames>()
+                {
+                    new GroupNames()
+                    {
+                        Name = "ЭИС"
+                    },
+                    new GroupNames()
+                    {
+                        Name = "ЭПИ"
+                    }
+                };
+
+                context.GroupNames.AddRange(groupNames);
+                context.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool SetGroups()
+        {
+            if (!context.Groups.Any())
+            {
+                var groups = new List<Group>()
+                {
+                    new Group()
+                    {
+                        Name = context.GroupNames.FirstOrDefault(n => n.Name == "ЭИС"),
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        Number = 14
+                    },
+                    new Group()
+                    {
+                        Name = context.GroupNames.FirstOrDefault(n => n.Name == "ЭИС"),
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        Number = 15
+                    },
+                    new Group()
+                    {
+                        Name = context.GroupNames.FirstOrDefault(n => n.Name == "ЭИС"),
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        Number = 16
+                    }
+                };
+
+                context.Groups.AddRange(groups);
                 context.SaveChanges();
 
                 return true;
@@ -524,7 +586,7 @@ namespace StudentAchievements.Infrastructure
 
         private bool SetAllData()
         {
-            if (SetGroupsType() && SetFormEducation() && SetDepartments() && SetDirection())
+            if (SetGroupsType() && SetFormEducation() && SetDepartments() && SetDirection() && SetGroupNames() && SetGroups())
             {
                 var departments = context.Departments;
 

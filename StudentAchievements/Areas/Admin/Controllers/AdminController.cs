@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Areas.Authorization.Models;
+using StudentAchievements.Infrastructure;
 using StudentAchievements.Models;
 
 namespace StudentAchievements.Areas.Admin.Controllers
@@ -32,6 +34,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
             ViewBag.UsersSelected = "active";
             ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "";
+
             return View(GetUsers(1));
         }
 
@@ -41,6 +44,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
             ViewBag.UsersSelected = "active";
             ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "";
+
             return View(GetUsers(currentPageIndex));
         }
 
@@ -59,8 +63,12 @@ namespace StudentAchievements.Areas.Admin.Controllers
             ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "active";
 
-            return View();
+            return View(new AddUsersViewModel(context));
         }
+
+        public IActionResult AddStudents() => PartialView("AddStudents");
+
+        public IActionResult AddTeachers() => PartialView("AddTeachers");
 
         private UsersListViewModel GetUsers(int currentPage)
         {
@@ -116,7 +124,8 @@ namespace StudentAchievements.Areas.Admin.Controllers
                         {
                             Email = adminInfo.User.Email,
                             Name = adminInfo.User.Name,
-                            Photo = adminInfo.User.Photo
+                            Photo = adminInfo.User.Photo,
+                            Gender = adminInfo.Gender
                         };
                         return View("EditAdmin", adminModel);
                     case "Employer":
@@ -254,6 +263,60 @@ namespace StudentAchievements.Areas.Admin.Controllers
             }
 
             return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddStudent(AddStudentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Name,
+                    Photo = UploadedImage(model)
+                };
+
+                var result = await repository.AddUser(user, model.Password,
+                    new Student() { User = user, Gender = model.Gender });
+
+                if (result.Succeeded)
+                {
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userManager.ConfirmEmailAsync(user, code);
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            return View("AddStudents", model);
+        }
+
+        private byte[] UploadedImage(AddStudentViewModel model)
+        {
+            byte[] photo = null;
+
+            if (model.Photo != null)
+            {
+                if (model.Photo.Length > 0)
+                {
+                    using (var binaryReader = new BinaryReader(model.UploadPhoto.OpenReadStream()))
+                    {
+                        photo = binaryReader.ReadBytes((int)model.Photo.Length);
+                    }
+
+                    return photo;
+                }
+            }
+            return photo;
         }
     }
 }

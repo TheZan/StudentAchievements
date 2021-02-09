@@ -26,6 +26,10 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         public string Name { get; set; }
 
         [Required]
+        [DisplayName("Пол")]
+        public string Gender { get; set; }
+
+        [Required]
         [EmailAddress]
         [DisplayName("Email")]
         public string Email { get; set; }

@@ -1,0 +1,80 @@
+﻿@model AddStudentViewModel
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <div class="card">
+        <div class="card-body">
+            <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="AddStudent">
+                <div class="text-danger" asp-validation-summary="All"></div>
+                <div class="form-group">
+                    <div><span asp-validation-for="Email" class="text-danger"></span></div>
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <div><span asp-validation-for="Password" class="text-danger"></span></div>
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <div><span asp-validation-for="ConfirmPassword" class="text-danger"></span></div>
+                    <label asp-for="ConfirmPassword"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <div><span asp-validation-for="Name" class="text-danger"></span></div>
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <div><span asp-validation-for="Gender" class="text-danger"></span></div>
+                    <label asp-for="Gender"></label>
+                    <select class="custom-select" asp-for="Gender">
+                        <option disabled selected>Выберите пол</option>
+                        <option>Мужской</option>
+                        <option>Женский</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div><span asp-validation-for="Dob" class="text-danger"></span></div>
+                    <label asp-for="Dob"></label>
+                    <input asp-for="Dob" id="DateId" type="text" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <div><span asp-validation-for="Group" class="text-danger"></span></div>
+                    <label asp-for="Group"></label>
+                    <select class="custom-select" asp-for="Group" asp-items="@Model.GroupsList">
+                        <option disabled selected>Выберите группу</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div><span asp-validation-for="FormEducation" class="text-danger"></span></div>
+                    <label asp-for="FormEducation"></label>
+                    <select class="custom-select" asp-for="FormEducation" asp-items="@Model.FormEducationList">
+                        <option disabled selected>Выберите форму обучения</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UploadPhoto"></label>
+                    <div><span asp-validation-for="UploadPhoto" class="text-danger"></span></div>
+                    <div class="custom-file">
+                        <input asp-for="UploadPhoto" type="file" class="custom-file-input" id="customFile">
+                        <label class="custom-file-label" for="customFile" data-browse="Выбрать">Выбрать файл</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" type="submit">Добавить</button>
+            </form>
+        </div>
+    </div>
+<script>
+    $('#DateId').daterangepicker(
+        {
+            "singleDatePicker": true,
+            "startDate": moment(),
+            "endDate": moment().endOf('year'),
+            "opens": "center"
+        });
+</script>

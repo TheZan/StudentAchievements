@@ -111,6 +111,11 @@ namespace StudentAchievements.Areas.Authorization.Models
 
                     switch (role.First())
                     {
+                        case "Admin":
+                            var admin = context.Administrators.FirstOrDefault(u => u.User.Email == user.Email);
+                            admin.Gender = ((AdminEditViewModel)model).Gender;
+                            await context.SaveChangesAsync();
+                            break;
                         case "Employer":
                             var employer = context.Employers.FirstOrDefault(u => u.User.Email == user.Email);
                             employer.Description = ((EmployerEditViewModel) model).Description;
@@ -119,12 +124,14 @@ namespace StudentAchievements.Areas.Authorization.Models
                         case "Teacher":
                             var teacher = context.Teachers.FirstOrDefault(u => u.User.Email == user.Email);
                             teacher.Department = ((TeacherEditViewModel) model).Department;
+                            teacher.Gender = ((TeacherEditViewModel)model).Gender;
                             await context.SaveChangesAsync();
                             break;
                         case "Student":
                             var student = context.Students.FirstOrDefault(u => u.User.Email == user.Email);
                             student.Dob = ((StudentEditViewModel) model).Dob;
                             student.Group = ((StudentEditViewModel) model).Group;
+                            student.Gender = ((StudentEditViewModel)model).Gender;
                             await context.SaveChangesAsync();
                             break;
                     }

@@ -180,6 +180,9 @@ namespace StudentAchievements.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -300,14 +303,34 @@ namespace StudentAchievements.Migrations
                     b.Property<int?>("DirectionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("NameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DirectionId");
 
+                    b.HasIndex("NameId");
+
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.GroupNames", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GroupNames");
                 });
 
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.ProgramType", b =>
@@ -338,14 +361,14 @@ namespace StudentAchievements.Migrations
                     b.Property<int?>("FormEducationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("YearOfStudy")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -382,6 +405,9 @@ namespace StudentAchievements.Migrations
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -580,7 +606,13 @@ namespace StudentAchievements.Migrations
                         .WithMany("Groups")
                         .HasForeignKey("DirectionId");
 
+                    b.HasOne("StudentAchievements.Areas.Authorization.Models.GroupNames", "Name")
+                        .WithMany()
+                        .HasForeignKey("NameId");
+
                     b.Navigation("Direction");
+
+                    b.Navigation("Name");
                 });
 
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.Student", b =>

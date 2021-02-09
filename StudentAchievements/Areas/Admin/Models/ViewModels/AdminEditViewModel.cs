@@ -25,6 +25,10 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         [DisplayName("Email")]
         public string Email { get; set; }
 
+        [Required]
+        [DisplayName("Пол")]
+        public string Gender { get; set; }
+
         [DisplayName("Фото")]
         public byte[] Photo { get; set; }
 
