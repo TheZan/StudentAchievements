@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    public class AddTeacherViewModel : IAddViewModel
+    public class AddTeacherViewModel : IAddUserViewModel
     {
         [Required]
         [DisplayName("ФИО")]

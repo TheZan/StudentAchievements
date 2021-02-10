@@ -12,7 +12,7 @@ using StudentAchievements.Models;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    public class TeacherEditViewModel : IEditViewModel
+    public class TeacherEditViewModel : IEditUserViewModel
     {
         public TeacherEditViewModel()
         {

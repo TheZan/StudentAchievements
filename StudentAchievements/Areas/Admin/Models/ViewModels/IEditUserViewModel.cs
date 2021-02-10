@@ -4,8 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    public interface IAddViewModel
+    public interface IEditUserViewModel
     {
+        public string Id { get; set; }
+
         [Required]
         [DisplayName("ФИО")]
         public string Name { get; set; }
@@ -15,19 +17,12 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         [DisplayName("Email")]
         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Required]
-        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
-        [DataType(DataType.Password)]
-        public string ConfirmPassword { get; set; }
-
         [DisplayName("Фото")]
         public byte[] Photo { get; set; }
 
-        [DisplayName("Добавить фото")]
+        [DisplayName("Изменить фото")]
         public IFormFile UploadPhoto { get; set; }
+
+        public byte[] NotFoundUserPhoto { get; set; }
     }
 }

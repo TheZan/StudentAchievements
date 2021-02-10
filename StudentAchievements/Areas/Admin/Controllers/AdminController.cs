@@ -22,12 +22,14 @@ namespace StudentAchievements.Areas.Admin.Controllers
         private StudentAchievementsDbContext context;
         private UserManager<User> userManager;
         private IUserRepository repository;
+        private IDataRepository dataRepository;
 
-        public AdminController(IUserRepository _repository, UserManager<User> _userManager, StudentAchievementsDbContext _context)
+        public AdminController(IUserRepository _repository, UserManager<User> _userManager, StudentAchievementsDbContext _context, IDataRepository _dataRepository)
         {
             context = _context;
             repository = _repository;
             userManager = _userManager;
+            dataRepository = _dataRepository;
         }
 
         public ViewResult Index()
@@ -67,9 +69,21 @@ namespace StudentAchievements.Areas.Admin.Controllers
             return View(new AddUsersViewModel(context));
         }
 
+        public ViewResult AddData()
+        {
+            ViewBag.UsersSelected = "";
+            ViewBag.AboutSelected = "";
+            ViewBag.AddUsersSelected = "";
+            ViewBag.DataSelected = "active";
+
+            return View(new AddDataViewModel(context));
+        }
+
         public IActionResult AddStudents() => PartialView("AddStudents");
 
         public IActionResult AddTeachers() => PartialView("AddTeachers");
+
+        public IActionResult AddDepartments() => PartialView("AddDepartments");
 
         private UsersListViewModel GetUsers(int currentPage)
         {
@@ -330,7 +344,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTeachers(AddTeacherViewModel model)
+        public async Task<IActionResult> AddTeacher(AddTeacherViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -369,7 +383,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
             return View("AddUsers", new AddUsersViewModel(context));
         }
 
-        private byte[] UploadedImage(IAddViewModel model)
+        private byte[] UploadedImage(IAddUserViewModel model)
         {
             byte[] photo = null;
 
@@ -386,6 +400,27 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 }
             }
             return photo;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDepartment(AddDepartmentsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var department = new Department()
+                {
+                    Name = model.Name
+                };
+
+                var result = await dataRepository.AddDepartment(model);
+
+                if (result)
+                {
+                    return RedirectToAction("AddData");
+                }
+            }
+
+            return View("AddData", new AddDataViewModel(context));
         }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    public class AdminEditViewModel : IEditViewModel
+    public class AdminEditViewModel : IEditUserViewModel
     {
         public AdminEditViewModel()
         {

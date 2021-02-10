@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    public class AddStudentViewModel : IAddViewModel
+    public class AddStudentViewModel : IAddUserViewModel
     {
         [Required]
         [DisplayName("ФИО")]

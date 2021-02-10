@@ -95,7 +95,7 @@ namespace StudentAchievements.Areas.Authorization.Models
             return IdentityResult.Failed();
         }
 
-        public async Task<IdentityResult> EditUser(User user, IEditViewModel model)
+        public async Task<IdentityResult> EditUser(User user, IEditUserViewModel model)
         {
             if (user != null)
             {
@@ -187,7 +187,7 @@ namespace StudentAchievements.Areas.Authorization.Models
             return IdentityResult.Failed();
         }
 
-        private byte[] UploadedImage(IEditViewModel model)
+        private byte[] UploadedImage(IEditUserViewModel model)
         {
             byte[] photo = null;
 

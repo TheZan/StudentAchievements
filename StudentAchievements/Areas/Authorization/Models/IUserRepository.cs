@@ -10,7 +10,7 @@ namespace StudentAchievements.Areas.Authorization.Models
         IQueryable<User> Users { get; }
 
         Task<IdentityResult> AddUser(User user, string password, IUser userType);
-        Task<IdentityResult> EditUser(User user, IEditViewModel model);
+        Task<IdentityResult> EditUser(User user, IEditUserViewModel model);
         Task<IdentityResult> DeleteUser(User user);
     }
 }

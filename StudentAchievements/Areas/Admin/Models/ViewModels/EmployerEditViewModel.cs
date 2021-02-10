@@ -5,7 +5,7 @@ using System.IO;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    public class EmployerEditViewModel : IEditViewModel
+    public class EmployerEditViewModel : IEditUserViewModel
     {
         public EmployerEditViewModel()
         {
