@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Areas.Authorization.Models;
@@ -125,7 +126,8 @@ namespace StudentAchievements.Areas.Admin.Controllers
                             Email = adminInfo.User.Email,
                             Name = adminInfo.User.Name,
                             Photo = adminInfo.User.Photo,
-                            Gender = adminInfo.Gender
+                            Gender = adminInfo.Gender,
+                            Id = id
                         };
                         return View("EditAdmin", adminModel);
                     case "Employer":
@@ -135,29 +137,38 @@ namespace StudentAchievements.Areas.Admin.Controllers
                             Email = employerInfo.User.Email,
                             Name = employerInfo.User.Name,
                             Photo = employerInfo.User.Photo,
-                            Description = employerInfo.Description
+                            Description = employerInfo.Description,
+                            Id = id
                         };
                         return View("EditEmployer", employerModel);
                     case "Teacher":
-                        var teacherInfo = context.Teachers.FirstOrDefault(u => u.User.Id == user.Id);
-                        var teacherModel = new TeacherEditViewModel(context)
+                        var teacherInfo = context.Teachers.Include(d => d.Department).FirstOrDefault(u => u.User.Id == user.Id);
+                        var teacherModel = new TeacherEditViewModel()
                         {
                             Email = teacherInfo.User.Email,
                             Name = teacherInfo.User.Name,
                             Photo = teacherInfo.User.Photo,
-                            Department = teacherInfo.Department
+                            Gender = teacherInfo.Gender,
+                            Department = teacherInfo.Department.Id,
+                            DepartmentsList = context.Departments.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
+                            Id = id
                         };
                         return View("EditTeacher", teacherModel);
                     case "Student":
-                        var studentInfo = context.Students.FirstOrDefault(u => u.User.Id == user.Id);
-                        var studentModel = new StudentEditViewModel(context)
+                        var studentInfo = context.Students.Include(s => s.Group).Include(f => f.FormEducation).FirstOrDefault(u => u.User.Id == user.Id);
+                        var studentModel = new StudentEditViewModel()
                         {
                             Email = studentInfo.User.Email,
                             Name = studentInfo.User.Name,
                             Photo = studentInfo.User.Photo,
                             Dob = studentInfo.Dob,
-                            Group = studentInfo.Group
-                        };
+                            Group = studentInfo.Group.Id,
+                            Gender = studentInfo.Gender,
+                            FormEducation = studentInfo.FormEducation.Id,
+                            GroupsList = context.Groups.Include(g => g.Name).Select(p => new SelectListItem { Value = p.Id.ToString(), Text = $"{p.Name.Name}-{p.Number}" }),
+                            FormEducationList = context.FormEducations.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
+                            Id = id
+                };
                         return View("EditStudent", studentModel);
                 }
             }
@@ -172,97 +183,108 @@ namespace StudentAchievements.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditAdmin(AdminEditViewModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
-
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                var result = await repository.EditUser(user, model);
+                var user = await userManager.FindByIdAsync(model.Id);
 
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    var result = await repository.EditUser(user, model);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-
-                return View("EditAdmin", model);
-            }
-            else
-            {
-                ModelState.AddModelError("", "Пользователь не найден.");
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
             }
 
-            return StatusCode(StatusCodes.Status404NotFound);
+            return View("EditAdmin", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditEmployer(EmployerEditViewModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
-
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                var result = await repository.EditUser(user, model);
+                var user = await userManager.FindByIdAsync(model.Id);
 
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    if (ModelState.IsValid)
+                    {
+                        var result = await repository.EditUser(user, model);
+
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
                 }
-
-                return View("EditEmployer", model);
-            }
-            else
-            {
-                ModelState.AddModelError("", "Пользователь не найден.");
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
             }
 
-            return StatusCode(StatusCodes.Status404NotFound);
+            return View("EditEmployer", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditTeacher(TeacherEditViewModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
-
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                var result = await repository.EditUser(user, model);
+                var user = await userManager.FindByIdAsync(model.Id);
 
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    return RedirectToAction(nameof(Index));
+                    if (ModelState.IsValid)
+                    {
+                        var result = await repository.EditUser(user, model);
+
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
                 }
-
-                return View("EditTeacher", model);
-            }
-            else
-            {
-                ModelState.AddModelError("", "Пользователь не найден.");
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
             }
 
-            return StatusCode(StatusCodes.Status404NotFound);
+            return View("EditTeacher", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditStudent(StudentEditViewModel model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
-
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                var result = await repository.EditUser(user, model);
+                var user = await userManager.FindByIdAsync(model.Id);
 
-                if (result.Succeeded)
+                if (user != null)
                 {
-                    return RedirectToAction(nameof(Index));
+
+                    var result = await repository.EditUser(user, model);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-
-                return View("EditStudent", model);
-            }
-            else
-            {
-                ModelState.AddModelError("", "Пользователь не найден.");
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
             }
 
-            return StatusCode(StatusCodes.Status404NotFound);
+            return View("EditStudent", model);
         }
 
         [HttpPost]
@@ -279,7 +301,14 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 };
 
                 var result = await repository.AddUser(user, model.Password,
-                    new Student() { User = user, Gender = model.Gender });
+                    new Student()
+                    {
+                        User = user,
+                        Gender = model.Gender,
+                        Dob = model.Dob,
+                        FormEducation = context.FormEducations.FirstOrDefault(f => f.Id == model.FormEducation),
+                        Group = context.Groups.FirstOrDefault(g => g.Id == model.Group)
+                    });
 
                 if (result.Succeeded)
                 {
@@ -297,20 +326,60 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 }
             }
 
-            return View("AddStudents", model);
+            return View("AddUsers", new AddUsersViewModel(context));
         }
 
-        private byte[] UploadedImage(AddStudentViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> AddTeachers(AddTeacherViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Name,
+                    Photo = UploadedImage(model)
+                };
+
+                var result = await repository.AddUser(user, model.Password,
+                    new Teacher()
+                    {
+                        User = user,
+                        Gender = model.Gender,
+                        Department = context.Departments.FirstOrDefault(d => d.Id == model.Department)
+                    });
+
+                if (result.Succeeded)
+                {
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userManager.ConfirmEmailAsync(user, code);
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            return View("AddUsers", new AddUsersViewModel(context));
+        }
+
+        private byte[] UploadedImage(IAddViewModel model)
         {
             byte[] photo = null;
 
-            if (model.Photo != null)
+            if (model.UploadPhoto != null)
             {
-                if (model.Photo.Length > 0)
+                if (model.UploadPhoto.Length > 0)
                 {
                     using (var binaryReader = new BinaryReader(model.UploadPhoto.OpenReadStream()))
                     {
-                        photo = binaryReader.ReadBytes((int)model.Photo.Length);
+                        photo = binaryReader.ReadBytes((int)model.UploadPhoto.Length);
                     }
 
                     return photo;

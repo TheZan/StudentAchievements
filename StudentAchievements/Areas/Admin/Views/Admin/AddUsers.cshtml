@@ -16,6 +16,6 @@
         @await Html.PartialAsync("AddStudents", Model.AddStudentViewModel)
     </div>
     <div class="tab-pane fade" id="nav-teachers" role="tabpanel" aria-labelledby="nav-teachers-tab">
-        @await Html.PartialAsync("AddTeachers")
+        @await Html.PartialAsync("AddTeachers", Model.AddTeacherViewModel)
     </div>
 </div>

@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Models;
 
@@ -13,13 +15,12 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
     public class StudentEditViewModel : IEditViewModel
     {
-        public StudentAchievementsDbContext Context;
-
-        public StudentEditViewModel(StudentAchievementsDbContext _context)
+        public StudentEditViewModel()
         {
-            Context = _context;
             NotFoundUserPhoto = GetNotFoundImage();
         }
+
+        public string Id { get; set; }
 
         [Required]
         [DisplayName("ФИО")]
@@ -48,9 +49,15 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 
         [Required]
         [DisplayName("Учебная группа")]
-        public Group Group { get; set; }
+        public int Group { get; set; }
 
-        public IEnumerable<Group> GetGroups() => Context.Groups;
+        [Required]
+        [DisplayName("Форма обучения")]
+        public int FormEducation { get; set; }
+
+        public IEnumerable<SelectListItem> GroupsList { get; set; }
+
+        public IEnumerable<SelectListItem> FormEducationList { get; set; }
 
         private byte[] GetNotFoundImage()
         {

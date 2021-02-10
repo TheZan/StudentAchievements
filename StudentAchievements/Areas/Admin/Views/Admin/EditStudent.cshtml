@@ -4,14 +4,20 @@
     ViewData["Title"] = "Редактирование студента";
 }
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 <div class="card">
     <div class="card-header">
-        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true"/>
+        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true" />
         @Model.Name
     </div>
     <div class="card-body">
         <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="EditStudent">
             <div class="text-danger" asp-validation-summary="All"></div>
+            <input asp-for="Id" type="hidden"/>
             <div class="form-group">
                 <div><span asp-validation-for="Email" class="text-danger"></span></div>
                 <label asp-for="Email"></label>
@@ -34,13 +40,20 @@
             <div class="form-group">
                 <div><span asp-validation-for="Dob" class="text-danger"></span></div>
                 <label asp-for="Dob"></label>
-                <input asp-for="Dob" id="datepicker" type="text" class="form-control" value="@Model.Dob" />
+                <input asp-for="Dob" id="DateId" type="text" class="form-control" />
             </div>
             <div class="form-group">
                 <div><span asp-validation-for="Group" class="text-danger"></span></div>
                 <label asp-for="Group"></label>
-                <select class="custom-select" asp-for="Group" asp-items="@(new SelectList(Model.GetGroups(), "Id", "Name"))">
+                <select class="custom-select" asp-for="Group" asp-items="@Model.GroupsList">
                     <option disabled selected>Выберите группу</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div><span asp-validation-for="FormEducation" class="text-danger"></span></div>
+                <label asp-for="FormEducation"></label>
+                <select class="custom-select" asp-for="FormEducation" asp-items="@Model.FormEducationList">
+                    <option disabled selected>Выберите форму обучения</option>
                 </select>
             </div>
             <div class="form-group">
@@ -58,7 +71,11 @@
 </div>
 
 <script>
-    $(function () {
-        $("#datepicker").datepicker();
-    });
+    $('#DateId').daterangepicker(
+        {
+            "singleDatePicker": true,
+            "startDate": moment(),
+            "endDate": moment().endOf('year'),
+            "opens": "center"
+        });
 </script>

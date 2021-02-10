@@ -44,11 +44,11 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 
         [Required]
         [DisplayName("Учебная группа")]
-        public Group Group { get; set; }
+        public int Group { get; set; }
 
         [Required]
         [DisplayName("Форма обучения")]
-        public FormEducation FormEducation { get; set; }
+        public int FormEducation { get; set; }
 
         [DisplayName("Фото")]
         public byte[] Photo { get; set; }

@@ -16,6 +16,8 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
             NotFoundUserPhoto = GetNotFoundImage();
         }
 
+        public string Id { get; set; }
+
         [Required]
         [DisplayName("ФИО")]
         public string Name { get; set; }

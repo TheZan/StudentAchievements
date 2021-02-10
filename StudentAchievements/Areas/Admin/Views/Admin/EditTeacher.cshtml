@@ -12,6 +12,7 @@
     <div class="card-body">
         <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="EditTeacher">
             <div class="text-danger" asp-validation-summary="All"></div>
+            <input asp-for="Id" type="hidden" />
             <div class="form-group">
                 <div><span asp-validation-for="Email" class="text-danger"></span></div>
                 <label asp-for="Email"></label>
@@ -34,7 +35,7 @@
             <div class="form-group">
                 <div><span asp-validation-for="Department" class="text-danger"></span></div>
                 <label asp-for="Department"></label>
-                <select class="custom-select" asp-for="Department" asp-items="@(new SelectList(Model.GetDepartments(), "Id", "Name"))">
+                <select class="custom-select" asp-for="Department" asp-items="@Model.DepartmentsList">
                     <option disabled selected>Выберите факультет</option>
                 </select>
             </div>

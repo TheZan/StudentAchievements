@@ -99,7 +99,6 @@ namespace StudentAchievements.Areas.Authorization.Models
         {
             if (user != null)
             {
-                user.Email = model.Email;
                 user.UserName = model.Email;
                 user.Name = model.Name;
                 user.Photo = UploadedImage(model) ?? user.Photo;
@@ -123,18 +122,22 @@ namespace StudentAchievements.Areas.Authorization.Models
                             break;
                         case "Teacher":
                             var teacher = context.Teachers.FirstOrDefault(u => u.User.Email == user.Email);
-                            teacher.Department = ((TeacherEditViewModel) model).Department;
+                            teacher.Department = context.Departments.FirstOrDefault(d => d.Id == ((TeacherEditViewModel)model).Department);
                             teacher.Gender = ((TeacherEditViewModel)model).Gender;
                             await context.SaveChangesAsync();
                             break;
                         case "Student":
                             var student = context.Students.FirstOrDefault(u => u.User.Email == user.Email);
                             student.Dob = ((StudentEditViewModel) model).Dob;
-                            student.Group = ((StudentEditViewModel) model).Group;
+                            student.Group = context.Groups.FirstOrDefault(s => s.Id == ((StudentEditViewModel)model).Group);
+                            student.FormEducation = context.FormEducations.FirstOrDefault(f => f.Id == ((StudentEditViewModel)model).FormEducation);
                             student.Gender = ((StudentEditViewModel)model).Gender;
                             await context.SaveChangesAsync();
                             break;
                     }
+
+                    var token = await userManager.GenerateChangeEmailTokenAsync(user, model.Email);
+                    await userManager.ChangeEmailAsync(user, model.Email, token);
 
                     return IdentityResult.Success;
                 }
