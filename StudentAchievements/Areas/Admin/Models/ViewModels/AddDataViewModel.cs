@@ -1,8 +1,7 @@
-﻿using StudentAchievements.Models;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using StudentAchievements.Models;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
@@ -18,8 +17,16 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
             {
                 Departments = context.Departments
             };
+
+            AddDirectionsViewModel = new AddDirectionsViewModel()
+            {
+                Directions = context.Directions.Include(d => d.Department).Include(p => p.ProgramType),
+                DepartmentsList = context.Departments.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
+                ProgramTypeList = context.ProgramType.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name })
+            };
         }
 
         public AddDepartmentsViewModel AddDepartmentsViewModel { get; set; }
+        public AddDirectionsViewModel AddDirectionsViewModel { get; set; }
     }
 }

@@ -1,0 +1,25 @@
+﻿@model EditDepartmentViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Редактирование факультета";
+}
+
+<div class="card">
+    <div class="card-header">
+        @Model.Name
+    </div>
+    <div class="card-body">
+        <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="EditDepartment">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group">
+                <div><span asp-validation-for="Name" class="text-danger"></span></div>
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <a asp-area="Admin" asp-controller="Admin" asp-action="AddData" class="btn btn-secondary">Отмена</a>
+            <button class="btn btn-primary" type="submit">Обновить</button>
+        </form>
+    </div>
+</div>

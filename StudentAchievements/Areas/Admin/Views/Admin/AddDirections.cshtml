@@ -1,0 +1,76 @@
+﻿@model AddDirectionsViewModel
+
+<div class="card">
+    <div class="card-header">
+        Список направлений
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="col-sm-auto">Номер</th>
+                    <th class="col-sm-auto">Факультет</th>
+                    <th class="col-sm-auto">Тип обучения</th>
+                    <th class="col">Название</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var direction in Model.Directions)
+                {
+                <tr>
+                    <td class="align-middle text-center">
+                        @direction.Id
+                    </td>
+                    <td class="align-middle">
+                        @direction.Department.Name
+                    </td>
+                    <td class="align-middle">
+                        @direction.ProgramType.Name
+                    </td>
+                    <td class="align-middle">
+                        @direction.Name
+                    </td>
+                    <td class="align-middle">
+                        <a class="btn btn-warning">Изменить</a>
+                    </td>
+                    <td class="align-middle">
+                        <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="DeleteDirection" asp-route-id="@direction.Id">
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        Добавить новое направление
+    </div>
+    <div class="card-body">
+        <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="AddDirection">
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="form-group">
+                <div><span asp-validation-for="Name" class="text-danger"></span></div>
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <div><span asp-validation-for="Department" class="text-danger"></span></div>
+                <label asp-for="Department"></label>
+                <select class="custom-select" asp-for="Department" asp-items="@Model.DepartmentsList">
+                    <option disabled selected>Выберите факультет</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div><span asp-validation-for="ProgramType" class="text-danger"></span></div>
+                <label asp-for="ProgramType"></label>
+                <select class="custom-select" asp-for="ProgramType" asp-items="@Model.ProgramTypeList">
+                    <option disabled selected>Выберите тип обучения</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Добавить</button>
+        </form>
+    </div>
+</div> 

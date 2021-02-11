@@ -85,6 +85,8 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
         public IActionResult AddDepartments() => PartialView("AddDepartments");
 
+        public IActionResult AddDirections() => PartialView("AddDirections");
+
         private UsersListViewModel GetUsers(int currentPage)
         {
             int maxRows = 10;
@@ -421,6 +423,104 @@ namespace StudentAchievements.Areas.Admin.Controllers
             }
 
             return View("AddData", new AddDataViewModel(context));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDepartment(int id)
+        {
+            var department = context.Departments.FirstOrDefault(d => d.Id == id);
+
+            if (department != null)
+            {
+                await dataRepository.DeleteDepartment(department);
+            }
+
+            return RedirectToAction("AddData");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditDepartment(int id)
+        {
+            var department = await context.Departments.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (department != null)
+            {
+                var model = new EditDepartmentViewModel()
+                {
+                    Id = department.Id,
+                    Name = department.Name
+                };
+
+                return View("EditDepartment", model);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Факультет не найден.");
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDepartment(EditDepartmentViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var department = await context.Departments.FirstOrDefaultAsync(d => d.Id == model.Id);
+
+                if (department != null)
+                {
+
+                    department.Name = model.Name;
+
+                    if (await dataRepository.EditDepartment(department))
+                    {
+                        return RedirectToAction(nameof(AddData));
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Факультет не найден.");
+                }
+            }
+
+            return View("EditDepartment", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDirection(AddDirectionsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var direction = new Direction()
+                {
+                    Name = model.Name,
+                    Department = await context.Departments.FirstOrDefaultAsync(d => d.Id == model.Department),
+                    ProgramType = await context.ProgramType.FirstOrDefaultAsync(d => d.Id == model.ProgramType)
+                };
+
+                var result = await dataRepository.AddDirection(direction);
+
+                if (result)
+                {
+                    return RedirectToAction("AddData");
+                }
+            }
+
+            return View("AddData", new AddDataViewModel(context));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteDirection(int id)
+        {
+            var direction = context.Directions.FirstOrDefault(d => d.Id == id);
+
+            if (direction != null)
+            {
+                await dataRepository.DeleteDirection(direction);
+            }
+
+            return RedirectToAction("AddData");
         }
     }
 }
