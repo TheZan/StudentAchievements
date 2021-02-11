@@ -11,13 +11,11 @@ namespace StudentAchievements.Areas.Authorization.Models
     public class UserRepository : IUserRepository
     {
         private UserManager<User> userManager;
-        private RoleManager<IdentityRole> roleManager;
         private StudentAchievementsDbContext context;
 
-        public UserRepository(UserManager<User> _userManager, RoleManager<IdentityRole> _roleManager, StudentAchievementsDbContext _context)
+        public UserRepository(UserManager<User> _userManager, StudentAchievementsDbContext _context)
         {
             userManager = _userManager;
-            roleManager = _roleManager;
             context = _context;
         }
 

@@ -588,16 +588,6 @@ namespace StudentAchievements.Infrastructure
         {
             if (SetGroupsType() && SetFormEducation() && SetDepartments() && SetDirection() && SetGroupNames() && SetGroups())
             {
-                var departments = context.Departments;
-
-                foreach (var department in departments)
-                {
-                    department.Directions.AddRange(context.Directions.Where(d => d.Department == department));
-                }
-
-                context.Departments.UpdateRange(departments);
-                context.SaveChanges();
-
                 return true;
             }
 

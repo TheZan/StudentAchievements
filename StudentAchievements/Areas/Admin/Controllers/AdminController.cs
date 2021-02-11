@@ -412,7 +412,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                     Name = model.Name
                 };
 
-                var result = await dataRepository.AddDepartment(model);
+                var result = await dataRepository.AddDepartment(department);
 
                 if (result)
                 {

@@ -1,6 +1,4 @@
-﻿using StudentAchievements.Areas.Admin.Models.ViewModels;
-using System;
-using System.Collections.Generic;
+﻿using StudentAchievements.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,64 +6,177 @@ namespace StudentAchievements.Areas.Authorization.Models
 {
     public class DataRepository : IDataRepository
     {
-        public Task<bool> AddDepartment(AddDepartmentsViewModel model)
+        private StudentAchievementsDbContext context;
+
+        public DataRepository(StudentAchievementsDbContext _context) => context = _context;
+
+        public async Task<bool> AddDepartment(Department department)
         {
-            throw new NotImplementedException();
+            if(department != null)
+            {
+                await context.Departments.AddAsync(department);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> AddDirection(AddDirectionsViewModel model)
+        public async Task<bool> AddDirection(Direction direction)
         {
-            throw new NotImplementedException();
+            if(direction != null)
+            {
+                await context.Directions.AddAsync(direction);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> AddGroup(AddGroupsViewModel model)
+        public async Task<bool> AddGroup(Group group)
         {
-            throw new NotImplementedException();
+            if(group != null)
+            {
+                await context.Groups.AddAsync(group);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> AddGroupName(AddGroupNamesViewModel model)
+        public async Task<bool> AddGroupName(GroupNames groupNames)
         {
-            throw new NotImplementedException();
+            if(groupNames != null)
+            {
+                await context.GroupNames.AddAsync(groupNames);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> DeleteDepartment(Department department)
+        public async Task<bool> DeleteDepartment(Department department)
         {
-            throw new NotImplementedException();
+            if (department != null)
+            {
+                context.Departments.Remove(department);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> DeleteDirection(Direction direction)
+        public async Task<bool> DeleteDirection(Direction direction)
         {
-            throw new NotImplementedException();
+            if (direction != null)
+            {
+                context.Directions.Remove(direction);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> DeleteGroup(Group group)
+        public async Task<bool> DeleteGroup(Group group)
         {
-            throw new NotImplementedException();
+            if (group != null)
+            {
+                context.Groups.Remove(group);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> DeleteGroupName(GroupNames groupNames)
+        public async Task<bool> DeleteGroupName(GroupNames groupNames)
         {
-            throw new NotImplementedException();
+            if (groupNames != null)
+            {
+                context.GroupNames.Remove(groupNames);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> EditDepartment(Department department)
+        public async Task<bool> EditDepartment(Department department)
         {
-            throw new NotImplementedException();
+            if (department != null)
+            {
+                var oldDepartment = context.Departments.FirstOrDefault(d => d.Id == department.Id);
+                oldDepartment.Name = department.Name;
+                oldDepartment.Directions = department.Directions;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> EditDirection(Direction direction)
+        public async Task<bool> EditDirection(Direction direction)
         {
-            throw new NotImplementedException();
+            if (direction != null)
+            {
+                var oldDirection = context.Directions.FirstOrDefault(p => p.Id == direction.Id);
+                oldDirection.Name = direction.Name;
+                oldDirection.ProgramType = direction.ProgramType;
+                oldDirection.Department = direction.Department;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> EditGroup(Group group)
+        public async Task<bool> EditGroup(Group group)
         {
-            throw new NotImplementedException();
+            if (group != null)
+            {
+                var oldGroup = context.Groups.FirstOrDefault(p => p.Id == group.Id);
+                oldGroup.Name = group.Name;
+                oldGroup.Number = group.Number;
+                oldGroup.Direction = group.Direction;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> EditGroupName(GroupNames groupNames)
+        public async Task<bool> EditGroupName(GroupNames groupNames)
         {
-            throw new NotImplementedException();
+            if (groupNames != null)
+            {
+                var oldGroupNames = context.GroupNames.FirstOrDefault(p => p.Id == groupNames.Id);
+                oldGroupNames.Name = groupNames.Name;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
