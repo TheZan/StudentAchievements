@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using StudentAchievements.Areas.Authorization.Models;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    public class AddDirectionsViewModel : IAddDataViewModel
+    public class EditDirectionViewModel : IEditDataViewModel
     {
         public int Id { get; set; }
 
         [Required]
         [DisplayName("Название")]
         public string Name { get; set; }
-
-        public IEnumerable<Direction> Directions { get; set; }
 
         [Required]
         [DisplayName("Факультет")]

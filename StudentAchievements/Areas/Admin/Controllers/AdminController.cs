@@ -522,5 +522,62 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
             return RedirectToAction("AddData");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditDirection(int id)
+        {
+            var direction = await context.Directions.Include(d => d.Department).Include(p => p.ProgramType)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (direction != null)
+            {
+                var model = new EditDirectionViewModel()
+                {
+                    Id = direction.Id,
+                    Name = direction.Name,
+                    Department = direction.Department.Id,
+                    ProgramType = direction.ProgramType.Id,
+                    DepartmentsList = context.Departments.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
+                    ProgramTypeList = context.ProgramType.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name })
+                };
+
+                return View("EditDirection", model);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Направление не найдено.");
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDirection(EditDirectionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var direction = await context.Directions.Include(d => d.Department).Include(p => p.ProgramType)
+                .FirstOrDefaultAsync(d => d.Id == model.Id);
+
+                if (direction != null)
+                {
+
+                    direction.Name = model.Name;
+                    direction.Department = await context.Departments.FirstOrDefaultAsync(d => d.Id == model.Department);
+                    direction.ProgramType = await context.ProgramType.FirstOrDefaultAsync(d => d.Id == model.ProgramType);
+
+                    if (await dataRepository.EditDirection(direction))
+                    {
+                        return RedirectToAction(nameof(AddData));
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Направление не найдено.");
+                }
+            }
+
+            return View("EditDirection", model);
+        }
     }
 }
