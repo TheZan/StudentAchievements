@@ -5,7 +5,6 @@ namespace StudentAchievements.Areas.Authorization.Models
     public class Group
     {
         public int Id { get; set; }
-        public GroupNames Name { get; set; }
         public int Number { get; set; }
         public Direction Direction { get; set; }
         public List<Student> Students { get; set; }

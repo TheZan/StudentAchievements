@@ -66,7 +66,7 @@ namespace StudentAchievements.Infrastructure
             SetAllData();
         }
 
-        private bool SetFormEducation()
+        private void SetFormEducation()
         {
             if (!context.FormEducations.Any())
             {
@@ -84,39 +84,10 @@ namespace StudentAchievements.Infrastructure
 
                 context.FormEducations.AddRange(formEducation);
                 context.SaveChanges();
-
-                return true;
             }
-
-            return false;
         }
 
-        private bool SetGroupNames()
-        {
-            if (!context.GroupNames.Any())
-            {
-                var groupNames = new List<GroupNames>()
-                {
-                    new GroupNames()
-                    {
-                        Name = "ЭИС"
-                    },
-                    new GroupNames()
-                    {
-                        Name = "ЭПИ"
-                    }
-                };
-
-                context.GroupNames.AddRange(groupNames);
-                context.SaveChanges();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool SetGroups()
+        private void SetGroups()
         {
             if (!context.Groups.Any())
             {
@@ -124,19 +95,16 @@ namespace StudentAchievements.Infrastructure
                 {
                     new Group()
                     {
-                        Name = context.GroupNames.FirstOrDefault(n => n.Name == "ЭИС"),
                         Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
                         Number = 14
                     },
                     new Group()
                     {
-                        Name = context.GroupNames.FirstOrDefault(n => n.Name == "ЭИС"),
                         Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
                         Number = 15
                     },
                     new Group()
                     {
-                        Name = context.GroupNames.FirstOrDefault(n => n.Name == "ЭИС"),
                         Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
                         Number = 16
                     }
@@ -144,14 +112,10 @@ namespace StudentAchievements.Infrastructure
 
                 context.Groups.AddRange(groups);
                 context.SaveChanges();
-
-                return true;
             }
-
-            return false;
         }
 
-        private bool SetGroupsType()
+        private void SetGroupsType()
         {
             if (!context.ProgramType.Any())
             {
@@ -169,14 +133,10 @@ namespace StudentAchievements.Infrastructure
 
                 context.ProgramType.AddRange(groupsType);
                 context.SaveChanges();
-
-                return true;
             }
-
-            return false;
         }
 
-        private bool SetDepartments()
+        private void SetDepartments()
         {
             if (!context.Departments.Any())
             {
@@ -210,14 +170,10 @@ namespace StudentAchievements.Infrastructure
 
                 context.Departments.AddRange(departments);
                 context.SaveChanges();
-
-                return true;
             }
-
-            return false;
         }
 
-        private bool SetDirection()
+        private void SetDirection()
         {
             if (!context.Directions.Any())
             {
@@ -257,6 +213,7 @@ namespace StudentAchievements.Infrastructure
                     new Direction()
                     {
                         Name = "Информационные системы и технологии",
+                        GroupName = "ЭИС",
                         Department = context.Departments.FirstOrDefault(d => d.Name == "Цифровых систем"),
                         ProgramType = context.ProgramType.FirstOrDefault(p => p.Name == "Бакалавриат")
                     },
@@ -269,6 +226,7 @@ namespace StudentAchievements.Infrastructure
                     new Direction()
                     {
                         Name = "Управление проектами разработки программного обеспечения",
+                        GroupName = "ЭПИ",
                         Department = context.Departments.FirstOrDefault(d => d.Name == "Цифровых систем"),
                         ProgramType = context.ProgramType.FirstOrDefault(p => p.Name == "Бакалавриат")
                     },
@@ -577,21 +535,16 @@ namespace StudentAchievements.Infrastructure
 
                 context.Directions.AddRange(directions);
                 context.SaveChanges();
-
-                return true;
             }
-
-            return false;
         }
 
-        private bool SetAllData()
+        private void SetAllData()
         {
-            if (SetGroupsType() && SetFormEducation() && SetDepartments() && SetDirection() && SetGroupNames() && SetGroups())
-            {
-                return true;
-            }
-
-            return false;
+            SetGroupsType();
+            SetFormEducation();
+            SetDepartments();
+            SetDirection();
+            SetGroups();
         }
     }
 }

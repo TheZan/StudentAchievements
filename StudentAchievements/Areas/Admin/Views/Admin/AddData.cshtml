@@ -9,7 +9,6 @@
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <a class="nav-link active" id="nav-departments-tab" data-toggle="tab" href="#nav-departments" role="tab" aria-controls="nav-departments" aria-selected="true">Факультеты</a>
         <a class="nav-link" id="nav-directions-tab" data-toggle="tab" href="#nav-directions" role="tab" aria-controls="nav-directions" aria-selected="false">Направления</a>
-        <a class="nav-link" id="nav-groupsnames-tab" data-toggle="tab" href="#nav-groupsnames" role="tab" aria-controls="nav-groupsnames" aria-selected="false">Названия групп</a>
         <a class="nav-link" id="nav-groups-tab" data-toggle="tab" href="#nav-groups" role="tab" aria-controls="nav-groups" aria-selected="false">Группы</a>
     </div>
 </nav>
@@ -20,10 +19,7 @@
     <div class="tab-pane fade" id="nav-directions" role="tabpanel" aria-labelledby="nav-directions-tab">
         @await Html.PartialAsync("AddDirections", Model.AddDirectionsViewModel);
     </div>
-    <div class="tab-pane fade" id="nav-groupsnames" role="tabpanel" aria-labelledby="nav-groupsnames-tab">
-        3
-    </div>
     <div class="tab-pane fade" id="nav-groups" role="tabpanel" aria-labelledby="nav-groups-tab">
-        4
+        @await Html.PartialAsync("AddGroups", Model.AddGroupsViewModel);
     </div>
 </div>

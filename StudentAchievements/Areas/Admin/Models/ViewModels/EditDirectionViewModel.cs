@@ -17,14 +17,18 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         public string Name { get; set; }
 
         [Required]
+        [DisplayName("Название группы")]
+        public string GroupName { get; set; }
+
+        [Required]
         [DisplayName("Факультет")]
-        public int Department { get; set; }
+        public int? Department { get; set; }
 
         public IEnumerable<SelectListItem> DepartmentsList { get; set; }
 
         [Required]
         [DisplayName("Тип обучения")]
-        public int ProgramType { get; set; }
+        public int? ProgramType { get; set; }
 
         public IEnumerable<SelectListItem> ProgramTypeList { get; set; }
     }

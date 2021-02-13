@@ -37,7 +37,7 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 
         [Required]
         [DisplayName("Факультет")]
-        public int Department { get; set; }
+        public int? Department { get; set; }
 
         [DisplayName("Фото")]
         public byte[] Photo { get; set; }

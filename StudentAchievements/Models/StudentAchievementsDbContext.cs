@@ -14,7 +14,7 @@ namespace StudentAchievements.Models
         public StudentAchievementsDbContext(DbContextOptions<StudentAchievementsDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public DbSet<Employer> Employers { get; set; }
@@ -29,6 +29,5 @@ namespace StudentAchievements.Models
         public DbSet<ProgramType> ProgramType { get; set; }
         public DbSet<Direction> Directions { get; set; }
         public DbSet<FormEducation> FormEducations { get; set; }
-        public DbSet<GroupNames> GroupNames { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace StudentAchievements.Migrations
 {
-    public partial class InitDatabase : Migration
+    public partial class InitDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -72,19 +72,6 @@ namespace StudentAchievements.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FormEducations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GroupNames",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GroupNames", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -293,6 +280,7 @@ namespace StudentAchievements.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DepartmentId = table.Column<int>(type: "int", nullable: true),
                     ProgramTypeId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -319,7 +307,6 @@ namespace StudentAchievements.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NameId = table.Column<int>(type: "int", nullable: true),
                     Number = table.Column<int>(type: "int", nullable: false),
                     DirectionId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -330,12 +317,6 @@ namespace StudentAchievements.Migrations
                         name: "FK_Groups_Directions_DirectionId",
                         column: x => x.DirectionId,
                         principalTable: "Directions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Groups_GroupNames_NameId",
-                        column: x => x.NameId,
-                        principalTable: "GroupNames",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -503,11 +484,6 @@ namespace StudentAchievements.Migrations
                 column: "DirectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_NameId",
-                table: "Groups",
-                column: "NameId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Students_FormEducationId",
                 table: "Students",
                 column: "FormEducationId");
@@ -585,9 +561,6 @@ namespace StudentAchievements.Migrations
 
             migrationBuilder.DropTable(
                 name: "Directions");
-
-            migrationBuilder.DropTable(
-                name: "GroupNames");
 
             migrationBuilder.DropTable(
                 name: "Departments");

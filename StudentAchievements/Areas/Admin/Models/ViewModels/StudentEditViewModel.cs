@@ -49,11 +49,11 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 
         [Required]
         [DisplayName("Учебная группа")]
-        public int Group { get; set; }
+        public int? Group { get; set; }
 
         [Required]
         [DisplayName("Форма обучения")]
-        public int FormEducation { get; set; }
+        public int? FormEducation { get; set; }
 
         public IEnumerable<SelectListItem> GroupsList { get; set; }
 

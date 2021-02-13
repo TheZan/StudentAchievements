@@ -13,10 +13,6 @@ namespace StudentAchievements.Areas.Authorization.Models
         Task<bool> EditDirection(Direction direction);
         Task<bool> DeleteDirection(Direction direction);
 
-        Task<bool> AddGroupName(GroupNames groupNames);
-        Task<bool> EditGroupName(GroupNames groupNames);
-        Task<bool> DeleteGroupName(GroupNames groupNames);
-
         Task<bool> AddGroup(Group group);
         Task<bool> EditGroup(Group group);
         Task<bool> DeleteGroup(Group group);

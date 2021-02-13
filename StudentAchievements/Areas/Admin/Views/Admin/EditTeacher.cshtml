@@ -11,7 +11,6 @@
     </div>
     <div class="card-body">
         <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="EditTeacher">
-            <div class="text-danger" asp-validation-summary="All"></div>
             <input asp-for="Id" type="hidden" />
             <div class="form-group">
                 <div><span asp-validation-for="Email" class="text-danger"></span></div>

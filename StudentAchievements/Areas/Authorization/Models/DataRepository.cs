@@ -49,19 +49,6 @@ namespace StudentAchievements.Areas.Authorization.Models
             return false;
         }
 
-        public async Task<bool> AddGroupName(GroupNames groupNames)
-        {
-            if(groupNames != null)
-            {
-                await context.GroupNames.AddAsync(groupNames);
-                await context.SaveChangesAsync();
-
-                return true;
-            }
-
-            return false;
-        }
-
         public async Task<bool> DeleteDepartment(Department department)
         {
             if (department != null)
@@ -93,19 +80,6 @@ namespace StudentAchievements.Areas.Authorization.Models
             if (group != null)
             {
                 context.Groups.Remove(group);
-                await context.SaveChangesAsync();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task<bool> DeleteGroupName(GroupNames groupNames)
-        {
-            if (groupNames != null)
-            {
-                context.GroupNames.Remove(groupNames);
                 await context.SaveChangesAsync();
 
                 return true;
@@ -152,24 +126,8 @@ namespace StudentAchievements.Areas.Authorization.Models
             if (group != null)
             {
                 var oldGroup = context.Groups.FirstOrDefault(p => p.Id == group.Id);
-                oldGroup.Name = group.Name;
                 oldGroup.Number = group.Number;
                 oldGroup.Direction = group.Direction;
-
-                await context.SaveChangesAsync();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task<bool> EditGroupName(GroupNames groupNames)
-        {
-            if (groupNames != null)
-            {
-                var oldGroupNames = context.GroupNames.FirstOrDefault(p => p.Id == groupNames.Id);
-                oldGroupNames.Name = groupNames.Name;
 
                 await context.SaveChangesAsync();
 

@@ -24,9 +24,16 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
                 DepartmentsList = context.Departments.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
                 ProgramTypeList = context.ProgramType.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name })
             };
+
+            AddGroupsViewModel = new AddGroupsViewModel()
+            {
+                Groups = context.Groups.Include(d => d.Direction),
+                DirectionsList = context.Directions.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name })
+            };
         }
 
         public AddDepartmentsViewModel AddDepartmentsViewModel { get; set; }
         public AddDirectionsViewModel AddDirectionsViewModel { get; set; }
+        public AddGroupsViewModel AddGroupsViewModel { get; set; }
     }
 }

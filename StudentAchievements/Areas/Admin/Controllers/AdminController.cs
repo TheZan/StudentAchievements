@@ -181,7 +181,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                             Group = studentInfo.Group.Id,
                             Gender = studentInfo.Gender,
                             FormEducation = studentInfo.FormEducation.Id,
-                            GroupsList = context.Groups.Include(g => g.Name).Select(p => new SelectListItem { Value = p.Id.ToString(), Text = $"{p.Name.Name}-{p.Number}" }),
+                            GroupsList = context.Groups.Include(g => g.Direction).Select(p => new SelectListItem { Value = p.Id.ToString(), Text = $"{p.Direction.GroupName}-{p.Number}" }),
                             FormEducationList = context.FormEducations.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
                             Id = id
                 };
@@ -195,6 +195,8 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
             return StatusCode(StatusCodes.Status404NotFound);
         }
+
+        #region Admin
 
         [HttpPost]
         public async Task<IActionResult> EditAdmin(AdminEditViewModel model)
@@ -220,6 +222,10 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
             return View("EditAdmin", model);
         }
+
+        #endregion
+
+        #region Employer
 
         [HttpPost]
         public async Task<IActionResult> EditEmployer(EmployerEditViewModel model)
@@ -249,6 +255,50 @@ namespace StudentAchievements.Areas.Admin.Controllers
             return View("EditEmployer", model);
         }
 
+        #endregion
+
+        #region Teacher
+
+        [HttpPost]
+        public async Task<IActionResult> AddTeacher(AddTeacherViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Name,
+                    Photo = UploadedImage(model)
+                };
+
+                var result = await repository.AddUser(user, model.Password,
+                    new Teacher()
+                    {
+                        User = user,
+                        Gender = model.Gender,
+                        Department = context.Departments.FirstOrDefault(d => d.Id == model.Department)
+                    });
+
+                if (result.Succeeded)
+                {
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userManager.ConfirmEmailAsync(user, code);
+
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            return View("AddUsers", new AddUsersViewModel(context));
+        }
+
         [HttpPost]
         public async Task<IActionResult> EditTeacher(TeacherEditViewModel model)
         {
@@ -276,6 +326,10 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
             return View("EditTeacher", model);
         }
+
+        #endregion
+
+        #region Student
 
         [HttpPost]
         public async Task<IActionResult> EditStudent(StudentEditViewModel model)
@@ -345,64 +399,9 @@ namespace StudentAchievements.Areas.Admin.Controllers
             return View("AddUsers", new AddUsersViewModel(context));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddTeacher(AddTeacherViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = new User()
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Name = model.Name,
-                    Photo = UploadedImage(model)
-                };
+        #endregion
 
-                var result = await repository.AddUser(user, model.Password,
-                    new Teacher()
-                    {
-                        User = user,
-                        Gender = model.Gender,
-                        Department = context.Departments.FirstOrDefault(d => d.Id == model.Department)
-                    });
-
-                if (result.Succeeded)
-                {
-                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    await userManager.ConfirmEmailAsync(user, code);
-
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-
-            return View("AddUsers", new AddUsersViewModel(context));
-        }
-
-        private byte[] UploadedImage(IAddUserViewModel model)
-        {
-            byte[] photo = null;
-
-            if (model.UploadPhoto != null)
-            {
-                if (model.UploadPhoto.Length > 0)
-                {
-                    using (var binaryReader = new BinaryReader(model.UploadPhoto.OpenReadStream()))
-                    {
-                        photo = binaryReader.ReadBytes((int)model.UploadPhoto.Length);
-                    }
-
-                    return photo;
-                }
-            }
-            return photo;
-        }
+        #region Department
 
         [HttpPost]
         public async Task<IActionResult> AddDepartment(AddDepartmentsViewModel model)
@@ -487,6 +486,10 @@ namespace StudentAchievements.Areas.Admin.Controllers
             return View("EditDepartment", model);
         }
 
+        #endregion
+
+        #region Direction
+
         [HttpPost]
         public async Task<IActionResult> AddDirection(AddDirectionsViewModel model)
         {
@@ -495,6 +498,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 var direction = new Direction()
                 {
                     Name = model.Name,
+                    GroupName = model.GroupName,
                     Department = await context.Departments.FirstOrDefaultAsync(d => d.Id == model.Department),
                     ProgramType = await context.ProgramType.FirstOrDefaultAsync(d => d.Id == model.ProgramType)
                 };
@@ -535,6 +539,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 {
                     Id = direction.Id,
                     Name = direction.Name,
+                    GroupName = direction.GroupName,
                     Department = direction.Department.Id,
                     ProgramType = direction.ProgramType.Id,
                     DepartmentsList = context.Departments.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
@@ -563,6 +568,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 {
 
                     direction.Name = model.Name;
+                    direction.GroupName = model.GroupName;
                     direction.Department = await context.Departments.FirstOrDefaultAsync(d => d.Id == model.Department);
                     direction.ProgramType = await context.ProgramType.FirstOrDefaultAsync(d => d.Id == model.ProgramType);
 
@@ -578,6 +584,118 @@ namespace StudentAchievements.Areas.Admin.Controllers
             }
 
             return View("EditDirection", model);
+        }
+
+        #endregion
+
+        #region Group
+
+        [HttpPost]
+        public async Task<IActionResult> AddGroup(AddGroupsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var group = new Group()
+                {
+                    Number = model.Number,
+                    Direction = await context.Directions.FirstOrDefaultAsync(d => d.Id == model.Direction),
+                };
+
+                var result = await dataRepository.AddGroup(group);
+
+                if (result)
+                {
+                    return RedirectToAction("AddData");
+                }
+            }
+
+            return View("AddData", new AddDataViewModel(context));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteGroup(int id)
+        {
+            var group = context.Groups.FirstOrDefault(d => d.Id == id);
+
+            if (group != null)
+            {
+                await dataRepository.DeleteGroup(group);
+            }
+
+            return RedirectToAction("AddData");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditGroup(int id)
+        {
+            var group = await context.Groups.Include(d => d.Direction).FirstOrDefaultAsync(d => d.Id == id);
+
+            if (group != null)
+            {
+                var model = new EditGroupViewModel()
+                {
+                    Id = group.Id,
+                    Direction = group.Direction.Id,
+                    Number = group.Number,
+                    DirectionsList = context.Directions.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
+                };
+
+                return View("EditGroup", model);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Группа не найдена.");
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditGroup(EditGroupViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var group = await context.Groups.Include(d => d.Direction).FirstOrDefaultAsync(d => d.Id == model.Id);
+
+                if (group != null)
+                {
+
+                    group.Number = model.Number;
+                    group.Direction = await context.Directions.FirstOrDefaultAsync(d => d.Id == model.Direction);
+
+                    if (await dataRepository.EditGroup(group))
+                    {
+                        return RedirectToAction(nameof(AddData));
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Группа не найдена.");
+                }
+            }
+
+            return View("EditGroup", model);
+        }
+
+        #endregion
+
+        private byte[] UploadedImage(IAddUserViewModel model)
+        {
+            byte[] photo = null;
+
+            if (model.UploadPhoto != null)
+            {
+                if (model.UploadPhoto.Length > 0)
+                {
+                    using (var binaryReader = new BinaryReader(model.UploadPhoto.OpenReadStream()))
+                    {
+                        photo = binaryReader.ReadBytes((int)model.UploadPhoto.Length);
+                    }
+
+                    return photo;
+                }
+            }
+            return photo;
         }
     }
 }

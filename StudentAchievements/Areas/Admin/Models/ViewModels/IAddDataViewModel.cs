@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
-    interface IAddDataViewModel
+    public interface IAddDataViewModel
     {
         [Required]
         [DisplayName("Название")]

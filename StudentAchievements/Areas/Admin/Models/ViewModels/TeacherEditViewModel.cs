@@ -44,7 +44,7 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 
         [Required]
         [DisplayName("Факультет")]
-        public int Department { get; set; }
+        public int? Department { get; set; }
 
         public IEnumerable<SelectListItem> DepartmentsList { get; set; }
 

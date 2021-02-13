@@ -8,7 +8,6 @@
 <div class="card">
     <div class="card-body">
         <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="AddTeachers">
-            <div class="text-danger" asp-validation-summary="All"></div>
             <div class="form-group">
                 <div><span asp-validation-for="Email" class="text-danger"></span></div>
                 <label asp-for="Email"></label>
