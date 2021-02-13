@@ -1,4 +1,7 @@
-﻿@model AddDirectionsViewModel
+﻿@using DynamicVML.Extensions
+@model AddDirectionsViewModel
+
+<link rel="stylesheet" asp-href-include="/lib/font-awesome/css/all.min.css" />
 
 <div class="card">
     <div class="card-header">
@@ -17,28 +20,28 @@
             <tbody>
                 @foreach (var direction in Model.Directions)
                 {
-                <tr>
-                    <td class="align-middle text-center">
-                        @direction.Id
-                    </td>
-                    <td class="align-middle">
-                        @direction.Department.Name
-                    </td>
-                    <td class="align-middle">
-                        @direction.ProgramType.Name
-                    </td>
-                    <td class="align-middle">
-                        @direction.Name
-                    </td>
-                    <td class="align-middle">
-                        <a asp-area="Admin" asp-controller="Admin" asp-action="EditDirection" asp-route-id="@direction.Id" class="btn btn-warning">Изменить</a>
-                    </td>
-                    <td class="align-middle">
-                        <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="DeleteDirection" asp-route-id="@direction.Id">
-                            <button type="submit" class="btn btn-danger">Удалить</button>
-                        </form>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="align-middle text-center">
+                            @direction.Id
+                        </td>
+                        <td class="align-middle">
+                            @direction.Department.Name
+                        </td>
+                        <td class="align-middle">
+                            @direction.ProgramType.Name
+                        </td>
+                        <td class="align-middle">
+                            @direction.Name
+                        </td>
+                        <td class="align-middle">
+                            <a asp-area="Admin" asp-controller="Admin" asp-action="EditDirection" asp-route-id="@direction.Id" class="btn btn-warning">Изменить</a>
+                        </td>
+                        <td class="align-middle">
+                            <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="DeleteDirection" asp-route-id="@direction.Id">
+                                <button type="submit" class="btn btn-danger">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -49,7 +52,7 @@
         Добавить новое направление
     </div>
     <div class="card-body">
-        <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="AddDirection">
+        <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="AddDirection">
             <div class="form-group">
                 <div><span asp-validation-for="Name" class="text-danger"></span></div>
                 <label asp-for="Name"></label>
@@ -74,7 +77,22 @@
                     <option disabled selected>Выберите тип обучения</option>
                 </select>
             </div>
+            <div class="form-group">
+                <div class="card">
+                    <div class="card-header">
+                        Список предметов
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @Html.ListEditorFor(x => x.SubjectsList, Url.Action("AddSubject"), "Добавить предмет")
+                            @*<a type="button" class="btn" id="btnAdd"><i class="fas fa-plus-circle"></i></a>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
             <button class="btn btn-primary" type="submit">Добавить</button>
         </form>
     </div>
-</div> 
+</div>
+
+<script src="~/lib/dynamic-viewmodel-list/dvml.js"></script>

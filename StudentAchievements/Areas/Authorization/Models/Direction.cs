@@ -13,5 +13,6 @@ namespace StudentAchievements.Areas.Authorization.Models
         public Department Department { get; set; }
         public ProgramType ProgramType { get; set; }
         public List<Group> Groups { get; set; }
+        public List<Subject> Subjects { get; set; }
     }
 }

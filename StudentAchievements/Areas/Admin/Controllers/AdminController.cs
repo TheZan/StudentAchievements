@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DynamicVML;
+using DynamicVML.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -678,6 +680,11 @@ namespace StudentAchievements.Areas.Admin.Controllers
         }
 
         #endregion
+
+        public IActionResult AddSubject(AddNewDynamicItem parameters)
+        {
+            return this.PartialView(new Subject(), parameters);
+        }
 
         private byte[] UploadedImage(IAddUserViewModel model)
         {
