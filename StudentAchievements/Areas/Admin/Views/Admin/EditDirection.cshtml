@@ -1,4 +1,5 @@
-﻿@model EditDirectionViewModel
+﻿@using DynamicVML.Extensions
+@model EditDirectionViewModel
 
 @{
     Layout = "_AdminLayout";
@@ -10,7 +11,44 @@
         @Model.Name
     </div>
     <div class="card-body">
+        <div class="card">
+            <div class="card-header">
+                Список предметов
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="col">Название</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var subject in Model.Subjects)
+                        {
+                            <tr>
+                                <td class="align-middle">
+                                    @subject.Name
+                                </td>
+                                <td class="align-middle">
+                                    <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="DeleteSubject" asp-route-id="@subject.Id">
+                                        <button type="submit" class="btn btn-danger">Удалить</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="EditDirection">
+            <div class="card">
+                <div class="card-header">
+                    Добавить предмет
+                </div>
+                <div class="card-body">
+                    @Html.ListEditorFor(x => x.SubjectsList, Url.Action("AddSubject"), "Добавить предмет")
+                </div>
+            </div>
             <input asp-for="Id" type="hidden" />
             <div class="form-group">
                 <div><span asp-validation-for="Name" class="text-danger"></span></div>

@@ -11,6 +11,7 @@ namespace StudentAchievements.Areas.Authorization.Models
         public int Id { get; set; }
         [DisplayName("Название")]
         public string Name { get; set; }
+        public int DirectionId { get; set; }
         public Direction Direction { get; set; }
     }
 }

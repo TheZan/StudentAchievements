@@ -1,8 +1,6 @@
 ﻿@using DynamicVML.Extensions
 @model AddDirectionsViewModel
 
-<link rel="stylesheet" asp-href-include="/lib/font-awesome/css/all.min.css" />
-
 <div class="card">
     <div class="card-header">
         Список направлений
@@ -85,7 +83,6 @@
                     <div class="card-body">
                         <div class="row">
                             @Html.ListEditorFor(x => x.SubjectsList, Url.Action("AddSubject"), "Добавить предмет")
-                            @*<a type="button" class="btn" id="btnAdd"><i class="fas fa-plus-circle"></i></a>*@
                         </div>
                     </div>
                 </div>
@@ -94,5 +91,3 @@
         </form>
     </div>
 </div>
-
-<script src="~/lib/dynamic-viewmodel-list/dvml.js"></script>

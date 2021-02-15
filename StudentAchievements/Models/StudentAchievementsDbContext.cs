@@ -14,7 +14,7 @@ namespace StudentAchievements.Models
         public StudentAchievementsDbContext(DbContextOptions<StudentAchievementsDbContext> options)
             : base(options)
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         public DbSet<Employer> Employers { get; set; }

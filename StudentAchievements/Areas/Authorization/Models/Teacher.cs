@@ -10,6 +10,7 @@ namespace StudentAchievements.Areas.Authorization.Models
         public int Id { get; set; }
         public User User { get; set; }
         public string Gender { get; set; }
+        public int DepartmentId { get; set; }
         public Department Department { get; set; }
     }
 }

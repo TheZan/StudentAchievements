@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using DynamicVML;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using StudentAchievements.Areas.Authorization.Models;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
@@ -31,5 +33,9 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         public int? ProgramType { get; set; }
 
         public IEnumerable<SelectListItem> ProgramTypeList { get; set; }
+
+        public IEnumerable<Subject> Subjects { get; set; }
+
+        public DynamicList<Subject> SubjectsList { get; set; } = new DynamicList<Subject>();
     }
 }

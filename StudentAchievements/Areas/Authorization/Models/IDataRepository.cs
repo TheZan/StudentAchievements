@@ -16,5 +16,9 @@ namespace StudentAchievements.Areas.Authorization.Models
         Task<bool> AddGroup(Group group);
         Task<bool> EditGroup(Group group);
         Task<bool> DeleteGroup(Group group);
+
+        Task<bool> AddSubject(Subject subject);
+        Task<bool> EditSubject(Subject subject);
+        Task<bool> DeleteSubject(Subject subject);
     }
 }

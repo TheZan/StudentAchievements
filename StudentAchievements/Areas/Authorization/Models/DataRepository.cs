@@ -49,6 +49,19 @@ namespace StudentAchievements.Areas.Authorization.Models
             return false;
         }
 
+        public async Task<bool> AddSubject(Subject subject)
+        {
+            if(subject != null)
+            {
+                await context.Subjects.AddAsync(subject);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> DeleteDepartment(Department department)
         {
             if (department != null)
@@ -80,6 +93,19 @@ namespace StudentAchievements.Areas.Authorization.Models
             if (group != null)
             {
                 context.Groups.Remove(group);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteSubject(Subject subject)
+        {
+            if (subject != null)
+            {
+                context.Subjects.Remove(subject);
                 await context.SaveChangesAsync();
 
                 return true;
@@ -128,6 +154,22 @@ namespace StudentAchievements.Areas.Authorization.Models
                 var oldGroup = context.Groups.FirstOrDefault(p => p.Id == group.Id);
                 oldGroup.Number = group.Number;
                 oldGroup.Direction = group.Direction;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> EditSubject(Subject subject)
+        {
+            if (subject != null)
+            {
+                var oldSubject = context.Subjects.FirstOrDefault(p => p.Id == subject.Id);
+                oldSubject.Name = subject.Name;
+                oldSubject.Direction = subject.Direction;
 
                 await context.SaveChangesAsync();
 

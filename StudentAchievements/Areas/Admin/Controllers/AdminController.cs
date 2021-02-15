@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -509,6 +510,18 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
                 if (result)
                 {
+                    var subjects = model.SubjectsList.ToModel(s => new Subject
+                    {
+                        Name = s.Name,
+                        Direction = s.Direction
+                    }).ToList();
+
+                    foreach (var subject in subjects)
+                    {
+                        subject.Direction = direction;
+                        await dataRepository.AddSubject(subject);
+                    }
+
                     return RedirectToAction("AddData");
                 }
             }
@@ -532,7 +545,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> EditDirection(int id)
         {
-            var direction = await context.Directions.Include(d => d.Department).Include(p => p.ProgramType)
+            var direction = await context.Directions.Include(d => d.Department).Include(p => p.ProgramType).Include(s => s.Subjects)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
             if (direction != null)
@@ -545,7 +558,8 @@ namespace StudentAchievements.Areas.Admin.Controllers
                     Department = direction.Department.Id,
                     ProgramType = direction.ProgramType.Id,
                     DepartmentsList = context.Departments.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
-                    ProgramTypeList = context.ProgramType.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name })
+                    ProgramTypeList = context.ProgramType.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
+                    Subjects = direction.Subjects
                 };
 
                 return View("EditDirection", model);
@@ -576,6 +590,18 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
                     if (await dataRepository.EditDirection(direction))
                     {
+                        var subjects = model.SubjectsList.ToModel(s => new Subject
+                        {
+                            Name = s.Name,
+                            Direction = s.Direction
+                        }).ToList();
+
+                        foreach (var subject in subjects)
+                        {
+                            subject.Direction = direction;
+                            await dataRepository.AddSubject(subject);
+                        }
+
                         return RedirectToAction(nameof(AddData));
                     }
                 }
@@ -681,10 +707,27 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
         #endregion
 
+        #region Subject
+
         public IActionResult AddSubject(AddNewDynamicItem parameters)
         {
             return this.PartialView(new Subject(), parameters);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteSubject(int id)
+        {
+            var subject = await context.Subjects.FirstOrDefaultAsync(s => s.Id == id);
+
+            if(subject != null)
+            {
+                await dataRepository.DeleteSubject(subject);
+            }
+
+            return RedirectToAction("EditDirection", new { id = subject.DirectionId });
+        }
+
+        #endregion
 
         private byte[] UploadedImage(IAddUserViewModel model)
         {

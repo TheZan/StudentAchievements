@@ -10,7 +10,7 @@ using StudentAchievements.Models;
 namespace StudentAchievements.Migrations
 {
     [DbContext(typeof(StudentAchievementsDbContext))]
-    [Migration("20210213101911_InitDb")]
+    [Migration("20210215124503_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -165,7 +165,7 @@ namespace StudentAchievements.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StudentId")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -205,7 +205,7 @@ namespace StudentAchievements.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StudentId")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SubjectId")
@@ -242,7 +242,7 @@ namespace StudentAchievements.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("GroupName")
@@ -305,7 +305,7 @@ namespace StudentAchievements.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DirectionId")
+                    b.Property<int>("DirectionId")
                         .HasColumnType("int");
 
                     b.Property<int>("Number")
@@ -343,13 +343,13 @@ namespace StudentAchievements.Migrations
                     b.Property<DateTime>("Dob")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FormEducationId")
+                    b.Property<int>("FormEducationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupId")
+                    b.Property<int>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -373,10 +373,15 @@ namespace StudentAchievements.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("DirectionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DirectionId");
 
                     b.ToTable("Subjects");
                 });
@@ -388,7 +393,7 @@ namespace StudentAchievements.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Gender")
@@ -532,7 +537,9 @@ namespace StudentAchievements.Migrations
                 {
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.Student", "Student")
                         .WithMany("Achievements")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Student");
                 });
@@ -550,7 +557,9 @@ namespace StudentAchievements.Migrations
                 {
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.Student", "Student")
                         .WithMany("Assessments")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.Subject", "Subject")
                         .WithMany()
@@ -565,7 +574,9 @@ namespace StudentAchievements.Migrations
                 {
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.Department", "Department")
                         .WithMany("Directions")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.ProgramType", "ProgramType")
                         .WithMany("Directions")
@@ -589,7 +600,9 @@ namespace StudentAchievements.Migrations
                 {
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.Direction", "Direction")
                         .WithMany("Groups")
-                        .HasForeignKey("DirectionId");
+                        .HasForeignKey("DirectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Direction");
                 });
@@ -598,11 +611,15 @@ namespace StudentAchievements.Migrations
                 {
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.FormEducation", "FormEducation")
                         .WithMany("Students")
-                        .HasForeignKey("FormEducationId");
+                        .HasForeignKey("FormEducationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.Group", "Group")
                         .WithMany("Students")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "User")
                         .WithMany()
@@ -615,11 +632,24 @@ namespace StudentAchievements.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.Subject", b =>
+                {
+                    b.HasOne("StudentAchievements.Areas.Authorization.Models.Direction", "Direction")
+                        .WithMany("Subjects")
+                        .HasForeignKey("DirectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Direction");
+                });
+
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.Teacher", b =>
                 {
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "User")
                         .WithMany()
@@ -638,6 +668,8 @@ namespace StudentAchievements.Migrations
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.Direction", b =>
                 {
                     b.Navigation("Groups");
+
+                    b.Navigation("Subjects");
                 });
 
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.FormEducation", b =>
