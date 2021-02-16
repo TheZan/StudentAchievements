@@ -6,72 +6,84 @@
 }
 
 <div>
+    <div class="card">
+        <div class="card-header">
+            Поиск
+        </div>
+        <div class="card-body">
+            <form asp-action="Index" asp-controller="Admin" asp-area="Admin" method="get">
+                <div class="input-group">
+                    <input name="SearchString" value="@ViewData["CurrentFilter"]" type="text" class="form-control">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <th class="col-sm">ФИО</th>
-            <th class="col-sm">Email</th>
-            <th class="col-sm">Роль</th>
-        </tr>
+            <tr>
+                <th class="col-sm">ФИО</th>
+                <th class="col-sm">Email</th>
+                <th class="col-sm">Роль</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var user in Model.Users)
-        {
-            <tr>
-                <td class="align-middle">
-                    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(user.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true"/>
-                    @user.Name
-                </td>
-                <td class="align-middle">@user.Email</td>
-                <td class="align-middle">@await Model.GetRole(user)</td>
-                <td>
-                    <a class="btn btn-warning" asp-area="Admin" asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">Изменить</a>
-                </td>
-                <td>
-                    <form method="post" asp-area="Authorization" asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">
-                        <button type="submit" class="btn btn-danger">Удалить</button>
-                    </form>
-                </td>
-            </tr>
-        }
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td class="align-middle">
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(user.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true" />
+                        @user.Name
+                    </td>
+                    <td class="align-middle">@user.Email</td>
+                    <td class="align-middle">@await Model.GetRole(user)</td>
+                    <td>
+                        <a class="btn btn-warning" asp-area="Admin" asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id">Изменить</a>
+                    </td>
+                    <td>
+                        <form method="post" asp-area="Authorization" asp-controller="Account" asp-action="DeleteUser" asp-route-id="@user.Id">
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
     <br />
-    <form asp-action="Index" asp-controller="Admin" method="post">
-        <nav>
-            <ul class="pagination justify-content-center fixed-bottom">
-                @if (Model.CurrentPageIndex > 1)
-                {
-                    <li class="page-item"><a class="page-link" href="javascript:PagerClick(@Model.CurrentPageIndex - 1);">Назад</a></li>
-                }
 
-                @foreach (var index in Model.GetPageList(Model.CurrentPageIndex, Model.CurrentPageIndex + 4))
-                {
-                    @if (Model.PageCount > 1)
-                    {
-                        @if (index != Model.CurrentPageIndex)
-                        {
-                            <li class="page-item"><a class="page-link" href="javascript:PagerClick(@index);">@index</a></li>
-                        }
-                        else
-                        {
-                            <li class="page-item active"><a class="page-link">@index</a></li>
-                        }
-                    }
-                }
+    @{
+        var prevDisabled = !Model.Users.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Users.HasNextPage ? "disabled" : "";
+    }
 
-                @if (Model.CurrentPageIndex < Model.PageCount)
-                {
-                    <li class="page-item"><a class="page-link" href="javascript:PagerClick(@Model.CurrentPageIndex + 1);">Вперед</a></li>
-                }
-            </ul>
-        </nav>
-        <input type="hidden" id="hfCurrentPageIndex" name="currentPageIndex" />
-    </form>
-    <script type="text/javascript">
-        function PagerClick(index) {
-            document.getElementById("hfCurrentPageIndex").value = index;
-            document.forms[0].submit();
-        }
-    </script>
+    @if (Model.Users.TotalPages > 1)
+    {
+    <nav>
+        <ul class="pagination justify-content-center fixed-bottom">
+            <li class="page-item @prevDisabled">
+                <a asp-action="Index"
+                   asp-controller="Admin"
+                   asp-area="Admin"
+                   asp-route-pageNumber="@(Model.Users.PageIndex - 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="page-link"> Назад
+                </a>
+            </li>
+            <li class="page-item @nextDisabled">
+                <a asp-action="Index"
+                   asp-controller="Admin"
+                   asp-area="Admin"
+                   asp-route-pageNumber="@(Model.Users.PageIndex + 1)"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   class="page-link"> Вперед
+                </a>
+            </li>
+        </ul>
+    </nav>
+    }
 </div>

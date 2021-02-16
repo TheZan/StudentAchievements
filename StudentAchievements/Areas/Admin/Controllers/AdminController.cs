@@ -35,39 +35,39 @@ namespace StudentAchievements.Areas.Admin.Controllers
             dataRepository = _dataRepository;
         }
 
-        public ViewResult Index()
+        public async Task<IActionResult> Index(string searchString, int? pageNumber)
         {
             ViewBag.UsersSelected = "active";
-            ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "";
+            ViewBag.DataSelected = "";
 
-            return View(GetUsers(1));
-        }
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
 
-        [HttpPost]
-        public ViewResult Index(int currentPageIndex)
-        {
-            ViewBag.UsersSelected = "active";
-            ViewBag.AboutSelected = "";
-            ViewBag.AddUsersSelected = "";
+            ViewData["CurrentFilter"] = searchString;
 
-            return View(GetUsers(currentPageIndex));
-        }
+            var user = repository.Users;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                user = user.Where(s => s.Name.Contains(searchString)
+                                       || s.Email.Contains(searchString));
+            }
 
-        public ViewResult About()
-        {
-            ViewBag.UsersSelected = "";
-            ViewBag.AboutSelected = "active";
-            ViewBag.AddUsersSelected = "";
+            int pageSize = 10;
 
-            return View();
+            return View(new UsersListViewModel(userManager)
+            {
+                Users = await PaginatedList<User>.CreateAsync(user.AsNoTracking(), pageNumber ?? 1, pageSize)
+            });
         }
 
         public ViewResult AddUsers()
         {
             ViewBag.UsersSelected = "";
-            ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "active";
+            ViewBag.DataSelected = "";
 
             return View(new AddUsersViewModel(context));
         }
@@ -75,7 +75,6 @@ namespace StudentAchievements.Areas.Admin.Controllers
         public ViewResult AddData()
         {
             ViewBag.UsersSelected = "";
-            ViewBag.AboutSelected = "";
             ViewBag.AddUsersSelected = "";
             ViewBag.DataSelected = "active";
 
@@ -89,44 +88,6 @@ namespace StudentAchievements.Areas.Admin.Controllers
         public IActionResult AddDepartments() => PartialView("AddDepartments");
 
         public IActionResult AddDirections() => PartialView("AddDirections");
-
-        private UsersListViewModel GetUsers(int currentPage)
-        {
-            int maxRows = 10;
-            var usersModel = new UsersListViewModel(userManager)
-            {
-                Users = repository.Users
-                    .OrderBy(user => user.Id)
-                    .Skip((currentPage - 1) * maxRows)
-                    .Take(maxRows).ToList()
-            };
-
-            //if (string.IsNullOrWhiteSpace(searchString))
-            //{
-
-            //    usersModel.ApplicationUsers = repository.ApplicationUsers
-            //        .OrderBy(user => user.Id)
-            //        .Skip((currentPage - 1) * maxRows)
-            //        .Take(maxRows).ToList();
-            //    usersModel.IdentityUsers = repository.IdentityUsers;
-            //}
-            //else
-            //{
-            //    usersModel.ApplicationUsers = repository.ApplicationUsers
-            //        .Where(u => u.Name.Contains(searchString))
-            //        .OrderBy(user => user.Id)
-            //        .Skip((currentPage - 1) * maxRows)
-            //        .Take(maxRows).ToList();
-            //    usersModel.IdentityUsers = repository.IdentityUsers;
-            //}
-
-            double pageCount = (double)(repository.Users.Count() / Convert.ToDecimal(maxRows));
-            usersModel.PageCount = (int)Math.Ceiling(pageCount);
-
-            usersModel.CurrentPageIndex = currentPage;
-
-            return usersModel;
-        }
 
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
