@@ -28,6 +28,10 @@ namespace StudentAchievements.Areas.Authorization.Models
         }
 
         public IQueryable<User> Users => userManager.Users;
+        public IQueryable<Teacher> Teachers => context.Teachers;
+        public IQueryable<Student> Students => context.Students;
+        public IQueryable<Employer> Employers => context.Employers;
+        public IQueryable<Administrator> Administrators => context.Administrators;
 
         public async Task<IdentityResult> AddUser(User user, string password, IUser userType)
         {

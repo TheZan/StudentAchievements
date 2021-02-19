@@ -36,6 +36,6 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 
         public IEnumerable<Subject> Subjects { get; set; }
 
-        public DynamicList<Subject> SubjectsList { get; set; } = new DynamicList<Subject>();
+        public DynamicList<AddSubjectViewModel> SubjectsList { get; set; } = new DynamicList<AddSubjectViewModel>();
     }
 }

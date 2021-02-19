@@ -1,0 +1,27 @@
+﻿@model AddSubjectViewModel
+
+    <div class="form-row">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group col-sm-auto">
+            <div><span asp-validation-for="Name" class="text-danger"></span></div>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="form-group col-sm-auto">
+            <div><span asp-validation-for="Grade" class="text-danger"></span></div>
+            <label asp-for="Grade"></label>
+            <input asp-for="Grade" class="form-control" />
+        </div>
+        <div class="form-group col-sm-auto">
+            <div><span asp-validation-for="Semester" class="text-danger"></span></div>
+            <label asp-for="Semester"></label>
+            <input asp-for="Semester" class="form-control" />
+        </div>
+        <div class="form-group col-sm-auto">
+            <div><span asp-validation-for="ControlType" class="text-danger"></span></div>
+            <label asp-for="ControlType"></label>
+            <select class="custom-select" asp-for="ControlType" asp-items="@Model.ControlTypeList">
+                <option disabled selected>Выберите вид контроля</option>
+            </select>
+        </div>
+    </div>    

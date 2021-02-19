@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using StudentAchievements.Infrastructure;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
 {
@@ -13,7 +14,7 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
     {
         public AdminEditViewModel()
         {
-            NotFoundUserPhoto = GetNotFoundImage();
+            NotFoundUserPhoto = NotFoundImageUtility.GetNotFoundImage();
         }
 
         public string Id { get; set; }
@@ -38,22 +39,5 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         public IFormFile UploadPhoto { get; set; }
 
         public byte[] NotFoundUserPhoto { get; set; }
-
-        private byte[] GetNotFoundImage()
-        {
-            byte[] photo = null;
-
-            using (var stream = new FileStream($"{Directory.GetCurrentDirectory()}/wwwroot/favicons/notFoundUserPhoto.png", FileMode.Open, FileAccess.Read))
-            {
-                photo = new byte[stream.Length];
-
-                using (var reader = new BinaryReader(stream))
-                {
-                    photo = reader.ReadBytes((int)stream.Length);
-                }
-            }
-
-            return photo;
-        }
     }
 }

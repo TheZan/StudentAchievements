@@ -1,0 +1,38 @@
+﻿@model StudentListViewModel
+
+@{
+    Layout = "_TeacherLayout";
+    ViewData["Title"] = "Список студентов";
+}
+
+<div class="accordion" id="groupList">
+    @foreach (var group in Model.Groups)
+    {
+        if (group.Students.Any())
+        {
+            <div class="card">
+                <div class="card-header" id="@($"heading{group.Id}")">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="@($"#collapse{group.Number}")" aria-expanded="false" aria-controls="@($"collapse{group.Number}")">
+                            @($"{group.Direction.GroupName}-{group.Grade}{group.Number}")
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="@($"collapse{group.Number}")" class="collapse" aria-labelledby="@($"heading{group.Id}")" data-parent="#groupList">
+                    <div class="card-body">
+                        <ul class="list-group">
+                            @foreach (var student in group.Students)
+                            {
+                                <li class="list-group-item">
+                                    <img src="data:image/jpeg;base64,@(Convert.ToBase64String(student.User.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true" />
+                                    @student.User.Name
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

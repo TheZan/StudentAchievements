@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Authorization.Models;
+using StudentAchievements.Infrastructure;
 using StudentAchievements.Models;
 
 namespace StudentAchievements.Areas.Admin.Models.ViewModels
@@ -17,7 +18,7 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
     {
         public StudentEditViewModel()
         {
-            NotFoundUserPhoto = GetNotFoundImage();
+            NotFoundUserPhoto = NotFoundImageUtility.GetNotFoundImage();
         }
 
         public string Id { get; set; }
@@ -58,22 +59,5 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         public IEnumerable<SelectListItem> GroupsList { get; set; }
 
         public IEnumerable<SelectListItem> FormEducationList { get; set; }
-
-        private byte[] GetNotFoundImage()
-        {
-            byte[] photo = null;
-
-            using (var stream = new FileStream($"{Directory.GetCurrentDirectory()}/wwwroot/favicons/notFoundUserPhoto.png", FileMode.Open, FileAccess.Read))
-            {
-                photo = new byte[stream.Length];
-
-                using (var reader = new BinaryReader(stream))
-                {
-                    photo = reader.ReadBytes((int)stream.Length);
-                }
-            }
-
-            return photo;
-        }
     }
 }

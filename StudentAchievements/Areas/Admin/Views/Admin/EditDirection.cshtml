@@ -20,21 +20,33 @@
                     <thead>
                         <tr>
                             <th class="col">Название</th>
+                            <th class="col">Курс</th>
+                            <th class="col">Семестр</th>
+                            <th class="col">Вид контроля</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var subject in Model.Subjects)
                         {
-                            <tr>
-                                <td class="align-middle">
-                                    @subject.Name
-                                </td>
-                                <td class="align-middle">
-                                    <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="DeleteSubject" asp-route-id="@subject.Id">
-                                        <button type="submit" class="btn btn-danger">Удалить</button>
-                                    </form>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td class="align-middle">
+                                @subject.Name
+                            </td>
+                            <td class="align-middle">
+                                @subject.Grade
+                            </td>
+                            <td class="align-middle">
+                                @subject.Semester
+                            </td>
+                            <td class="align-middle">
+                                @subject.ControlType.Name
+                            </td>
+                            <td class="align-middle">
+                                <form method="post" asp-area="Admin" asp-controller="Admin" asp-action="DeleteSubject" asp-route-id="@subject.Id">
+                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                </form>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>

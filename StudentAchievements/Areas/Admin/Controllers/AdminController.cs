@@ -237,7 +237,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 };
 
                 var result = await repository.AddUser(user, model.Password,
-                    new Teacher()
+                    new Authorization.Models.Teacher()
                     {
                         User = user,
                         Gender = model.Gender,
@@ -471,15 +471,30 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
                 if (result)
                 {
-                    var subjects = model.SubjectsList.ToModel(s => new Subject
+                    var subjectsViewModels = model.SubjectsList.ToModel(s => new AddSubjectViewModel()
                     {
                         Name = s.Name,
-                        Direction = s.Direction
+                        Grade = s.Grade,
+                        Semester = s.Semester,
+                        ControlType = s.ControlType
                     }).ToList();
+
+                    var subjects = new List<Subject>();
+
+                    foreach (var viewModel in subjectsViewModels)
+                    {
+                        subjects.Add(new Subject()
+                        {
+                            Name = viewModel.Name,
+                            Grade = viewModel.Grade,
+                            Semester = viewModel.Semester,
+                            Direction = direction,
+                            ControlType = await context.ControlTypes.FirstOrDefaultAsync(c => c.Id == viewModel.ControlType)
+                        });
+                    }
 
                     foreach (var subject in subjects)
                     {
-                        subject.Direction = direction;
                         await dataRepository.AddSubject(subject);
                     }
 
@@ -506,7 +521,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> EditDirection(int id)
         {
-            var direction = await context.Directions.Include(d => d.Department).Include(p => p.ProgramType).Include(s => s.Subjects)
+            var direction = await context.Directions.Include(d => d.Department).Include(p => p.ProgramType).Include(s => s.Subjects).ThenInclude(t => t.ControlType)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
             if (direction != null)
@@ -543,7 +558,6 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
                 if (direction != null)
                 {
-
                     direction.Name = model.Name;
                     direction.GroupName = model.GroupName;
                     direction.Department = await context.Departments.FirstOrDefaultAsync(d => d.Id == model.Department);
@@ -551,11 +565,27 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
                     if (await dataRepository.EditDirection(direction))
                     {
-                        var subjects = model.SubjectsList.ToModel(s => new Subject
+                        var subjectsViewModels = model.SubjectsList.ToModel(s => new AddSubjectViewModel()
                         {
                             Name = s.Name,
-                            Direction = s.Direction
+                            Grade = s.Grade,
+                            Semester = s.Semester,
+                            ControlType = s.ControlType
                         }).ToList();
+
+                        var subjects = new List<Subject>();
+
+                        foreach (var viewModel in subjectsViewModels)
+                        {
+                            subjects.Add(new Subject()
+                            {
+                                Name = viewModel.Name,
+                                Grade = viewModel.Grade,
+                                Semester = viewModel.Semester,
+                                Direction = direction,
+                                ControlType = await context.ControlTypes.FirstOrDefaultAsync(c => c.Id == viewModel.ControlType)
+                            });
+                        }
 
                         foreach (var subject in subjects)
                         {
@@ -672,7 +702,13 @@ namespace StudentAchievements.Areas.Admin.Controllers
 
         public IActionResult AddSubject(AddNewDynamicItem parameters)
         {
-            return this.PartialView(new Subject(), parameters);
+            var typeList = context.ControlTypes.Select(p => new SelectListItem
+                {Value = p.Id.ToString(), Text = p.Name});
+
+            return this.PartialView(new AddSubjectViewModel()
+            {
+                ControlTypeList = typeList
+            }, parameters);
         }
 
         [HttpPost]

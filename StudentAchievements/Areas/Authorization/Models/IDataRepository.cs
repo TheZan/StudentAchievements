@@ -1,10 +1,16 @@
-﻿using StudentAchievements.Areas.Admin.Models.ViewModels;
+﻿using System.Linq;
+using StudentAchievements.Areas.Admin.Models.ViewModels;
 using System.Threading.Tasks;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
     public interface IDataRepository
     {
+        IQueryable<Department> Departments { get; }
+        IQueryable<Direction> Directions { get; }
+        IQueryable<Group> Groups { get; }
+        IQueryable<Subject> Subjects { get; }
+
         Task<bool> AddDepartment(Department department);
         Task<bool> EditDepartment(Department department);
         Task<bool> DeleteDepartment(Department department);

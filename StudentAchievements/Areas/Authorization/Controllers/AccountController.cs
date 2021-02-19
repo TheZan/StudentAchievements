@@ -65,11 +65,11 @@ namespace StudentAchievements.Areas.Authorization.Controllers
                         switch (firstRole)
                         {
                             case "Admin":
-                                return RedirectToAction("Index", "Admin", new {area = "Admin"});
+                                return RedirectToAction("Index", "Admin", new { area = "Admin" });
                             case "Employer":
                                 return RedirectToAction("Index", "Admin", new { area = "Employer" });
                             case "Teacher":
-                                return RedirectToAction("Index", "Admin", new { area = "Teacher" });
+                                return RedirectToAction("Index", "Teacher", new { area = "Teacher" });
                             case "Student":
                                 return RedirectToAction("Index", "Admin", new { area = "Student" });
                         }

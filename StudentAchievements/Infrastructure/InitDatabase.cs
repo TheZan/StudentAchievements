@@ -66,6 +66,60 @@ namespace StudentAchievements.Infrastructure
             SetAllData();
         }
 
+        private void SetScores()
+        {
+            if (!context.Scores.Any())
+            {
+                var scores = new List<Score>()
+                {
+                    new Score()
+                    {
+                        Name = "Удовлетворительно"
+                    },
+                    new Score()
+                    {
+                        Name = "Хорошо"
+                    },
+                    new Score()
+                    {
+                        Name = "Отлично"
+                    },
+                    new Score()
+                    {
+                        Name = "Зачет"
+                    },
+                };
+
+                context.Scores.AddRange(scores);
+                context.SaveChanges();
+            }
+        }
+
+        private void SetControlType()
+        {
+            if (!context.ControlTypes.Any())
+            {
+                var controlTypes = new List<ControlType>()
+                {
+                    new ControlType()
+                    {
+                        Name = "Зачет"
+                    },
+                    new ControlType()
+                    {
+                        Name = "Дифференцированный зачет"
+                    },
+                    new ControlType()
+                    {
+                        Name = "Экзамен"
+                    }
+                };
+
+                context.ControlTypes.AddRange(controlTypes);
+                context.SaveChanges();
+            }
+        }
+
         private void SetFormEducation()
         {
             if (!context.FormEducations.Any())
@@ -96,17 +150,20 @@ namespace StudentAchievements.Infrastructure
                     new Group()
                     {
                         Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
-                        Number = 14
+                        Number = 4,
+                        Grade = 1
                     },
                     new Group()
                     {
                         Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
-                        Number = 15
+                        Number = 5,
+                        Grade = 1
                     },
                     new Group()
                     {
                         Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
-                        Number = 16
+                        Number = 6,
+                        Grade = 1
                     }
                 };
 
@@ -540,6 +597,8 @@ namespace StudentAchievements.Infrastructure
 
         private void SetAllData()
         {
+            SetControlType();
+            SetScores();
             SetGroupsType();
             SetFormEducation();
             SetDepartments();

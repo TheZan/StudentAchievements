@@ -10,6 +10,11 @@ namespace StudentAchievements.Areas.Authorization.Models
 
         public DataRepository(StudentAchievementsDbContext _context) => context = _context;
 
+        public IQueryable<Department> Departments => context.Departments;
+        public IQueryable<Direction> Directions => context.Directions;
+        public IQueryable<Group> Groups => context.Groups;
+        public IQueryable<Subject> Subjects => context.Subjects;
+
         public async Task<bool> AddDepartment(Department department)
         {
             if(department != null)
