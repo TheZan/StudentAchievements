@@ -25,7 +25,7 @@ namespace StudentAchievements
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<StudentAchievementsDbContext>(options =>
-                options.UseSqlServer(Configuration["Data:StudentAchievementsIdentity:ConnectionString"]));
+                options.UseNpgsql(Configuration["Data:StudentAchievementsIdentity:ConnectionString"]));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<StudentAchievementsDbContext>()

@@ -26,12 +26,18 @@ namespace StudentAchievements.Areas.Teacher.Controllers
         public ViewResult Index()
         {
             ViewBag.StudentsSelected = "active";
+            
             var currentTeacher = userRepository.Teachers.FirstOrDefault(t => t.User.Email == User.Identity.Name);
+
+            var t = dataRepository.Groups.Include(s => s.Students).ThenInclude(u => u.User)
+                    .Include(d => d.Direction).Where(p => p.Direction.DepartmentId == currentTeacher.DepartmentId);
 
             return View(new StudentListViewModel()
             {
-                Groups = dataRepository.Groups.Include(s => s.Students).ThenInclude(u => u.User)
-                    .Include(d => d.Direction).Where(p => p.Direction.DepartmentId == currentTeacher.DepartmentId)
+                Directions = dataRepository.Directions.Include(g => g.Groups)
+                                                        .ThenInclude(s => s.Students)
+                                                        .ThenInclude(u => u.User)
+                                                        .Where(d => d.DepartmentId == currentTeacher.DepartmentId)
             });
         }
     }

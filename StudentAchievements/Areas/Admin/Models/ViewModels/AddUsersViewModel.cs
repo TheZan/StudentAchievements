@@ -18,7 +18,7 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
 
             AddStudentViewModel = new AddStudentViewModel()
             {
-                GroupsList = context.Groups.Include(g => g.Direction).Select(p => new SelectListItem { Value = p.Id.ToString(), Text = $"{p.Direction.GroupName}-{p.Number}" }),
+                GroupsList = context.Groups.Include(g => g.Direction).Select(p => new SelectListItem { Value = p.Id.ToString(), Text = $"{p.Direction.GroupName}-{p.Grade}{p.Number}" }),
                 FormEducationList = context.FormEducations.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name })
             };
 

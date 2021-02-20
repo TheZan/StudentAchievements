@@ -595,6 +595,512 @@ namespace StudentAchievements.Infrastructure
             }
         }
 
+        private void SetSubjects()
+        {
+            if (!context.Subjects.Any())
+            {
+                var subjects = new List<Subject>()
+                {
+                    new Subject()
+                    {
+                        Name = "Иностранный язык",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Информатика",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "История развития отрасли",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Линейная алгебра",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Социология",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физическая культура и спорт",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Философия",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Химия",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Экология",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Экономика",
+                        Grade = 1,
+                        Semester = 1,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Архитектура информационных систем",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Иностранный язык",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Информатика",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "История",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Математика",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Операционные системы",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физика",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физическая культура и спорт",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Химия",
+                        Grade = 1,
+                        Semester = 2,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Web - технологии",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Иностранный язык",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Математика",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Математика (доп.главы)",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Психология управления коллективом",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Теория информационных процессов и систем",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Технологии программирования",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физика",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физическая культура и спорт",
+                        Grade = 2,
+                        Semester = 3,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Иностранный язык",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Иностранный язык (специализация)",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Инфокоммуникационные системы и сети",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Информационные технологии",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Правоведение",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Технологии программирования",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Управление данными",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физическая культура и спорт",
+                        Grade = 2,
+                        Semester = 4,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Иностранный язык (специализация)",
+                        Grade = 3,
+                        Semester = 5,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Информационная безопасность и защита информации",
+                        Grade = 3,
+                        Semester = 5,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Корпоративные информационные системы управления предприятием",
+                        Grade = 3,
+                        Semester = 5,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Методы и средства проектирования информационных систем и технологий",
+                        Grade = 3,
+                        Semester = 5,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Системы управления базами данных",
+                        Grade = 3,
+                        Semester = 5,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Технологии обработки информации",
+                        Grade = 3,
+                        Semester = 5,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физическая культура и спорт",
+                        Grade = 3,
+                        Semester = 5,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Инвестиционный менеджмент",
+                        Grade = 3,
+                        Semester = 6,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Инструментальные средства информационных систем",
+                        Grade = 3,
+                        Semester = 6,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Культурология и этика общения",
+                        Grade = 3,
+                        Semester = 6,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Менеджмент ИТ проектов",
+                        Grade = 3,
+                        Semester = 6,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Моделирование производственных процессов. Моделирование основных производственных процессов",
+                        Grade = 3,
+                        Semester = 6,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Физическая культура и спорт",
+                        Grade = 3,
+                        Semester = 6,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Информационные технологии управления предприятием",
+                        Grade = 4,
+                        Semester = 7,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Логистика",
+                        Grade = 4,
+                        Semester = 7,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Маркетинг",
+                        Grade = 4,
+                        Semester = 7,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Телекоммуникационные системы",
+                        Grade = 4,
+                        Semester = 7,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Управление качеством",
+                        Grade = 4,
+                        Semester = 7,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Электронная коммерция",
+                        Grade = 4,
+                        Semester = 7,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Экзамен")
+                    },
+                    new Subject()
+                    {
+                        Name = "Безопасность жизнедеятельности",
+                        Grade = 4,
+                        Semester = 8,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Защита интеллектуальной собственности и патентоведение",
+                        Grade = 4,
+                        Semester = 8,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Интеллектуальные информационные системы и технологии",
+                        Grade = 4,
+                        Semester = 8,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Практика производственная (научно-исследовательская работа)",
+                        Grade = 4,
+                        Semester = 8,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Практика производственная (практика по получению профессиональных умений и опыта профессиональной деятельности)",
+                        Grade = 4,
+                        Semester = 8,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Практика производственная преддипломная",
+                        Grade = 4,
+                        Semester = 8,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                    new Subject()
+                    {
+                        Name = "Практика учебная (практика по получению первичных профессиональных умений и навыков, в т.ч. первичных умений и навыков научно-исследовательской деятельности)",
+                        Grade = 4,
+                        Semester = 8,
+                        Direction = context.Directions.FirstOrDefault(d => d.Name == "Информационные системы и технологии"),
+                        ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
+                    },
+                };
+            }
+        }
+
         private void SetAllData()
         {
             SetControlType();
@@ -604,6 +1110,7 @@ namespace StudentAchievements.Infrastructure
             SetDepartments();
             SetDirection();
             SetGroups();
+            SetSubjects();
         }
     }
 }

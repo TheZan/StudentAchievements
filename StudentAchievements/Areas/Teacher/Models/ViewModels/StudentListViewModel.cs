@@ -16,6 +16,6 @@ namespace StudentAchievements.Areas.Teacher.Models.ViewModels
 
         public byte[] NotFoundUserPhoto { get; set; }
 
-        public IEnumerable<Group> Groups { get; set; }
+        public IEnumerable<Direction> Directions { get; set; }
     }
 }

@@ -145,7 +145,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                             Group = studentInfo.Group.Id,
                             Gender = studentInfo.Gender,
                             FormEducation = studentInfo.FormEducation.Id,
-                            GroupsList = context.Groups.Include(g => g.Direction).Select(p => new SelectListItem { Value = p.Id.ToString(), Text = $"{p.Direction.GroupName}-{p.Number}" }),
+                            GroupsList = context.Groups.Include(g => g.Direction).Select(p => new SelectListItem { Value = p.Id.ToString(), Text = $"{p.Direction.GroupName}-{p.Grade}{p.Number}" }),
                             FormEducationList = context.FormEducations.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
                             Id = id
                 };
