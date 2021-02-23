@@ -10,7 +10,7 @@ using StudentAchievements.Models;
 namespace StudentAchievements.Migrations
 {
     [DbContext(typeof(StudentAchievementsDbContext))]
-    [Migration("20210220120609_InitDb")]
+    [Migration("20210222111236_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

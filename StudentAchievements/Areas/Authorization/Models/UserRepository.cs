@@ -2,9 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
+using StudentAchievements.Areas.Teacher.Models.ViewModels;
 using StudentAchievements.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -206,6 +209,28 @@ namespace StudentAchievements.Areas.Authorization.Models
                 }
             }
             return photo;
+        }
+
+        public async Task<bool> EditStudentAssessments(IList<AssessmentViewModel> model)
+        {
+            if(model != null)
+            {
+                var student = await context.Students.Include(a => a.Assessments.OrderBy(o => o.Subject.Semester)).ThenInclude(s => s.Subject).FirstOrDefaultAsync(s => s.Id == model[0].StudentId);
+
+                for (int i = 0; i < student.Assessments.Count; i++)
+                {
+                    for (int j = 0; j < model.Count; j++)
+                    {
+                        student.Assessments[i++].Score = await context.Scores.FirstOrDefaultAsync(s => s.Id == model[j].Score);
+                    }
+                }
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

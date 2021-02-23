@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Security.Permissions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -333,6 +334,8 @@ namespace StudentAchievements.Areas.Admin.Controllers
                     Name = model.Name,
                     Photo = UploadedImage(model)
                 };
+                
+                var group = context.Groups.FirstOrDefault(g => g.Id == model.Group);
 
                 var result = await repository.AddUser(user, model.Password,
                     new Student()
@@ -341,8 +344,26 @@ namespace StudentAchievements.Areas.Admin.Controllers
                         Gender = model.Gender,
                         Dob = model.Dob,
                         FormEducation = context.FormEducations.FirstOrDefault(f => f.Id == model.FormEducation),
-                        Group = context.Groups.FirstOrDefault(g => g.Id == model.Group)
+                        Group = group
                     });
+
+                var subjects = dataRepository.Directions.Include(s => s.Subjects).FirstOrDefault(d => d.Id == group.DirectionId);
+                var assesments = new List<Assessment>();
+                var student = context.Students.FirstOrDefault(s => s.User.Email == model.Email);
+                var noScore = context.Scores.FirstOrDefault(s => s.Name == "Нет оценки");
+
+                foreach (var subject in subjects.Subjects)
+                {
+                    assesments.Add(new Assessment()
+                    {
+                        Subject = subject,
+                        Student = student,
+                        Score = noScore
+                    });
+                }
+
+                context.Assessments.AddRange(assesments);
+                context.SaveChanges();
 
                 if (result.Succeeded)
                 {
@@ -616,6 +637,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
             {
                 var group = new Group()
                 {
+                    Grade = model.Grade,
                     Number = model.Number,
                     Direction = await context.Directions.FirstOrDefaultAsync(d => d.Id == model.Direction),
                 };
@@ -656,6 +678,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                     Id = group.Id,
                     Direction = group.Direction.Id,
                     Number = group.Number,
+                    Grade = group.Grade,
                     DirectionsList = context.Directions.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Name }),
                 };
 
@@ -680,6 +703,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 {
 
                     group.Number = model.Number;
+                    group.Grade = model.Grade;
                     group.Direction = await context.Directions.FirstOrDefaultAsync(d => d.Id == model.Direction);
 
                     if (await dataRepository.EditGroup(group))

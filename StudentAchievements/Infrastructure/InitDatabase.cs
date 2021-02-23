@@ -88,6 +88,10 @@ namespace StudentAchievements.Infrastructure
                     {
                         Name = "Зачет"
                     },
+                    new Score()
+                    {
+                        Name = "Нет оценки"
+                    }
                 };
 
                 context.Scores.AddRange(scores);
@@ -1098,6 +1102,9 @@ namespace StudentAchievements.Infrastructure
                         ControlType = context.ControlTypes.FirstOrDefault(c => c.Name == "Дифференцированный зачет")
                     },
                 };
+
+                context.Subjects.AddRange(subjects);
+                context.SaveChanges();
             }
         }
 

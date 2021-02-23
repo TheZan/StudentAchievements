@@ -14,6 +14,21 @@ namespace StudentAchievements.Areas.Authorization.Models
         public IQueryable<Direction> Directions => context.Directions;
         public IQueryable<Group> Groups => context.Groups;
         public IQueryable<Subject> Subjects => context.Subjects;
+        public IQueryable<Score> Scores => context.Scores;
+        public IQueryable<Achievement> Achievements => context.Achievements;
+
+        public async Task<bool> AddAchievement(Achievement achievement)
+        {
+            if(achievement != null)
+            {
+                await context.Achievements.AddAsync(achievement);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
 
         public async Task<bool> AddDepartment(Department department)
         {
@@ -54,11 +69,37 @@ namespace StudentAchievements.Areas.Authorization.Models
             return false;
         }
 
+        public async Task<bool> AddScore(Score score)
+        {
+             if(score != null)
+             {
+                await context.Scores.AddAsync(score);
+                await context.SaveChangesAsync();
+
+                return true;
+             }
+
+             return false;
+        }
+
         public async Task<bool> AddSubject(Subject subject)
         {
             if(subject != null)
             {
                 await context.Subjects.AddAsync(subject);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteAchievement(Achievement achievement)
+        {
+            if (achievement != null)
+            {
+                context.Achievements.Remove(achievement);
                 await context.SaveChangesAsync();
 
                 return true;
@@ -106,11 +147,41 @@ namespace StudentAchievements.Areas.Authorization.Models
             return false;
         }
 
+        public async Task<bool> DeleteScore(Score score)
+        {
+            if (score != null)
+            {
+                context.Scores.Remove(score);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> DeleteSubject(Subject subject)
         {
             if (subject != null)
             {
                 context.Subjects.Remove(subject);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> EditAchievement(Achievement achievement)
+        {
+            if (achievement != null)
+            {
+                var oldAchievement = context.Achievements.FirstOrDefault(d => d.Id == achievement.Id);
+                oldAchievement.Name = achievement.Name;
+                oldAchievement.Description = achievement.Description;
+                oldAchievement.Student = achievement.Student;
+
                 await context.SaveChangesAsync();
 
                 return true;
@@ -159,6 +230,21 @@ namespace StudentAchievements.Areas.Authorization.Models
                 var oldGroup = context.Groups.FirstOrDefault(p => p.Id == group.Id);
                 oldGroup.Number = group.Number;
                 oldGroup.Direction = group.Direction;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> EditScore(Score score)
+        {
+            if (score != null)
+            {
+                var oldScore= context.Scores.FirstOrDefault(p => p.Id == score.Id);
+                oldScore.Name = score.Name;
 
                 await context.SaveChangesAsync();
 

@@ -1,0 +1,49 @@
+@model AchievementViewModel
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="col-sm-auto">Название</th>
+            <th class="col-sm-auto">Описание</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var achievement in Model.Achievements)
+        {
+            <tr>
+                <td class="align-middle">
+                    @achievement.Name
+                </td>
+                <td class="align-middle">
+                    @achievement.Description
+                </td>
+                <td class="align-middle text-center">
+                    <form method="POST" asp-area="Teacher" asp-controller="Teacher" asp-action="DeleteAchievement" asp-route-studentId="@Model.StudentId" asp-route-id="@achievement.Id">
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="card">
+    <div class="card-header">
+        Добавить достижение
+    </div>
+    <div class="card-body">
+        <form method="POST" asp-area="Teacher" asp-controller="Teacher" asp-action="AddAchievement">
+            <input type="hidden" asp-for="StudentId"/>
+            <div class="form-group">
+                <div><span asp-validation-for="Name" class="text-danger"></span></div>
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <div><span asp-validation-for="Description" class="text-danger"></span></div>
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control" />
+            </div>
+            <button class="btn btn-primary" type="submit">Добавить</button>
+        </form>
+    </div>
+</div> 

@@ -14,6 +14,10 @@ namespace StudentAchievements.Areas.Admin.Models.ViewModels
         public string Name { get; set; }
 
         [Required]
+        [DisplayName("Год обучения")]
+        public int Grade { get; set; }
+
+        [Required]
         [DisplayName("Номер")]
         public int Number { get; set; }
 
