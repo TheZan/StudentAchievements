@@ -5,6 +5,11 @@
     ViewData["Title"] = "Список студентов";
 }
 
+<div class="card">
+    <div class="card-header">
+        <h2>@($"Институт {Model.Directions.Select(p => p.Department.Name).FirstOrDefault().ToLowerInvariant()}")</h2>
+    </div>
+</div>
 <div class="accordion" id="directionList">
     @foreach (var direction in Model.Directions)
     {
