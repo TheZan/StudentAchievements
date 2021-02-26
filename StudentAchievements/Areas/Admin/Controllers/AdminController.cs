@@ -338,7 +338,7 @@ namespace StudentAchievements.Areas.Admin.Controllers
                 var group = context.Groups.FirstOrDefault(g => g.Id == model.Group);
 
                 var result = await repository.AddUser(user, model.Password,
-                    new Student()
+                    new StudentAchievements.Areas.Authorization.Models.Student()
                     {
                         User = user,
                         Gender = model.Gender,

@@ -30,11 +30,11 @@ namespace StudentAchievements.Controllers
                     case "Admin":
                         return RedirectToAction("Index", "Admin", new {area = "Admin"});
                     case "Employer":
-                        return RedirectToAction("Index", "Admin", new {area = "Employer"});
+                        return RedirectToAction("Index", "Employer", new {area = "Employer"});
                     case "Teacher":
                         return RedirectToAction("Index", "Teacher", new {area = "Teacher"});
                     case "Student":
-                        return RedirectToAction("Index", "Admin", new {area = "Student"});
+                        return RedirectToAction("Index", "Student", new {area = "Student"});
                 }
             }
 

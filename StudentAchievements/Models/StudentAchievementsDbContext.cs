@@ -17,8 +17,8 @@ namespace StudentAchievements.Models
             Database.EnsureCreated();
         }
 
-        public DbSet<Employer> Employers { get; set; }
-        public DbSet<Student> Students { get; set; }
+        public DbSet<StudentAchievements.Areas.Authorization.Models.Employer> Employers { get; set; }
+        public DbSet<StudentAchievements.Areas.Authorization.Models.Student> Students { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Administrator> Administrators { get; set; }

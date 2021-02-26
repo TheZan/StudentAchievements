@@ -14,7 +14,7 @@ namespace StudentAchievements.Areas.Teacher.Models.ViewModels
         }
 
         public byte[] NotFoundUserPhoto { get; set; }
-        public Student Student { get;set; }
+        public StudentAchievements.Areas.Authorization.Models.Student Student { get;set; }
         public IList<AssessmentViewModel> AssessmentsList { get;set; }
         public AchievementViewModel AchievementViewModel { get;set; }
     }

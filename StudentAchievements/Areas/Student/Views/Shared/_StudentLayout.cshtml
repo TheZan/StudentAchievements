@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<head>
+    <meta name="viewimport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+    @await Html.PartialAsync("_Favicons")
+    <link rel="stylesheet" asp-href-include="/lib/twitter-bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" asp-href-include="/lib/font-awesome/css/all.min.css" />
+</head>
+<body class="bg-light">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <a class="navbar-brand" asp-controller="Teacher" asp-action="Index">
+                <img src="/favicons/favicon-32x32.png" width="32" height="32" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item @ViewBag.StudentsSelected">
+                        <a class="nav-link" asp-controller="Teacher" asp-action="Index">Список студентов</a>
+                    </li>
+                    <li class="nav-item @ViewBag.FeedbackSelected">
+                        <a class="nav-link" href="#">Отклики</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @User.Identity?.Name
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" asp-controller="Account" asp-action="Logout" asp-area="Authorization">Выход</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div>
+        @RenderBody()
+    </div>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+    <script src="/lib/jquery/jquery.min.js"></script>
+    <script src="/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+    <script src="/lib/js/GetFileName.js"></script>
+    <script src="/lib/dynamic-viewmodel-list/dvml.js"></script>
+</body>
+</html>

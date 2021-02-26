@@ -32,8 +32,8 @@ namespace StudentAchievements.Areas.Authorization.Models
 
         public IQueryable<User> Users => userManager.Users;
         public IQueryable<Teacher> Teachers => context.Teachers;
-        public IQueryable<Student> Students => context.Students;
-        public IQueryable<Employer> Employers => context.Employers;
+        public IQueryable<StudentAchievements.Areas.Authorization.Models.Student> Students => context.Students;
+        public IQueryable<StudentAchievements.Areas.Authorization.Models.Employer> Employers => context.Employers;
         public IQueryable<Administrator> Administrators => context.Administrators;
 
         public async Task<IdentityResult> AddUser(User user, string password, IUser userType)
@@ -74,7 +74,7 @@ namespace StudentAchievements.Areas.Authorization.Models
                                     await context.SaveChangesAsync();
                                     break;
                                 case "Employer":
-                                    await context.Employers.AddAsync((Employer) userType);
+                                    await context.Employers.AddAsync((StudentAchievements.Areas.Authorization.Models.Employer) userType);
                                     await context.SaveChangesAsync();
                                     break;
                                 case "Teacher":
@@ -82,7 +82,7 @@ namespace StudentAchievements.Areas.Authorization.Models
                                     await context.SaveChangesAsync();
                                     break;
                                 case "Student":
-                                    await context.Students.AddAsync((Student) userType);
+                                    await context.Students.AddAsync((StudentAchievements.Areas.Authorization.Models.Student) userType);
                                     await context.SaveChangesAsync();
                                     break;
                             }

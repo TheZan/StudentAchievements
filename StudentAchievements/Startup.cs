@@ -70,12 +70,22 @@ namespace StudentAchievements
                 routes.MapAreaRoute(
                     name: null,
                     areaName: "Admin",
-                    template: "AdminPanel/{controller=Admin}/{action=Index}");
+                    template: "Admin/{controller=Admin}/{action=Index}");
 
                 routes.MapAreaRoute(
                     name: null,
                     areaName: "Teacher",
-                    template: "TeacherPanel/{controller=Teacher}/{action=Index}");
+                    template: "Teacher/{controller=Teacher}/{action=Index}");
+
+                routes.MapAreaRoute(
+                    name: null,
+                    areaName: "Employer",
+                    template: "Employer/{controller=Employer}/{action=Index}");
+
+                routes.MapAreaRoute(
+                    name: null,
+                    areaName: "Student",
+                    template: "Student/{controller=Student}/{action=Index}");
 
                 routes.MapAreaRoute(
                     name: null,

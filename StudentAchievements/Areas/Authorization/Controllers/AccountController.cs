@@ -67,11 +67,11 @@ namespace StudentAchievements.Areas.Authorization.Controllers
                             case "Admin":
                                 return RedirectToAction("Index", "Admin", new { area = "Admin" });
                             case "Employer":
-                                return RedirectToAction("Index", "Admin", new { area = "Employer" });
+                                return RedirectToAction("Index", "Employer", new { area = "Employer" });
                             case "Teacher":
                                 return RedirectToAction("Index", "Teacher", new { area = "Teacher" });
                             case "Student":
-                                return RedirectToAction("Index", "Admin", new { area = "Student" });
+                                return RedirectToAction("Index", "Student", new { area = "Student" });
                         }
                     }
                 }
@@ -100,7 +100,7 @@ namespace StudentAchievements.Areas.Authorization.Controllers
                 };
 
                 var result = await userRepository.AddUser(user, registrationModel.Password,
-                    new Employer() {User = user});
+                    new StudentAchievements.Areas.Authorization.Models.Employer() {User = user});
 
                 if (result.Succeeded)
                 {
