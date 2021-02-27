@@ -132,12 +132,6 @@ namespace StudentAchievements.Areas.Employer.Controllers
                                                         .Include(u => u.User)
                                                         .FirstOrDefaultAsync(s => s.Id == id);
 
-            var studentScores = dataRepository.Assessments.Include(s => s.Subject)
-                                                            .Include(s => s.Score)
-                                                            .Where(p => p.StudentId == id)
-                                                            .OrderBy(o => o.Subject.Semester)
-                                                            .ToList();
-
             foreach (var assesment in student.Assessments)
             {
                 assesment.Score = await dataRepository.Scores.FirstOrDefaultAsync(p => p.Id == assesment.ScoreId);
