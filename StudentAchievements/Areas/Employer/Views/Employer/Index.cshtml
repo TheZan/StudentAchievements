@@ -27,10 +27,18 @@
     <table class="table table-bordered table-hover bg-white">
         <thead>
             <tr>
-                <th class="col-sm">ФИО</th>
-                <th class="col-sm">Дата рождения</th>
-                <th class="col-sm">Пол</th>
-                <th class="col-sm">Направление</th>
+                <th class="col-sm">
+                    <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ФИО</a>
+                </th>
+                <th class="col-sm">
+                    <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["DobSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Дата рождения</a>
+                </th>
+                <th class="col-sm">
+                    <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["GenderSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Пол</a>
+                </th>
+                <th class="col-sm">
+                    <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["DirectionSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Направление</a>
+                </th>
                 <th class="col-sm">Количество достижений</th>
                 <th class="col-md">Количество оценок</th>
             </tr>
@@ -89,6 +97,7 @@
                 <a asp-action="Index"
                    asp-controller="Admin"
                    asp-area="Admin"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
                    asp-route-pageNumber="@(Model.Students.PageIndex - 1)"
                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
                    class="page-link"> Назад
@@ -98,6 +107,7 @@
                 <a asp-action="Index"
                    asp-controller="Admin"
                    asp-area="Admin"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
                    asp-route-pageNumber="@(Model.Students.PageIndex + 1)"
                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
                    class="page-link"> Вперед

@@ -29,14 +29,24 @@ namespace StudentAchievements.Areas.Employer.Controllers
             userRepository = _userRepository;
         }
 
-        public async Task<IActionResult> Index(string searchString, int? pageNumber)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewBag.StudentsSelected = "active";
             ViewBag.MessengerSelected = "";
 
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DobSortParm"] = sortOrder == "Dob" ? "dob_desc" : "Dob";
+            ViewData["DirectionSortParm"] = sortOrder == "Direction" ? "direction_desc" : "Direction";
+            ViewData["GenderSortParm"] = sortOrder == "Gender" ? "gender_desc" : "Gender";
+
             if (searchString != null)
             {
                 pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
             }
 
             ViewData["CurrentFilter"] = searchString;
@@ -56,6 +66,34 @@ namespace StudentAchievements.Areas.Employer.Controllers
                 searchStudents = searchStudents.Where(s => s.User.Name.Contains(searchString)
                                        || s.User.Email.Contains(searchString)
                                        || s.Group.Direction.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    searchStudents = searchStudents.OrderByDescending(s => s.User.Name);
+                    break;
+                case "Dob":
+                    searchStudents = searchStudents.OrderBy(s => s.Dob);
+                    break;
+                case "date_desc":
+                    searchStudents = searchStudents.OrderByDescending(s => s.Dob);
+                    break;
+                case "Direction":
+                    searchStudents = searchStudents.OrderBy(s => s.Group.Direction.Name);
+                    break;
+                case "direction_desc":
+                    searchStudents = searchStudents.OrderByDescending(s => s.Group.Direction.Name);
+                    break;
+                case "Gender":
+                    searchStudents = searchStudents.OrderBy(s => s.Gender);
+                    break;
+                case "gender_desc":
+                    searchStudents = searchStudents.OrderByDescending(s => s.Gender);
+                    break;
+                default:
+                    searchStudents = searchStudents.OrderBy(s => s.User.Name);
+                    break;
             }
 
             int pageSize = 10;
