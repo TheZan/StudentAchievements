@@ -26,7 +26,6 @@ namespace StudentAchievements.Areas.Authorization.Models.ViewModels
         [Required]
         public string UserName { get; set; }
 
-        [Required]
         [DisplayName("Логотип")]
         public IFormFile Photo { get; set; }
     }

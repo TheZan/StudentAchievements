@@ -37,10 +37,15 @@
                     <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["GenderSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Пол</a>
                 </th>
                 <th class="col-sm">
+                    <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["GradeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Курс</a>
+                </th>
+                <th class="col-sm">
                     <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["DirectionSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Направление</a>
                 </th>
-                <th class="col-sm">Количество достижений</th>
-                <th class="col-md">Количество оценок</th>
+                <th class="col-sm">
+                    <a asp-action="Index" asp-controller="Employer" asp-area="Employer" asp-route-sortOrder="@ViewData["AchievementsSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Количество достижений</a>
+                </th>
+                <th class="col-md">Оценки</th>
             </tr>
         </thead>
         <tbody>
@@ -50,10 +55,11 @@
                         <td class="align-middle">
                             <img src="data:image/jpeg;base64,@(Convert.ToBase64String(student.User.Photo ?? Model.NotFoundUserPhoto))"
                                 class="rounded-circle" height="40" width="40" asp-append-version="true" />
-                            @student.User.Name
+                            <a target="_blank" asp-area="Employer" asp-controller="Employer" asp-action="ViewStudentProfile" asp-route-id="@student.Id">@student.User.Name</a>
                         </td>
                         <td class="align-middle text-center">@student.Dob.ToShortDateString()</td>
                         <td class="align-middle text-center">@student.Gender</td>
+                        <td class="align-middle text-center">@student.Group.Grade</td>
                         <td class="align-middle">@student.Group.Direction.Name</td>
                         <td class="align-middle text-center">@student.Achievements.Count()</td>
                         <td class="align-middle">

@@ -12,6 +12,7 @@ namespace StudentAchievements.Areas.Authorization.Models
         IQueryable<Subject> Subjects { get; }
         IQueryable<Score> Scores { get; }
         IQueryable<Achievement> Achievements { get; }
+        IQueryable<Assessment> Assessments { get; }
 
         Task<bool> AddDepartment(Department department);
         Task<bool> EditDepartment(Department department);
@@ -36,5 +37,9 @@ namespace StudentAchievements.Areas.Authorization.Models
         Task<bool> AddAchievement(Achievement achievement);
         Task<bool> EditAchievement(Achievement achievement);
         Task<bool> DeleteAchievement(Achievement achievement);
+
+        Task<bool> AddAssessment(Assessment assessment);
+        Task<bool> EditAssessment(Assessment assessment);
+        Task<bool> DeleteAssessment(Assessment assessment);
     }
 }

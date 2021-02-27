@@ -16,12 +16,26 @@ namespace StudentAchievements.Areas.Authorization.Models
         public IQueryable<Subject> Subjects => context.Subjects;
         public IQueryable<Score> Scores => context.Scores;
         public IQueryable<Achievement> Achievements => context.Achievements;
+        public IQueryable<Assessment> Assessments => context.Assessments;
 
         public async Task<bool> AddAchievement(Achievement achievement)
         {
             if(achievement != null)
             {
                 await context.Achievements.AddAsync(achievement);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> AddAssessment(Assessment assessment)
+        {
+            if(assessment != null)
+            {
+                await context.Assessments.AddAsync(assessment);
                 await context.SaveChangesAsync();
 
                 return true;
@@ -108,6 +122,19 @@ namespace StudentAchievements.Areas.Authorization.Models
             return false;
         }
 
+        public async Task<bool> DeleteAssessment(Assessment assessment)
+        {
+            if (assessment != null)
+            {
+                context.Assessments.Remove(assessment);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> DeleteDepartment(Department department)
         {
             if (department != null)
@@ -181,6 +208,23 @@ namespace StudentAchievements.Areas.Authorization.Models
                 oldAchievement.Name = achievement.Name;
                 oldAchievement.Description = achievement.Description;
                 oldAchievement.Student = achievement.Student;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> EditAssessment(Assessment assessment)
+        {
+            if (assessment != null)
+            {
+                var oldAssessment = context.Assessments.FirstOrDefault(d => d.Id == assessment.Id);
+                oldAssessment.Subject = assessment.Subject;
+                oldAssessment.Score = assessment.Score;
+                oldAssessment.Student = assessment.Student;
 
                 await context.SaveChangesAsync();
 
