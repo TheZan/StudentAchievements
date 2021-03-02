@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using StudentAchievements.Models;
+using StudentAchievements.Areas.Message.Models;
+using StudentAchievements.Areas.Authorization.Models;
+
+namespace StudentAchievements.Areas.Message.Infrastructure
+{
+    public class Messenger
+    {
+        private StudentAchievementsDbContext context;
+
+        public Messenger(StudentAchievementsDbContext _context)
+        {
+            context = _context;
+        }
+
+        public async Task<bool> SendMessage(User receiver, User sender, string message)
+        {
+            if(receiver != null && sender != null && message != null)
+            {
+                if (!context.Chats.Any(p => (p.OneUser == receiver || p.OneUser == sender) && (p.TwoUser == receiver || p.TwoUser == sender)))
+                {
+                    await context.Chats.AddAsync(new Chat()
+                    {
+                        OneUser = receiver,
+                        TwoUser = sender
+                    });
+
+                    await context.SaveChangesAsync();
+                }
+
+                await context.Messages.AddAsync(new Models.Message()
+                {
+                    MessageText = message,
+                    Sender = sender.Name,
+                    Chat = context.Chats.FirstOrDefault(p => (p.OneUser == receiver || p.OneUser == sender) && (p.TwoUser == receiver || p.TwoUser == sender)),
+                    IsViewed = false,
+                    SendDate = DateTime.Now
+                });
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }   
+    }
+}

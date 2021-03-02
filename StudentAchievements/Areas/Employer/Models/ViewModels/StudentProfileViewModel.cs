@@ -15,5 +15,6 @@ namespace StudentAchievements.Areas.Employer.Models.ViewModels
         public StudentAchievements.Areas.Authorization.Models.Student Student { get;set; }
         public List<Assessment> AssessmentsList { get;set; }
         public List<Achievement> AchievementsList { get;set; }
+        public string EmployerId { get;set; }
     }
 }

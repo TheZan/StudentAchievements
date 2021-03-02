@@ -12,7 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Employer;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Infrastructure;
+using StudentAchievements.Models;
 using StudentAchievements.Areas.Employer.Models.ViewModels;
+using StudentAchievements.Areas.Message.Infrastructure;
 
 namespace StudentAchievements.Areas.Employer.Controllers
 {
@@ -20,14 +22,20 @@ namespace StudentAchievements.Areas.Employer.Controllers
     [Authorize(Roles = "Employer")]
     public class EmployerController : Controller
     {
+        private StudentAchievementsDbContext context;
         private IDataRepository dataRepository;
         private IUserRepository userRepository;
+        private Messenger messenger;
 
-        public EmployerController(IDataRepository _dataRepository, IUserRepository _userRepository)
+        public EmployerController(StudentAchievementsDbContext _context, IDataRepository _dataRepository, IUserRepository _userRepository)
         {
+            context = _context;
             dataRepository = _dataRepository;
             userRepository = _userRepository;
+            messenger = new Messenger(context);
         }
+
+        public IActionResult NewMessage() => PartialView();
 
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
@@ -137,17 +145,31 @@ namespace StudentAchievements.Areas.Employer.Controllers
                 assesment.Score = await dataRepository.Scores.FirstOrDefaultAsync(p => p.Id == assesment.ScoreId);
             }
 
+            var t = userRepository.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name).Id;
+
             if (student != null)
             {
                 return View("StudentProfile", new StudentProfileViewModel()
                 {
                     Student = student,
                     AssessmentsList = student.Assessments,
-                    AchievementsList = student.Achievements
+                    AchievementsList = student.Achievements,
+                    
                 });
             } 
 
             return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(NewMessageViewModel model)
+        {
+            var userOne = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == model.ReceiverId);
+            var userTwo = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == model.SenderId);
+
+            await messenger.SendMessage(userOne, userTwo, model.Message);
+            
+            return RedirectToAction("ViewStudentProfile", new { id = userRepository.Students.FirstOrDefaultAsync(p => p.User == userOne).Id });
         }
     }
 }

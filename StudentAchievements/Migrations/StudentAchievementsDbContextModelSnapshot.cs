@@ -524,6 +524,51 @@ namespace StudentAchievements.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsViewed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("MessageText")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -718,6 +763,29 @@ namespace StudentAchievements.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Message", b =>
+                {
+                    b.HasOne("StudentAchievements.Areas.Message.Models.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.ControlType", b =>
                 {
                     b.Navigation("Subjects");
@@ -760,6 +828,11 @@ namespace StudentAchievements.Migrations
                     b.Navigation("Achievements");
 
                     b.Navigation("Assessments");
+                });
+
+            modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Chat", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

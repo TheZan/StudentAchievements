@@ -10,7 +10,7 @@
 <body class="bg-light">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white">
-            <a class="navbar-brand" asp-controller="Employer" asp-action="Index">
+            <a class="navbar-brand" asp-controller="Message" asp-action="Index">
                 <img src="/favicons/favicon-32x32.png" width="32" height="32" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
@@ -18,11 +18,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item @ViewBag.StudentsSelected">
-                        <a class="nav-link" asp-controller="Employer" asp-action="Index">Список студентов</a>
-                    </li>
-                    <li class="nav-item @ViewBag.MessengerSelected">
-                        <a class="nav-link" asp-area="Message" asp-controller="Message" asp-action="Index">Сообщения</a>
+                    <li class="nav-item activate">
+                        <a class="nav-link" asp-controller="Message" asp-action="Back">Назад</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">

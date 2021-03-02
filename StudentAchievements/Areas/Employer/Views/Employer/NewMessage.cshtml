@@ -1,0 +1,14 @@
+@model NewMessageViewModel
+
+<form asp-area="Employer" asp-controller="Employer" asp-action="SendMessage" method="POST">
+    <div class="modal-body form-group">
+        <input type="hidden" asp-for="ReceiverId"></input>
+        <input type="hidden" asp-for="SenderId"></input>
+        <div><span asp-validation-for="Message" class="text-danger"></span></div>
+        <textarea class="form-control" asp-for="Message"></textarea>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </div>
+</form>

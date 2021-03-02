@@ -92,6 +92,11 @@ namespace StudentAchievements
                     areaName: "Authorization",
                     template: "Identity/{controller=Account}/{action=Login}");
 
+                routes.MapAreaRoute(
+                    name: null,
+                    areaName: "Message",
+                    template: "Message/{controller=Message}/{action=Index}");
+
                 routes.MapRoute(
                     name: null,
                     template: "{controller=Home}/{action=Index}/{id?}");
