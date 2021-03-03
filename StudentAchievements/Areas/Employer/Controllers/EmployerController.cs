@@ -145,7 +145,7 @@ namespace StudentAchievements.Areas.Employer.Controllers
                 assesment.Score = await dataRepository.Scores.FirstOrDefaultAsync(p => p.Id == assesment.ScoreId);
             }
 
-            var t = userRepository.Users.FirstOrDefaultAsync(u => u.Name == User.Identity.Name).Id;
+            var employer = await userRepository.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
 
             if (student != null)
             {
@@ -154,7 +154,11 @@ namespace StudentAchievements.Areas.Employer.Controllers
                     Student = student,
                     AssessmentsList = student.Assessments,
                     AchievementsList = student.Achievements,
-                    
+                    NewMessage = new NewMessageViewModel()
+                    {
+                        ReceiverId = student.User.Id,
+                        SenderId = employer.Id
+                    } 
                 });
             } 
 
@@ -164,12 +168,14 @@ namespace StudentAchievements.Areas.Employer.Controllers
         [HttpPost]
         public async Task<IActionResult> SendMessage(NewMessageViewModel model)
         {
-            var userOne = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == model.ReceiverId);
-            var userTwo = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == model.SenderId);
+            var userOne = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == model.ReceiverId.ToString());
+            var userTwo = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == model.SenderId.ToString());
+
+            var student = await userRepository.Students.FirstOrDefaultAsync(p => p.User == userOne);
 
             await messenger.SendMessage(userOne, userTwo, model.Message);
             
-            return RedirectToAction("ViewStudentProfile", new { id = userRepository.Students.FirstOrDefaultAsync(p => p.User == userOne).Id });
+            return RedirectToAction("ViewStudentProfile", new { id = student.Id });
         }
     }
 }

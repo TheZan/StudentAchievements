@@ -50,18 +50,6 @@ namespace StudentAchievements.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chats",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chats", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ControlTypes",
                 columns: table => new
                 {
@@ -253,6 +241,32 @@ namespace StudentAchievements.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OneUserId = table.Column<string>(type: "text", nullable: true),
+                    TwoUserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Chats_AspNetUsers_OneUserId",
+                        column: x => x.OneUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Chats_AspNetUsers_TwoUserId",
+                        column: x => x.TwoUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employers",
                 columns: table => new
                 {
@@ -270,41 +284,6 @@ namespace StudentAchievements.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Messages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MessageText = table.Column<string>(type: "text", nullable: true),
-                    ReceiverId = table.Column<string>(type: "text", nullable: true),
-                    SenderId = table.Column<string>(type: "text", nullable: true),
-                    ChatId = table.Column<int>(type: "integer", nullable: false),
-                    IsViewed = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_ReceiverId",
-                        column: x => x.ReceiverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Messages_AspNetUsers_SenderId",
-                        column: x => x.SenderId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Messages_Chats_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Chats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -360,6 +339,29 @@ namespace StudentAchievements.Migrations
                         principalTable: "ProgramType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MessageText = table.Column<string>(type: "text", nullable: true),
+                    Sender = table.Column<string>(type: "text", nullable: true),
+                    ChatId = table.Column<int>(type: "integer", nullable: false),
+                    IsViewed = table.Column<bool>(type: "boolean", nullable: false),
+                    SendDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Chats_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -564,6 +566,16 @@ namespace StudentAchievements.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Chats_OneUserId",
+                table: "Chats",
+                column: "OneUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_TwoUserId",
+                table: "Chats",
+                column: "TwoUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Directions_DepartmentId",
                 table: "Directions",
                 column: "DepartmentId");
@@ -587,16 +599,6 @@ namespace StudentAchievements.Migrations
                 name: "IX_Messages_ChatId",
                 table: "Messages",
                 column: "ChatId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Messages_ReceiverId",
-                table: "Messages",
-                column: "ReceiverId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Messages_SenderId",
-                table: "Messages",
-                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_FormEducationId",
@@ -685,9 +687,6 @@ namespace StudentAchievements.Migrations
                 name: "Chats");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "FormEducations");
 
             migrationBuilder.DropTable(
@@ -695,6 +694,9 @@ namespace StudentAchievements.Migrations
 
             migrationBuilder.DropTable(
                 name: "ControlTypes");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Directions");

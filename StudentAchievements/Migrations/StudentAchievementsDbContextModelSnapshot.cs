@@ -531,7 +531,17 @@ namespace StudentAchievements.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("OneUserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("TwoUserId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OneUserId");
+
+                    b.HasIndex("TwoUserId");
 
                     b.ToTable("Chats");
                 });
@@ -552,19 +562,15 @@ namespace StudentAchievements.Migrations
                     b.Property<string>("MessageText")
                         .HasColumnType("text");
 
-                    b.Property<string>("ReceiverId")
-                        .HasColumnType("text");
+                    b.Property<DateTime>("SendDate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("SenderId")
+                    b.Property<string>("Sender")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -763,6 +769,21 @@ namespace StudentAchievements.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Chat", b =>
+                {
+                    b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "OneUser")
+                        .WithMany()
+                        .HasForeignKey("OneUserId");
+
+                    b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "TwoUser")
+                        .WithMany()
+                        .HasForeignKey("TwoUserId");
+
+                    b.Navigation("OneUser");
+
+                    b.Navigation("TwoUser");
+                });
+
             modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Message", b =>
                 {
                     b.HasOne("StudentAchievements.Areas.Message.Models.Chat", "Chat")
@@ -771,19 +792,7 @@ namespace StudentAchievements.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "Receiver")
-                        .WithMany()
-                        .HasForeignKey("ReceiverId");
-
-                    b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "Sender")
-                        .WithMany()
-                        .HasForeignKey("SenderId");
-
                     b.Navigation("Chat");
-
-                    b.Navigation("Receiver");
-
-                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.ControlType", b =>

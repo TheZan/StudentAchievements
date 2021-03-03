@@ -118,7 +118,6 @@
 </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -127,8 +126,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                @await Html.PartialAsync("NewMessage", new NewMessageViewModel(){ ReceiverId = Model.Student.User.Id })
+                @await Html.PartialAsync("NewMessage", Model.NewMessage)
             </div>
         </div>
-    </form>
 </div>
