@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Infrastructure;
 using StudentAchievements.Models;
+using StudentAchievements.Areas.Message.Infrastructure;
 
 namespace StudentAchievements
 {
@@ -39,11 +40,15 @@ namespace StudentAchievements
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IDataRepository, DataRepository>();
+            services.AddTransient<Messenger>();
 
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            /* services.AddMvc(options => options.EnableEndpointRouting = false); */
+
+            services.AddMvc();
 
             services.AddMemoryCache();
             services.AddSession();
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -61,11 +66,59 @@ namespace StudentAchievements
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSession();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints => 
+            {
+                 endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapAreaControllerRoute(
+                    name: "AreaAdmin",
+                    areaName: "Admin",
+                    pattern: "{controller=Admin}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapAreaControllerRoute(
+                    name: "AreaTeacher",
+                    areaName: "Teacher",
+                    pattern: "{controller=Teacher}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapAreaControllerRoute(
+                    name: "AreaEmployer",
+                    areaName: "Employer",
+                    pattern: "{controller=Employer}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapAreaControllerRoute(
+                    name: "AreaStudent",
+                    areaName: "Student",
+                    pattern: "{controller=Student}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapAreaControllerRoute(
+                    name: "AreaAuthorization",
+                    areaName: "Authorization",
+                    pattern: "{controller=Account}/{action=Login}/{id?}"
+                );
+
+                endpoints.MapAreaControllerRoute(
+                    name: "AreaMessage",
+                    areaName: "Message",
+                    pattern: "{controller=Message}/{action=Index}/{id?}"
+                );
+
+                endpoints.MapHub<ChatHub>("/chat");
+            });
+
+            /* app.UseMvc(routes =>
             {
                 routes.MapAreaRoute(
                     name: null,
@@ -100,7 +153,7 @@ namespace StudentAchievements
                 routes.MapRoute(
                     name: null,
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            }); */
         }
     }
 }

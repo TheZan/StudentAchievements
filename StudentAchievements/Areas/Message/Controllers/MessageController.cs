@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Message.Models.ViewModels;
 using StudentAchievements.Models;
 using StudentAchievements.Areas.Authorization.Models;
+using StudentAchievements.Areas.Message.Infrastructure;
 
 namespace StudentAchievements.Areas.Message.Controllers
 {
@@ -18,11 +19,13 @@ namespace StudentAchievements.Areas.Message.Controllers
     {
         private StudentAchievementsDbContext context;
         private IUserRepository userRepository;
+        private Messenger messenger;
 
-        public MessageController(StudentAchievementsDbContext _context, IUserRepository _userRepository)
+        public MessageController(StudentAchievementsDbContext _context, IUserRepository _userRepository, Messenger _messenger)
         {
             context = _context;
             userRepository = _userRepository;
+            messenger = _messenger;
         }
 
         public async Task<IActionResult> Index()
@@ -83,6 +86,13 @@ namespace StudentAchievements.Areas.Message.Controllers
             return PartialView("Messages", model);
         }
 
-        
+        [HttpPost]
+        public async Task SendMessage(string receiverId, string message)
+        {
+            var sender = await userRepository.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
+            var receiver = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == receiverId);
+
+            await messenger.SendMessage(receiver, sender, message);
+        }
     }
 }
