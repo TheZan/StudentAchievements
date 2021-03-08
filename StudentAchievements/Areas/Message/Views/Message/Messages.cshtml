@@ -54,23 +54,10 @@
 </div>
 
 <div class="flex-grow-0 py-3 px-4 border-top">
-    <form asp-area="Message" asp-controller="Message" asp-action="SendMessage">
         <div class="input-group">
-            <input name="receiverId" type="hidden" value="@Model.Companion.Id">
-            <input name="message" type="text" class="form-control" placeholder="Введите сообщение...">
-            <button type="submit" onclick="GetMessages('@Model.Companion.Id')" class="btn btn-primary">Отправить</button>
+            <input id="from" type="hidden" value="@Model.Me.Id">
+            <input id="to" type="hidden" value="@Model.Companion.Id">
+            <input id="message" type="text" class="form-control" placeholder="Введите сообщение...">
+            <input id="test" type="button" class="btn btn-primary" value="Отправить"/>
         </div>
-    </form>
 </div>
-
-<script type="text/javascript">
- function GetMessages(id) {
-  fetch('/Message/GetMessages/?id=' + id)
-   .then((response) => {
-	return response.text();
-   })
-   .then((result) => {
-	document.getElementById('chat').innerHTML = result;
-   });
- }
-</script>

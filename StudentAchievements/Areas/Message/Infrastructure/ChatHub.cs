@@ -16,17 +16,22 @@ namespace StudentAchievements.Areas.Message.Infrastructure
     {
         private StudentAchievementsDbContext context;
         private IUserRepository userRepository;
+        private Messenger messenger;
 
-        public ChatHub(StudentAchievementsDbContext _context, IUserRepository _userRepository)
+        public ChatHub(StudentAchievementsDbContext _context, IUserRepository _userRepository, Messenger _messenger)
         {
             context = _context;
             userRepository = _userRepository;
+            messenger = _messenger;
         }
 
-        public async Task Send(string message, string to)
+        public async Task Send(string message, string from, string to)
         {
-            var userInfoReciever = userRepository.Users.FirstOrDefault(p => p.Email == to).Id;
-            await Clients.User(userInfoReciever).SendAsync("Send", message);
+            var sender = userRepository.Users.FirstOrDefault(s => s.Id == from);
+            var receiver = userRepository.Users.FirstOrDefault(s => s.Id == to);
+            await messenger.SendMessage(receiver, sender, message);
+            
+            await Clients.Others.SendAsync("Receive", from);
         }
     }
 }
