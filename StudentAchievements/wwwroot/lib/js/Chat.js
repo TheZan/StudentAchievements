@@ -5,6 +5,7 @@ function GetMessages(id) {
      })
      .then((result) => {
       document.getElementById('chat').innerHTML = result;
+      document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
      });
 }
 
@@ -27,16 +28,5 @@ let i = setInterval(function() {
         });
     }
 }, 1000);
-
-if(document.getElementById("test")){
-    document.getElementById("test").addEventListener("click", function (e) {
-        let message = document.getElementById("message").value;
-        let from = document.getElementById("from").value;
-        let to = document.getElementById("to").value;
-        hubConnection.invoke("Send", message, from, to);
-
-        GetMessages(to);
-    });
-}
 
 hubConnection.start();

@@ -1,0 +1,1 @@
+document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
