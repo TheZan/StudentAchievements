@@ -41,6 +41,7 @@ namespace StudentAchievements
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IDataRepository, DataRepository>();
             services.AddTransient<Messenger>();
+            services.AddSingleton<ConnectionProvider>();
 
             /* services.AddMvc(options => options.EnableEndpointRouting = false); */
 
