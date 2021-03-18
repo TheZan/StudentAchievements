@@ -76,6 +76,19 @@ namespace StudentAchievements.Areas.Message.Controllers
                                         .Include(m => m.Messages)
                                         .FirstOrDefaultAsync(p => (p.OneUser == currentUser || p.OneUser == companion) && (p.TwoUser == currentUser || p.TwoUser == companion));
 
+            var messageList = chat.Messages.Where(p => p.IsViewed == false).ToList();
+            
+            foreach (var message in messageList)
+            {
+                if(message.Sender == companion.Name)
+                {
+                    message.IsViewed = true;
+                }
+            }
+            
+            context.Messages.UpdateRange(messageList);
+            await context.SaveChangesAsync();
+
             var model = new MessageListViewModel()
             {
                 Me = currentUser,
