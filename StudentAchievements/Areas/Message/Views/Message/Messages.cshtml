@@ -1,63 +1,35 @@
-@using StudentAchievements.Infrastructure
 @model MessageListViewModel
 
-<div class="py-2 px-4 border-bottom d-none d-lg-block">
-    <div class="d-flex align-items-center py-1">
-        <div class="position-relative">
-            <img src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Companion.Photo ?? NotFoundImageUtility.GetNotFoundImage()))"
-                asp-append-version="true" class="rounded-circle mr-1" alt="@Model.Companion.Name" width="40"
-                height="40">
+@using StudentAchievements.Infrastructure;
+
+@foreach (var message in Model.Chat.Messages)
+{
+    if (message.Sender == Model.Me.Name)
+    {
+        <div class="chat-message-right pb-4">
+            <div>
+                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Me.Photo ?? NotFoundImageUtility.GetNotFoundImage()))"
+                    asp-append-version="true" class="rounded-circle mr-1" alt="@Model.Me.Name" width="40" height="40">
+                <div class="text-muted small text-nowrap mt-2">@message.SendDate.ToString("dd/MM/yyyy, HH:mm:ss")</div>
+            </div>
+            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                <div class="font-weight-bold mb-1">Вы</div>
+                @message.MessageText
+            </div>
         </div>
-        <div class="flex-grow-1 pl-3">
-            <strong>@Model.Companion.Name</strong>
+    }
+    else
+    {
+        <div class="chat-message-left pb-4">
+            <div>
+                <img src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Companion.Photo ?? NotFoundImageUtility.GetNotFoundImage()))"
+                    asp-append-version="true" class="rounded-circle mr-1" alt="@Model.Companion.Name" width="40" height="40">
+                <div class="text-muted small text-nowrap mt-2">@message.SendDate.ToString("dd/MM/yyyy, HH:mm:ss")</div>
+            </div>
+            <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3 ml-2">
+                <div class="font-weight-bold mb-2">@Model.Companion.Name</div>
+                @message.MessageText
+            </div>
         </div>
-    </div>
-</div>
-
-<div class="position-relative" id="@Model.Companion.Id">
-    <div class="chat-messages p-4" id="chatBox">
-
-        @foreach (var message in Model.Chat.Messages)
-        {
-            if (message.Sender == Model.Me.Name)
-            {
-                <div class="chat-message-right pb-4">
-                    <div>
-                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Me.Photo ?? NotFoundImageUtility.GetNotFoundImage()))"
-                            asp-append-version="true" class="rounded-circle mr-1" alt="@Model.Me.Name" width="40" height="40">
-                        <div class="text-muted small text-nowrap mt-2">@message.SendDate.ToString("dd/MM/yyyy, HH:mm:ss")</div>
-                    </div>
-                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                        <div class="font-weight-bold mb-1">Вы</div>
-                        @message.MessageText
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="chat-message-left pb-4">
-                    <div>
-                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(@Model.Companion.Photo ?? NotFoundImageUtility.GetNotFoundImage()))"
-                            asp-append-version="true" class="rounded-circle mr-1" alt="@Model.Companion.Name" width="40"
-                            height="40">
-                        <div class="text-muted small text-nowrap mt-2">@message.SendDate.ToString("dd/MM/yyyy, HH:mm:ss")</div>
-                    </div>
-                    <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3 ml-2">
-                        <div class="font-weight-bold mb-2">@Model.Companion.Name</div>
-                        @message.MessageText
-                    </div>
-                </div>
-            }
-        }
-
-    </div>
-</div>
-
-<div class="flex-grow-0 py-3 px-4 border-top">
-        <div class="input-group">
-            <input id="from" type="hidden" value="@Model.Me.Id">
-            <input id="to" type="hidden" value="@Model.Companion.Id">
-            <input id="message" type="text" class="form-control" placeholder="Введите сообщение...">
-            <input id="sendButton" type="button" class="btn btn-primary" value="Отправить"/>
-        </div>
-</div>
+    }
+}

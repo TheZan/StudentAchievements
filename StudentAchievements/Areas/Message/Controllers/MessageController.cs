@@ -20,6 +20,8 @@ namespace StudentAchievements.Areas.Message.Controllers
         private StudentAchievementsDbContext context;
         private IUserRepository userRepository;
         private Messenger messenger;
+        
+        private const int pageSize = 20;
 
         public MessageController(StudentAchievementsDbContext _context, IUserRepository _userRepository, Messenger _messenger)
         {
@@ -64,7 +66,7 @@ namespace StudentAchievements.Areas.Message.Controllers
             return RedirectToAction("Index", "Student", new { area = "Student" });
         }
 
-        [HttpGet]
+        /* [HttpGet]
         public async Task<IActionResult> GetMessages(string id)
         {
             var currentUser = await userRepository.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
@@ -97,6 +99,50 @@ namespace StudentAchievements.Areas.Message.Controllers
             };
 
             return PartialView("Messages", model);
+        } */
+
+        [HttpGet]
+        public async Task<IActionResult> GetMessages(string id, int? pageNumber)
+        {
+            var currentUser = await userRepository.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
+
+            var companion = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            var numberOfRecordToskip = pageNumber * pageSize;
+
+            var chat = await context.Chats.Include(o => o.OneUser)
+                                        .Include(t => t.TwoUser)
+                                        .Include(m => m.Messages.OrderByDescending(d => d.SendDate).Skip(Convert.ToInt32(numberOfRecordToskip)).Take(pageSize))
+                                        .FirstOrDefaultAsync(p => (p.OneUser == currentUser || p.OneUser == companion) && (p.TwoUser == currentUser || p.TwoUser == companion));
+
+            var messageList = chat.Messages.Where(p => p.IsViewed == false).ToList();
+            
+            foreach (var message in messageList)
+            {
+                if(message.Sender == companion.Name)
+                {
+                    message.IsViewed = true;
+                }
+            }
+            
+            context.Messages.UpdateRange(messageList);
+            await context.SaveChangesAsync();
+
+            var model = new MessageListViewModel()
+            {
+                Me = currentUser,
+                Companion = companion,
+                Chat = chat
+            };
+
+            if(pageNumber == null)
+            {
+                return PartialView("MessageList", model);
+            }
+            else
+            {
+                return PartialView("Messages", model);
+            }
         }
 
         [HttpPost]
