@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Models;
 using StudentAchievements.Areas.Message.Models;
 using StudentAchievements.Areas.Authorization.Models;
@@ -65,6 +66,22 @@ namespace StudentAchievements.Areas.Message.Infrastructure
             }
 
             return false;
-        }   
+        }
+
+        public async Task<int> GetUnreadMessageCount(string userId)
+        {
+            int unreadMessageCount = 0;
+
+            var currentUser = await context.Users.FirstOrDefaultAsync(p => p.Id == userId);
+
+            var chatList = context.Chats.Include(m => m.Messages.Where(c => c.IsViewed == false && c.Sender != currentUser.Name)).Where(p => (p.OneUser == currentUser || p.TwoUser == currentUser)).ToList();
+            
+            foreach (var chat in chatList)
+            {
+                unreadMessageCount += chat.Messages.Count();
+            }
+
+            return unreadMessageCount;
+        }
     }
 }

@@ -134,5 +134,15 @@ namespace StudentAchievements.Areas.Message.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        public async Task<int> GetMessageCount()
+        {
+            var currentUser = await userRepository.Users.FirstOrDefaultAsync(p => p.Email == User.Identity.Name);
+
+            var count = await messenger.GetUnreadMessageCount(currentUser.Id);
+
+            return count;
+        }
     }
 }
