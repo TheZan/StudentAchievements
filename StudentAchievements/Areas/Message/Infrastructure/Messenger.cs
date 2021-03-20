@@ -46,6 +46,25 @@ namespace StudentAchievements.Areas.Message.Infrastructure
             }
 
             return false;
+        }
+
+        public async Task<bool> CheckMessage(int id)
+        {
+            if(id != 0)
+            {
+                var message = context.Messages.FirstOrDefault(p => p.Id == id);
+                if(message != null)
+                {
+                    message.IsViewed = true;
+
+                    context.Messages.Update(message);
+                    await context.SaveChangesAsync();
+
+                    return true;
+                }
+            }
+
+            return false;
         }   
     }
 }

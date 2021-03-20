@@ -2,21 +2,24 @@ var pageNumber = 0;
 
 function GetOldMessages(id) {
     if(pageNumber > -1){
-    pageNumber++;
-    fetch('/Message/GetMessages/?id=' + id + '&pageNumber=' + pageNumber)
-     .then((response) => {
-      return response.text();
-     })
-     .then((result) => {
-        if(!!result){
-            $('#chatBox').prepend(result);
-            $('#loading').hide();
-            $('#chatBox').scrollTop(30);
-        }
-        else{
-            pageNumber = -1;
-        }
-     });
+        document.getElementById("loading").style.visibility = "visible";
+        pageNumber++;
+
+        fetch('/Message/GetMessages/?id=' + id + '&pageNumber=' + pageNumber)
+        .then((response) => {
+            return response.text();
+        })
+        .then((result) => {
+            if(result.length > 4){
+                $('#chatBox').prepend(result);
+                $('#chatBox').scrollTop(30);
+            }
+            else{
+                pageNumber = -1;
+            }
+
+            document.getElementById("loading").style.visibility = "hidden";
+        });
     }
 }
 
@@ -36,12 +39,9 @@ function GetMessages(id) {
       let i = setInterval(function() {
         if (document.getElementById("sendButton")){
             clearInterval(i);
-            $('#loading').hide();
 
             $('#chatBox').scroll(function(){
                 if ($('#chatBox').scrollTop() == 0){
-                     $('#loading').show();
-                    
                     var id = document.getElementById("chatCompanionId").value;
                     GetOldMessages(id);
                 }
@@ -77,12 +77,26 @@ function SendMessage() {
     }
 }
 
+function CheckMessage(fromId, message) {
+    var url = '/Message/CheckMessage/';
+    var data = { id: fromId, message: message };
+    $.ajax({
+        url: url,
+        type: "POST",
+        contentType: 'application/x-www-form-urlencoded',
+        data: data
+    });
+}
+
 const hubConnection = new signalR.HubConnectionBuilder().withUrl("/chat", { accessTokenFactory: () => this.loginToken }).build();
 
 hubConnection.on("Receive", function (message, from, fromId, sendDate, senderPhoto) {
-    if(document.getElementById(fromId)){
-        GetCompanionMessage(message, from, sendDate, senderPhoto);
-        document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
+    if(document.getElementById("chatCompanionId")){
+        if(document.getElementById("chatCompanionId").value == fromId){
+            GetCompanionMessage(message, from, sendDate, senderPhoto);
+            document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
+            CheckMessage(fromId, message);
+        }
     }
     else
     {

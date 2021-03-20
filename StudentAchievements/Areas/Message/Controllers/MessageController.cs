@@ -66,41 +66,6 @@ namespace StudentAchievements.Areas.Message.Controllers
             return RedirectToAction("Index", "Student", new { area = "Student" });
         }
 
-        /* [HttpGet]
-        public async Task<IActionResult> GetMessages(string id)
-        {
-            var currentUser = await userRepository.Users.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
-
-            var companion = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == id);
-
-            var chat = await context.Chats.Include(o => o.OneUser)
-                                        .Include(t => t.TwoUser)
-                                        .Include(m => m.Messages)
-                                        .FirstOrDefaultAsync(p => (p.OneUser == currentUser || p.OneUser == companion) && (p.TwoUser == currentUser || p.TwoUser == companion));
-
-            var messageList = chat.Messages.Where(p => p.IsViewed == false).ToList();
-            
-            foreach (var message in messageList)
-            {
-                if(message.Sender == companion.Name)
-                {
-                    message.IsViewed = true;
-                }
-            }
-            
-            context.Messages.UpdateRange(messageList);
-            await context.SaveChangesAsync();
-
-            var model = new MessageListViewModel()
-            {
-                Me = currentUser,
-                Companion = companion,
-                Chat = chat
-            };
-
-            return PartialView("Messages", model);
-        } */
-
         [HttpGet]
         public async Task<IActionResult> GetMessages(string id, int? pageNumber)
         {
@@ -108,12 +73,13 @@ namespace StudentAchievements.Areas.Message.Controllers
 
             var companion = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-            var numberOfRecordToskip = pageNumber * pageSize;
+            var numberOfMessageToskip = pageNumber * pageSize;
 
             var chat = await context.Chats.Include(o => o.OneUser)
                                         .Include(t => t.TwoUser)
-                                        .Include(m => m.Messages.OrderByDescending(d => d.SendDate).Skip(Convert.ToInt32(numberOfRecordToskip)).Take(pageSize))
+                                        .Include(m => m.Messages.OrderByDescending(d => d.SendDate).Skip(Convert.ToInt32(numberOfMessageToskip)).Take(pageSize))
                                         .FirstOrDefaultAsync(p => (p.OneUser == currentUser || p.OneUser == companion) && (p.TwoUser == currentUser || p.TwoUser == companion));
+            chat.Messages = chat.Messages.OrderBy(p => p.SendDate).ToList();
 
             var messageList = chat.Messages.Where(p => p.IsViewed == false).ToList();
             
@@ -152,6 +118,21 @@ namespace StudentAchievements.Areas.Message.Controllers
             var receiver = await userRepository.Users.FirstOrDefaultAsync(u => u.Id == receiverId);
 
             await messenger.SendMessage(receiver, sender, message);
+        }
+
+        [HttpPost]
+        public async Task CheckMessage(string id, string message)
+        {
+            if(id !="" && message != "")
+            {
+                var msgList = context.Messages.Include(c => c.Chat).Where(p => (p.Chat.OneUser.Id == id || p.Chat.TwoUser.Id == id) && p.MessageText == message).ToList();
+                var msg = msgList.OrderBy(p => p.SendDate).LastOrDefault();
+                
+                if(msg != null)
+                {
+                    await messenger.CheckMessage(msg.Id);
+                }
+            }
         }
     }
 }
