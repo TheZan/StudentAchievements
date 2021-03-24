@@ -1,10 +1,11 @@
 using StudentAchievements.Infrastructure;
 using StudentAchievements.Areas.Authorization.Models;
 using System.Collections.Generic;
+using StudentAchievements.Models;
 
 namespace StudentAchievements.Areas.Employer.Models.ViewModels
 {
-    public class StudentProfileViewModel
+    public class StudentProfileViewModel : IStudentProfileViewModel
     {
         public StudentProfileViewModel()
         {

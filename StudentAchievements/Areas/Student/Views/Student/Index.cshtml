@@ -1,4 +1,96 @@
+@model StudentAchievements.Areas.Student.Models.ViewModels.StudentProfileViewModel
+
 @{
     Layout = "_StudentLayout";
-    ViewData["Title"] = "Тест для студентов";
+    ViewData["Title"] = @Model.Student.User.Name;
 }
+
+<hr>
+<div class="bootstrap snippets bootdey" style="margin-top:20px;">
+    <div class="row">
+        <div class="col-sm-10">
+            <h1>@Model.Student.User.Name</h1>
+        </div>
+        <div class="col-sm-2">
+            <a class="pull-right"><img title="profile image" class="rounded-circle" width="96px" height="96px"
+                    src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Student.User.Photo ?? Model.NotFoundUserPhoto))"
+                    asp-append-version="true"></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            <ul class="list-group">
+                <li class="list-group-item text-muted">Профиль</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center"><span
+                        class="text-left"><strong>Email</strong></span> @Model.Student.User.Email</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center"><span
+                        class="text-left"><strong>ФИО</strong></span> @Model.Student.User.Name</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center"><span
+                        class="text-left"><strong>Пол</strong></span> @Model.Student.Gender</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center"><span
+                        class="text-left"><strong>Дата рождения</strong></span> @Model.Student.Dob.ToShortDateString()
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center"><span
+                        class="text-left"><strong>Курс</strong></span>
+                    @Model.Student.Group.Grade
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class="text-left"><strong>Форма обучения</strong></span> @Model.Student.FormEducation.Name
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-sm">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-assesments-tab" data-toggle="tab" href="#nav-assesments"
+                        role="tab" aria-controls="nav-assesments" aria-selected="true">Оценки</a>
+                    <a class="nav-link" id="nav-achivements-tab" data-toggle="tab" href="#nav-achivements" role="tab"
+                        aria-controls="nav-achivements" aria-selected="false">Достижения</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active bg-white" id="nav-assesments" role="tabpanel"
+                    aria-labelledby="nav-assesments-tab">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col-sm-auto">Название</th>
+                                <th scope="col-sm-auto">Курс</th>
+                                <th scope="col-sm-auto">Семестр</th>
+                                <th scope="col-sm-auto">Вид контроля</th>
+                                <th scope="col">Оценка</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var assesment in Model.AssessmentsList)
+                            {
+                                <tr>
+                                    <td class="align-middle">
+                                        @assesment.Subject.Name
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @assesment.Subject.Grade
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        @assesment.Subject.Semester
+                                    </td>
+                                    <td class="align-middle">
+                                        @assesment.Subject.ControlType.Name
+                                    </td>
+                                    <td class="align-middle">
+                                        @assesment.Score.Name
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade bg-white" id="nav-achivements" role="tabpanel"
+                    aria-labelledby="nav-achivements-tab">
+                     @await Html.PartialAsync("AchievementsTable", Model.AchievementViewModel)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
