@@ -5,8 +5,8 @@
     ViewData["Title"] = "Список студентов";
 }
 
-<div>
-    <div class="card">
+<div class="container-fluid">
+    <div class="card row">
         <div class="card-header">
             Поиск
         </div>
@@ -24,6 +24,7 @@
         </div>
     </div>
 
+<div class="row">
     <table class="table table-bordered table-hover bg-white">
         <thead>
             <tr>
@@ -88,6 +89,7 @@
             }
         </tbody>
     </table>
+    </div>
     <br />
 
     @{
@@ -97,7 +99,7 @@
 
     @if (Model.Students.TotalPages > 1)
     {
-    <nav>
+    <nav class="row">
         <ul class="pagination justify-content-center fixed-bottom">
             <li class="page-item @prevDisabled">
                 <a asp-action="Index"
