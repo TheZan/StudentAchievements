@@ -32,6 +32,7 @@
                             @User.Identity?.Name
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" asp-controller="Student" asp-action="EditProfile" asp-area="Student">Настройки</a>
                             <a class="dropdown-item" asp-controller="Account" asp-action="Logout" asp-area="Authorization">Выход</a>
                         </div>
                     </li>
@@ -43,6 +44,8 @@
         @RenderBody()
     </div>
     <script src="/lib/jquery/jquery.min.js"></script>
+    <script src="/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="/lib/js/signalr/dist/browser/signalr.min.js"></script>
     <script src="/lib/js/Chat.js"></script>
     <script src="/lib/twitter-bootstrap/js/bootstrap.min.js"></script>

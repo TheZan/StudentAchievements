@@ -93,5 +93,59 @@ namespace StudentAchievements.Areas.Student.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var currentUser = await userRepository.Students.Include(p => p.User).FirstOrDefaultAsync(p => p.User.Email == User.Identity.Name);
+            
+            if(currentUser != null)
+            {
+                var model = new StudentSettingsViewModel()
+                {
+                    Id = currentUser.User.Id,
+                    Name = currentUser.User.Name,
+                    Gender = currentUser.Gender,
+                    Photo = currentUser.User.Photo,
+                    Dob = currentUser.Dob
+                };
+
+                return View("StudentSettings", model);
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(StudentSettingsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userRepository.Users.FirstOrDefaultAsync(p => p.Id == model.Id);
+
+                if (user != null)
+                {
+
+                    IdentityResult resultInfo = await userRepository.EditStudent(user, model);
+                    IdentityResult resultChangePassword = new IdentityResult();
+
+                   /*  if(model.OldPassword != null && model.NewPassword != null && model.ConfirmNewPassword != null)
+                    {
+                        resultChangePassword = await userRepository.ChangeUserPassword(user, model.OldPassword, model.NewPassword, model.ConfirmNewPassword);
+                    } */
+
+                    if (resultInfo.Succeeded || resultChangePassword.Succeeded)
+                    {
+                        return RedirectToAction(nameof(EditProfile));
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
+            }
+
+            return View("StudentSettings", model);
+        }
     }
 }

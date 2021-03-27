@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Areas.Teacher.Models.ViewModels;
 using System.Collections.Generic;
+using StudentAchievements.Areas.Student.Models.ViewModels;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -19,5 +20,8 @@ namespace StudentAchievements.Areas.Authorization.Models
         Task<IdentityResult> EditUser(User user, IEditUserViewModel model);
         Task<IdentityResult> DeleteUser(User user);
         Task<bool> EditStudentAssessments(IList<AssessmentViewModel> model);
+
+        Task<IdentityResult> ChangeUserPassword (User user, string oldPassword, string newPassword, string ConfirmNewPassword);
+        Task<IdentityResult> EditStudent(User user, StudentSettingsViewModel model);
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Admin.Controllers;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Areas.Authorization.Models.ViewModels;
@@ -261,6 +262,52 @@ namespace StudentAchievements.Areas.Authorization.Controllers
                 }
             }
             return photo;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            var user = await userRepository.Users.FirstOrDefaultAsync(p => p.Id == model.Id);
+            var role = await userManager.GetRolesAsync(user);
+
+            if (ModelState.IsValid)
+            {
+                if (model.OldPassword != null && model.NewPassword != null && model.ConfirmNewPassword != null)
+                {
+                    var resultChangePassword = await userRepository.ChangeUserPassword(user, model.OldPassword, model.NewPassword, model.ConfirmNewPassword);
+                    if(resultChangePassword.Succeeded)
+                    {
+                        return View("PasswordChangeSuccessful");
+                    }
+                    else
+                    {
+                        return View("PasswordChangeFailed");
+                    }
+                }
+            }
+
+            return default;
+        }
+
+        public async Task<IActionResult> BackRedirect()
+        {
+            var user = await userRepository.Users.FirstOrDefaultAsync(p => p.Email == User.Identity.Name);
+            var role = await userManager.GetRolesAsync(user);
+
+            switch (role[0])
+            {
+                case "Admin":
+                    return RedirectToAction("EditProfile", "Admin", new { area = "Admin" });
+                case "Employer":
+                    return RedirectToAction("EditProfile", "Employer", new { area = "Employer" });
+                case "Teacher":
+                    return RedirectToAction("EditProfile", "Teacher", new { area = "Teacher" });
+                case "Student":
+                    return RedirectToAction("EditProfile", "Student", new { area = "Student" });
+                default:
+                    return default;
+            }
         }
     }
 }

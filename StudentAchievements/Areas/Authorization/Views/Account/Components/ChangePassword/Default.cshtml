@@ -1,0 +1,22 @@
+@model ChangePasswordViewModel
+
+<form method="post" asp-area="Authorization" asp-controller="Account" asp-action="ChangePassword">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <input asp-for="Id" type="hidden" />
+    <div class="form-group">
+        <div><span asp-validation-for="OldPassword" class="text-danger"></span></div>
+        <label asp-for="OldPassword"></label>
+        <input asp-for="OldPassword" class="form-control" />
+    </div>
+    <div class="form-group">
+        <div><span asp-validation-for="NewPassword" class="text-danger"></span></div>
+        <label asp-for="NewPassword"></label>
+        <input asp-for="NewPassword" class="form-control" />
+    </div>
+    <div class="form-group">
+        <div><span asp-validation-for="ConfirmNewPassword" class="text-danger"></span></div>
+        <label asp-for="ConfirmNewPassword"></label>
+        <input asp-for="ConfirmNewPassword" class="form-control" />
+    </div>
+    <button class="btn btn-primary" type="submit">Изменить пароль</button>
+</form>

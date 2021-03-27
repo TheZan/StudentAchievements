@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.Razor;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Infrastructure;
 using StudentAchievements.Models;
@@ -50,6 +51,7 @@ namespace StudentAchievements
             services.AddMemoryCache();
             services.AddSession();
             services.AddSignalR();
+            services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new RazorViewLocationExpander()));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

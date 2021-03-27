@@ -8,6 +8,7 @@ using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Areas.Teacher.Models.ViewModels;
 using StudentAchievements.Models;
 using Microsoft.EntityFrameworkCore;
+using StudentAchievements.Areas.Student.Models.ViewModels;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -231,6 +232,45 @@ namespace StudentAchievements.Areas.Authorization.Models
             }
 
             return false;
+        }
+
+        public async Task<IdentityResult> ChangeUserPassword(User user, string oldPassword, string newPassword, string confirmNewPassword)
+        {
+            if(user != null && oldPassword != null && newPassword != null && confirmNewPassword != null)
+            {
+                if(newPassword == confirmNewPassword)
+                {
+                    IdentityResult result = await userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+                    
+                    if(result.Succeeded)
+                    {
+                        return IdentityResult.Success;
+                    }
+                }
+            }
+
+            return IdentityResult.Failed();
+        }
+
+        public async Task<IdentityResult> EditStudent(User user, StudentSettingsViewModel model)
+        {
+            if(user != null && model != null)
+            {
+                user.Photo = UploadedImage(model) ?? user.Photo;
+                
+                var userUpdateResult = await userManager.UpdateAsync(user);
+                if (userUpdateResult.Succeeded)
+                {
+                    var student = context.Students.FirstOrDefault(u => u.User.Email == user.Email);
+                    student.Dob = model.Dob;
+                    student.Gender = model.Gender;
+                    await context.SaveChangesAsync();
+                    
+                    return IdentityResult.Success;
+                }
+            }
+
+            return IdentityResult.Failed();
         }
     }
 }

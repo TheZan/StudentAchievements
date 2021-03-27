@@ -4,11 +4,6 @@
     ViewData["Title"] = "Редактирование студента";
 }
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
 <div class="card">
     <div class="card-header">
         <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true" />
