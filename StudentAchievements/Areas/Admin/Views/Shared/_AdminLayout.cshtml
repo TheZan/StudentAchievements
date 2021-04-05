@@ -34,6 +34,7 @@
                             @User.Identity?.Name
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" asp-controller="Admin" asp-action="EditProfile" asp-area="Admin">Настройки</a>
                             <a class="dropdown-item" asp-controller="Account" asp-action="Logout" asp-area="Authorization">Выход</a>
                         </div>
                     </li>

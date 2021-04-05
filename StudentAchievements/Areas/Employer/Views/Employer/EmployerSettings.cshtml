@@ -1,0 +1,34 @@
+@model EmployerSettingsViewModel
+
+@{
+    Layout = "_EmployerLayout";
+    ViewData["Title"] = "Настройки";
+}
+
+<div class="card">
+    <div class="card-header">
+        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true" />
+        @Model.Name
+    </div>
+    <div class="card-body">
+        <form enctype="multipart/form-data" method="post" asp-area="Employer" asp-controller="Employer" asp-action="EditProfile">
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group">
+                <div><span asp-validation-for="Description" class="text-danger"></span></div>
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="UploadPhoto"></label>
+                <div><span asp-validation-for="UploadPhoto" class="text-danger"></span></div>
+                <div class="custom-file">
+                    <input asp-for="UploadPhoto" type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile" data-browse="Выбрать">Выбрать файл</label>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Изменить данные</button>
+        </form>
+        <br/>
+        @await Component.InvokeAsync("ChangePassword")
+    </div>
+</div>

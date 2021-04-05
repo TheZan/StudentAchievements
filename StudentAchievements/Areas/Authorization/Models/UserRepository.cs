@@ -9,6 +9,7 @@ using StudentAchievements.Areas.Teacher.Models.ViewModels;
 using StudentAchievements.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Student.Models.ViewModels;
+using StudentAchievements.Areas.Employer.Models.ViewModels;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -264,6 +265,69 @@ namespace StudentAchievements.Areas.Authorization.Models
                     var student = context.Students.FirstOrDefault(u => u.User.Email == user.Email);
                     student.Dob = model.Dob;
                     student.Gender = model.Gender;
+                    await context.SaveChangesAsync();
+                    
+                    return IdentityResult.Success;
+                }
+            }
+
+            return IdentityResult.Failed();
+        }
+
+        public async Task<IdentityResult> EditTeacher(User user, TeacherSettingsViewModel model)
+        {
+            if(user != null && model != null)
+            {
+                user.Photo = UploadedImage(model) ?? user.Photo;
+                
+                var userUpdateResult = await userManager.UpdateAsync(user);
+
+                if (userUpdateResult.Succeeded)
+                {
+                    var teacher = context.Teachers.FirstOrDefault(u => u.User.Email == user.Email);
+                    teacher.Gender = model.Gender;
+                    await context.SaveChangesAsync();
+                    
+                    return IdentityResult.Success;
+                }
+            }
+
+            return IdentityResult.Failed();
+        }
+
+        public async Task<IdentityResult> EditEmployer(User user, EmployerSettingsViewModel model)
+        {
+            if(user != null && model != null)
+            {
+                user.Photo = UploadedImage(model) ?? user.Photo;
+                
+                var userUpdateResult = await userManager.UpdateAsync(user);
+                
+                if (userUpdateResult.Succeeded)
+                {
+                    var employer = context.Employers.FirstOrDefault(u => u.User.Email == user.Email);
+                    employer.Description = model.Description;
+                    await context.SaveChangesAsync();
+                    
+                    return IdentityResult.Success;
+                }
+            }
+
+            return IdentityResult.Failed();
+        }
+
+        public async Task<IdentityResult> EditAdmin(User user, AdminSettingsViewModel model)
+        {
+            if(user != null && model != null)
+            {
+                user.Photo = UploadedImage(model) ?? user.Photo;
+                
+                var userUpdateResult = await userManager.UpdateAsync(user);
+                
+                if (userUpdateResult.Succeeded)
+                {
+                    var admin = context.Administrators.FirstOrDefault(u => u.User.Email == user.Email);
+                    admin.Gender = model.Gender;
                     await context.SaveChangesAsync();
                     
                     return IdentityResult.Success;

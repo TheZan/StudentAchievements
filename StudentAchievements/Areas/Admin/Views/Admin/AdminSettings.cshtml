@@ -1,0 +1,38 @@
+@model AdminSettingsViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Настройки";
+}
+
+<div class="card">
+    <div class="card-header">
+        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Photo ?? Model.NotFoundUserPhoto))" class="rounded-circle" height="40" width="40" asp-append-version="true" />
+        @Model.Name
+    </div>
+    <div class="card-body">
+        <form enctype="multipart/form-data" method="post" asp-area="Admin" asp-controller="Admin" asp-action="EditProfile">
+            <input asp-for="Id" type="hidden" />
+            <div class="form-group">
+                <div><span asp-validation-for="Gender" class="text-danger"></span></div>
+                <label asp-for="Gender"></label>
+                <select class="custom-select" asp-for="Gender">
+                    <option disabled selected>Выберите пол</option>
+                    <option>Мужской</option>
+                    <option>Женский</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="UploadPhoto"></label>
+                <div><span asp-validation-for="UploadPhoto" class="text-danger"></span></div>
+                <div class="custom-file">
+                    <input asp-for="UploadPhoto" type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile" data-browse="Выбрать">Выбрать файл</label>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Изменить данные</button>
+        </form>
+        <br/>
+        @await Component.InvokeAsync("ChangePassword")
+    </div>
+</div>

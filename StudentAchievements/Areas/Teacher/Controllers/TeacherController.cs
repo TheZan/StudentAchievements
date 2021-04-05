@@ -149,5 +149,52 @@ namespace StudentAchievements.Areas.Teacher.Controllers
 
             return RedirectToAction(nameof(ViewStudentProfile), new { id = studentId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var currentUser = await userRepository.Teachers.Include(p => p.User).FirstOrDefaultAsync(p => p.User.Email == User.Identity.Name);
+            
+            if(currentUser != null)
+            {
+                var model = new TeacherSettingsViewModel()
+                {
+                    Id = currentUser.User.Id,
+                    Name = currentUser.User.Name,
+                    Gender = currentUser.Gender,
+                    Photo = currentUser.User.Photo
+                };
+
+                return View("TeacherSettings", model);
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(TeacherSettingsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userRepository.Users.FirstOrDefaultAsync(p => p.Id == model.Id);
+
+                if (user != null)
+                {
+
+                    IdentityResult resultInfo = await userRepository.EditTeacher(user, model);
+
+                    if (resultInfo.Succeeded)
+                    {
+                        return RedirectToAction(nameof(EditProfile));
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
+            }
+
+            return View("TeacherSettings", model);
+        }
     }
 }

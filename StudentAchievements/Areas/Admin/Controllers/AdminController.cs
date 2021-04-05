@@ -768,5 +768,51 @@ namespace StudentAchievements.Areas.Admin.Controllers
             }
             return photo;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var currentUser = await repository.Administrators.Include(p => p.User).FirstOrDefaultAsync(p => p.User.Email == User.Identity.Name);
+            
+            if(currentUser != null)
+            {
+                var model = new AdminSettingsViewModel()
+                {
+                    Id = currentUser.User.Id,
+                    Name = currentUser.User.Name,
+                    Gender = currentUser.Gender,
+                    Photo = currentUser.User.Photo
+                };
+
+                return View("AdminSettings", model);
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(AdminSettingsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await repository.Users.FirstOrDefaultAsync(p => p.Id == model.Id);
+
+                if (user != null)
+                {
+                    IdentityResult resultInfo = await repository.EditAdmin(user, model);
+
+                    if (resultInfo.Succeeded)
+                    {
+                        return RedirectToAction(nameof(EditProfile));
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
+            }
+
+            return View("AdminSettings", model);
+        }
     }
 }

@@ -5,6 +5,7 @@ using StudentAchievements.Areas.Admin.Models.ViewModels;
 using StudentAchievements.Areas.Teacher.Models.ViewModels;
 using System.Collections.Generic;
 using StudentAchievements.Areas.Student.Models.ViewModels;
+using StudentAchievements.Areas.Employer.Models.ViewModels;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -23,5 +24,8 @@ namespace StudentAchievements.Areas.Authorization.Models
 
         Task<IdentityResult> ChangeUserPassword (User user, string oldPassword, string newPassword, string ConfirmNewPassword);
         Task<IdentityResult> EditStudent(User user, StudentSettingsViewModel model);
+        Task<IdentityResult> EditTeacher(User user, TeacherSettingsViewModel model);
+        Task<IdentityResult> EditEmployer(User user, EmployerSettingsViewModel model);
+        Task<IdentityResult> EditAdmin(User user, AdminSettingsViewModel model);
     }
 }

@@ -177,5 +177,51 @@ namespace StudentAchievements.Areas.Employer.Controllers
             
             return RedirectToAction("ViewStudentProfile", new { id = student.Id });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var currentUser = await userRepository.Employers.Include(p => p.User).FirstOrDefaultAsync(p => p.User.Email == User.Identity.Name);
+            
+            if(currentUser != null)
+            {
+                var model = new EmployerSettingsViewModel()
+                {
+                    Id = currentUser.User.Id,
+                    Name = currentUser.User.Name,
+                    Photo = currentUser.User.Photo,
+                    Description = currentUser.Description
+                };
+
+                return View("EmployerSettings", model);
+            }
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EmployerSettingsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userRepository.Users.FirstOrDefaultAsync(p => p.Id == model.Id);
+
+                if (user != null)
+                {
+                    IdentityResult resultInfo = await userRepository.EditEmployer(user, model);
+
+                    if (resultInfo.Succeeded)
+                    {
+                        return RedirectToAction(nameof(EditProfile));
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Пользователь не найден.");
+                }
+            }
+
+            return View("EmployerSettings", model);
+        }
     }
 }

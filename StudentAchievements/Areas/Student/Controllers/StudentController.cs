@@ -127,14 +127,8 @@ namespace StudentAchievements.Areas.Student.Controllers
                 {
 
                     IdentityResult resultInfo = await userRepository.EditStudent(user, model);
-                    IdentityResult resultChangePassword = new IdentityResult();
 
-                   /*  if(model.OldPassword != null && model.NewPassword != null && model.ConfirmNewPassword != null)
-                    {
-                        resultChangePassword = await userRepository.ChangeUserPassword(user, model.OldPassword, model.NewPassword, model.ConfirmNewPassword);
-                    } */
-
-                    if (resultInfo.Succeeded || resultChangePassword.Succeeded)
+                    if (resultInfo.Succeeded)
                     {
                         return RedirectToAction(nameof(EditProfile));
                     }
