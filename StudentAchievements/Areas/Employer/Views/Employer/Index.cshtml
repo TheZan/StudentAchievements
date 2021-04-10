@@ -5,8 +5,9 @@
     ViewData["Title"] = "Список студентов";
 }
 
-<div class="container-fluid">
-    <div class="card row">
+<div class="row">
+    <div class="col-sm" style="padding-right: 0; padding-left: 0;">
+    <div class="card">
         <div class="card-header">
             Поиск
         </div>
@@ -23,9 +24,11 @@
             </form>
         </div>
     </div>
-
+    </div>
+</div>
 <div class="row">
-    <table class="table table-bordered table-hover bg-white">
+<div class="col-sm" style="padding-right: 0; padding-left: 0;">
+    <table class="table table-bordered table-hover bg-white table-responsive">
         <thead>
             <tr>
                 <th class="col-sm">
@@ -89,7 +92,6 @@
             }
         </tbody>
     </table>
-    </div>
     <br />
 
     @{
@@ -124,4 +126,5 @@
         </ul>
     </nav>
     }
+    </div>
 </div>

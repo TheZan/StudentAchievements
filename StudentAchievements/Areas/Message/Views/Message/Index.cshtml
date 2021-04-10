@@ -1,53 +1,56 @@
 @using StudentAchievements.Infrastructure
 @model IEnumerable<MessageListViewModel>
 @{
-    Layout = "_MessageLayout";
-    ViewData["Title"] = "Сообщения";
+	Layout = "_MessageLayout";
+	ViewData["Title"] = "Сообщения";
 }
 
-<main class="content">
-    <div class="container p-0">
+<div class="row">
+ <div class="col-sm">
+  <h1 class="h3">Сообщения</h1>
+ </div>
+</div>
+@if (Model.Count() > 0)
+{
+	<div class="row">
+	 <div class="col-sm-3" style="overflow-y: auto; max-height: 800px;">
 
-		<h1 class="h3 mb-3">Сообщения</h1>
-		@if(Model.Count() > 0)
-		{
-		<div class="card">
-			<div class="row g-0">
-				<div class="col-12 col-lg-5 col-xl-3 border-right" style="overflow-y: auto; max-height: 800px;">
-
-					@foreach (var chat in Model)
+			@foreach (var chat in Model)
+			{
+		  <a onclick="GetMessages('@chat.Companion.Id')" style="cursor: pointer;"
+			class="list-group-item list-group-item-action border-0">
+					@if (chat.UnreadMessageCount > 0)
 					{
-						<a onclick="GetMessages('@chat.Companion.Id')" style="cursor: pointer;" class="list-group-item list-group-item-action border-0">
-							@if(chat.UnreadMessageCount > 0)
-							{
-								<div class="badge bg-primary float-right text-white" id="@($"companion-{chat.Companion.Id}")">@chat.UnreadMessageCount</div>
-							}
-							else
-							{
-								<div style="visibility: hidden;" class="badge bg-primary float-right text-white" id="@($"companion-{chat.Companion.Id}")"></div>
-							}
-							<div class="d-flex align-items-start">
-								<img src="data:image/jpeg;base64,@(Convert.ToBase64String(chat.Companion.Photo ?? NotFoundImageUtility.GetNotFoundImage()))"
-                    				asp-append-version="true" class="rounded-circle mr-1" alt="@chat.Companion.Name" width="40" height="40">
-								<div class="flex-grow-1 ml-3">
-									@chat.Companion.Name
-								</div>
-							</div>
-						</a>
+			   <div class="badge bg-primary float-right text-white" id="@($"companion-{chat.Companion.Id}")">
+							@chat.UnreadMessageCount</div>
 					}
-					<hr class="d-block d-lg-none mt-1 mb-0">
-				</div>
-				<div class="col-12 col-lg-7 col-xl-9 bg-white" id="chat"></div>
+					else
+					{
+			   <div style="visibility: hidden;" class="badge bg-primary float-right text-white"
+				id="@($"companion-{chat.Companion.Id}")"></div>
+					}
+		   <div class="d-flex align-items-start">
+			<img src="data:image/jpeg;base64,@(Convert.ToBase64String(chat.Companion.Photo ?? NotFoundImageUtility.GetNotFoundImage()))"
+					asp-append-version="true" class="rounded-circle mr-1" alt="@chat.Companion.Name" width="40"
+					height="40">
+			<div class="flex-grow-1 ml-3">
+							@chat.Companion.Name
 			</div>
-		</div>
-		}
-		else
-		{
-	   	<div class="bg-white" style="height: 500px; display: flex; align-items: center; justify-content: center">
-			<h4 style="margin: 0;">
-		 		Нет доступных чатов
-			</h4>
-	   	</div>
-		}
+		   </div>
+		  </a>
+			}
+	  <hr class="d-block d-lg-none mt-1 mb-0">
+	 </div>
+	 <div class="col-sm bg-white" id="chat"></div>
 	</div>
-</main>
+}
+else
+{
+	<div class="row bg-white" style="height: 500px; display: flex; align-items: center; justify-content: center">
+	 <div class="col-sm">
+	  <h4 style="margin: 0;">
+	   Нет доступных чатов
+	  </h4>
+	 </div>
+	</div>
+}

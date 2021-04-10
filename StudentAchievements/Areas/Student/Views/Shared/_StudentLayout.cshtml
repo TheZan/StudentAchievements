@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html style="height: 100%;">
 <head>
-    <meta name="viewimport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     @await Html.PartialAsync("_Favicons")
     <link rel="stylesheet" asp-href-include="/lib/twitter-bootstrap/css/bootstrap.min.css" />
@@ -40,7 +41,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid">
         @RenderBody()
     </div>
     <script src="/lib/jquery/jquery.min.js"></script>

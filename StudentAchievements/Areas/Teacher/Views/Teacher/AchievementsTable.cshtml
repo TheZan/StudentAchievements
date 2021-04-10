@@ -1,20 +1,20 @@
 @model AchievementViewModel
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover table-responsive">
     <thead>
         <tr>
-            <th class="col-sm-auto">Название</th>
-            <th class="col-sm-auto">Описание</th>
+            <th class="col-sm">Название</th>
+            <th class="col-sm">Описание</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var achievement in Model.Achievements)
         {
             <tr>
-                <td class="align-middle">
+                <td class="align-middle" style="word-wrap: break-word;min-width: 160px;max-width: 160px;">
                     @achievement.Name
                 </td>
-                <td class="align-middle">
+                <td class="align-middle" style="word-wrap: break-word;min-width: 160px;max-width: 160px;">
                     @achievement.Description
                 </td>
                 <td class="align-middle text-center">
