@@ -118,6 +118,12 @@ namespace StudentAchievements
                     pattern: "{controller=Message}/{action=Index}/{id?}"
                 );
 
+                endpoints.MapAreaControllerRoute(
+                    name: "AreaVacancies",
+                    areaName: "Vacancies",
+                    pattern: "{controller=Vacancies}/{action=Index}/{id?}"
+                );
+
                 endpoints.MapHub<ChatHub>("/chat");
             });
 

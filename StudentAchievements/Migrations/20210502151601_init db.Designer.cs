@@ -10,8 +10,8 @@ using StudentAchievements.Models;
 namespace StudentAchievements.Migrations
 {
     [DbContext(typeof(StudentAchievementsDbContext))]
-    [Migration("20210303132229_InitDb")]
-    partial class InitDb
+    [Migration("20210502151601_init db")]
+    partial class initdb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -526,6 +526,41 @@ namespace StudentAchievements.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("StudentAchievements.Areas.Employer.Models.Vacancy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Experience")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("WorkSchedule")
+                        .HasColumnType("text");
+
+                    b.Property<string>("WorkType")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployerId");
+
+                    b.ToTable("Vacancies");
+                });
+
             modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Chat", b =>
                 {
                     b.Property<int>("Id")
@@ -771,6 +806,17 @@ namespace StudentAchievements.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("StudentAchievements.Areas.Employer.Models.Vacancy", b =>
+                {
+                    b.HasOne("StudentAchievements.Areas.Authorization.Models.Employer", "Employer")
+                        .WithMany("Vacancies")
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employer");
+                });
+
             modelBuilder.Entity("StudentAchievements.Areas.Message.Models.Chat", b =>
                 {
                     b.HasOne("StudentAchievements.Areas.Authorization.Models.User", "OneUser")
@@ -812,6 +858,11 @@ namespace StudentAchievements.Migrations
                     b.Navigation("Groups");
 
                     b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.Employer", b =>
+                {
+                    b.Navigation("Vacancies");
                 });
 
             modelBuilder.Entity("StudentAchievements.Areas.Authorization.Models.FormEducation", b =>

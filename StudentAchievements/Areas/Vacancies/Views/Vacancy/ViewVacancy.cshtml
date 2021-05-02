@@ -1,0 +1,46 @@
+@model Vacancy
+
+@{
+    Layout = "_VacancyLayout";
+    ViewData["Title"] = @Model.Name;
+}
+
+<div class="row">
+    <div class="col-sm card" style="padding-right: 0; padding-left: 0;">
+        <h1 class="card-header">@Model.Name</h1>
+        <div class="card-body">
+            <h5 class="card-title">@Model.Employer.User.Name</h5>
+            <p class="card-text">
+            <div class="row">
+                <div class="col-sm">
+                    <h3>@Model.Salary руб.</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <b>Опыт работы:</b> @Model.Experience
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <b>Тип занятости:</b> @Model.WorkType
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    <b>График работы:</b> @Model.WorkSchedule
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm">
+                    @Model.Content
+                </div>
+            </div>
+            </p>
+            @if (User.IsInRole("Student"))
+            {
+                <a asp-area="Vacancy" asp-controller="Vacancy" asp-action="Respond" asp-route-id="@Model.Employer.User.Id" asp-route-url="@Context.Request.Host@Context.Request.Path" asp-route-name="@Model.Name" class="btn btn-success">Откликнуться</a>
+            }
+        </div>
+    </div>
+</div>

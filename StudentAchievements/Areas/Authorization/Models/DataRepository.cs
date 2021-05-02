@@ -1,6 +1,8 @@
-﻿using StudentAchievements.Models;
+﻿using StudentAchievements.Areas.Vacancies.Models;
+using StudentAchievements.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -17,6 +19,8 @@ namespace StudentAchievements.Areas.Authorization.Models
         public IQueryable<Score> Scores => context.Scores;
         public IQueryable<Achievement> Achievements => context.Achievements;
         public IQueryable<Assessment> Assessments => context.Assessments;
+
+        public IQueryable<Vacancy> Vacancies => context.Vacancies.Include(e => e.Employer).ThenInclude(e => e.User);
 
         public async Task<bool> AddAchievement(Achievement achievement)
         {
@@ -109,6 +113,19 @@ namespace StudentAchievements.Areas.Authorization.Models
             return false;
         }
 
+        public async Task<bool> AddVacancy(Vacancy vacancy)
+        {
+            if(vacancy != null)
+            {
+                await context.Vacancies.AddAsync(vacancy);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
         public async Task<bool> DeleteAchievement(Achievement achievement)
         {
             if (achievement != null)
@@ -192,6 +209,19 @@ namespace StudentAchievements.Areas.Authorization.Models
             if (subject != null)
             {
                 context.Subjects.Remove(subject);
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteVacancy(Vacancy vacancy)
+        {
+            if (vacancy != null)
+            {
+                context.Vacancies.Remove(vacancy);
                 await context.SaveChangesAsync();
 
                 return true;
@@ -305,6 +335,26 @@ namespace StudentAchievements.Areas.Authorization.Models
                 var oldSubject = context.Subjects.FirstOrDefault(p => p.Id == subject.Id);
                 oldSubject.Name = subject.Name;
                 oldSubject.Direction = subject.Direction;
+
+                await context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> EditVacancy(Vacancy vacancy)
+        {
+            if (vacancy != null)
+            {
+                var oldVacancy = context.Vacancies.FirstOrDefault(p => p.Id == vacancy.Id);
+                oldVacancy.Name = vacancy.Name;
+                oldVacancy.Salary = vacancy.Salary;
+                oldVacancy.Experience = vacancy.Experience;
+                oldVacancy.WorkType = vacancy.WorkType;
+                oldVacancy.WorkSchedule = vacancy.WorkSchedule;
+                oldVacancy.Content = vacancy.Content;
 
                 await context.SaveChangesAsync();
 

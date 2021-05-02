@@ -1,0 +1,121 @@
+@model PaginatedList<Vacancy>
+
+@{
+    Layout = "_VacancyLayout";
+    ViewData["Title"] = "Мои вакансии";
+}
+
+<div class="row">
+    <div class="col-sm" style="padding-right: 0; padding-left: 0;">
+        <div class="card">
+            <div class="card-header">
+                Поиск
+            </div>
+            <div class="card-body">
+                <form asp-action="GetMyVacancy" asp-controller="Vacancy" asp-area="Vacancies" method="get">
+                    <div class="input-group">
+                        <input name="SearchString" value="@ViewData["CurrentFilter"]" type="text" class="form-control">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm" style="padding-right: 0; padding-left: 0;">
+        <table class="table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <th class="col-sm">Название</th>
+                    <th class="col-sm">Тип занятости</th>
+                    <th class="col-sm">График работы</th>
+                    <th class="col-sm">Заработная плата</th>
+                    <th class="col-sm align-middle text-center" colspan="3">
+                        <a class="btn btn-primary addVacancy-container" asp-area="Vacancy" asp-controller="Vacancy" asp-action="ViewVacancy" data-toggle="modal"
+                        data-target="#addVacancy-container">
+                                Новая вакансия <i class="fas fa-plus"></i>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vacancy in Model)
+                {
+                    <tr>
+                        <td class="align-middle">@vacancy.Name</td>
+                        <td class="align-middle">@vacancy.WorkType</td>
+                        <td class="align-middle">@vacancy.WorkSchedule</td>
+                        <td class="align-middle">@vacancy.Salary руб.</td>
+                        <td class="align-middle">
+                            <a class="btn btn-success" asp-area="Vacancy" asp-controller="Vacancy" asp-action="ViewVacancy"
+                            asp-route-id="@vacancy.Id">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                        <td class="align-middle">
+                            <a class="btn btn-warning editVacancy-container" asp-area="Vacancy" asp-controller="Vacancy" asp-action="ViewVacancy" 
+                            data-toggle="modal" data-id="@vacancy.Id" data-target="#editVacancy-container">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        </td>
+                        <td class="align-middle">
+                            <a class="btn btn-danger removeVacancy-container" asp-area="Vacancy" asp-controller="Vacancy" asp-action="ViewVacancy"
+                            data-toggle="modal" data-id="@vacancy.Id" data-target="#removeVacancy-container">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+
+        @{
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+        }
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav>
+                <ul class="pagination justify-content-center fixed-bottom">
+                    <li class="page-item @prevDisabled">
+                        <a asp-action="Index" asp-controller="Admin" asp-area="Admin"
+                        asp-route-pageNumber="@(Model.PageIndex - 1)"
+                        asp-route-currentFilter="@ViewData["CurrentFilter"]" class="page-link"> Назад
+                        </a>
+                    </li>
+                    <li class="page-item @nextDisabled">
+                        <a asp-action="Index" asp-controller="Admin" asp-area="Admin"
+                        asp-route-pageNumber="@(Model.PageIndex + 1)"
+                        asp-route-currentFilter="@ViewData["CurrentFilter"]" class="page-link"> Вперед
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
+
+<div class="modal" id="addVacancy-container" tabindex="-1" role="dialog" aria-labelledby="addVacancy-title">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="addVacancy-content-container"></div>
+    </div>
+</div>
+
+<div class="modal" id="editVacancy-container" tabindex="-1" role="dialog" aria-labelledby="editVacancy-title">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="editVacancy-content-container"></div>
+    </div>
+</div>
+
+<div class="modal" id="removeVacancy-container" tabindex="-1" role="dialog" aria-labelledby="removeVacancy-title">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="removeVacancy-content-container"></div>
+    </div>
+</div>

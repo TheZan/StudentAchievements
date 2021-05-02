@@ -1,0 +1,24 @@
+@model int
+
+@{
+    Layout = null;
+}
+
+<div class="modal-content">
+    <form method="POST" asp-action="RemoveVacancy" asp-controller="Vacancy" asp-area="Vacancies">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Удаление вакансии</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input value="@Model" name="id" type="hidden" />
+            Вы действительно хотите вакансию?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            <button type="submit" class="btn btn-danger">Удалить</button>
+        </div>
+    </form>
+</div>

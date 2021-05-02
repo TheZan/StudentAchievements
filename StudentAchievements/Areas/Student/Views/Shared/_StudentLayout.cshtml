@@ -26,6 +26,9 @@
                     <li class="nav-item @ViewBag.FeedbackSelected">
                         <a class="nav-link" asp-controller="Message" asp-action="Index">Сообщения <span style="visibility: hidden;" id="unreadMessageCount" class="badge badge-primary"></span></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="Vacancies" asp-controller="Vacancy" asp-action="Index">Вакансии</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">

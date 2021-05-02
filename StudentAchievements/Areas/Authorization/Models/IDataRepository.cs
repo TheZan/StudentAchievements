@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using StudentAchievements.Areas.Admin.Models.ViewModels;
 using System.Threading.Tasks;
+using StudentAchievements.Areas.Vacancies.Models;
 
 namespace StudentAchievements.Areas.Authorization.Models
 {
@@ -13,6 +14,7 @@ namespace StudentAchievements.Areas.Authorization.Models
         IQueryable<Score> Scores { get; }
         IQueryable<Achievement> Achievements { get; }
         IQueryable<Assessment> Assessments { get; }
+        IQueryable<Vacancy> Vacancies { get; }
 
         Task<bool> AddDepartment(Department department);
         Task<bool> EditDepartment(Department department);
@@ -41,5 +43,9 @@ namespace StudentAchievements.Areas.Authorization.Models
         Task<bool> AddAssessment(Assessment assessment);
         Task<bool> EditAssessment(Assessment assessment);
         Task<bool> DeleteAssessment(Assessment assessment);
+
+        Task<bool> AddVacancy(Vacancy vacancy);
+        Task<bool> EditVacancy(Vacancy vacancy);
+        Task<bool> DeleteVacancy(Vacancy vacancy);
     }
 }

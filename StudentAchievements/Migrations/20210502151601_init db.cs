@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace StudentAchievements.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class initdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -365,6 +365,31 @@ namespace StudentAchievements.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Vacancies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Salary = table.Column<decimal>(type: "numeric", nullable: false),
+                    Experience = table.Column<string>(type: "text", nullable: true),
+                    WorkType = table.Column<string>(type: "text", nullable: true),
+                    WorkSchedule = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: true),
+                    EmployerId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vacancies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vacancies_Employers_EmployerId",
+                        column: x => x.EmployerId,
+                        principalTable: "Employers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
@@ -634,6 +659,11 @@ namespace StudentAchievements.Migrations
                 name: "IX_Teachers_UserId",
                 table: "Teachers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vacancies_EmployerId",
+                table: "Vacancies",
+                column: "EmployerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -663,13 +693,13 @@ namespace StudentAchievements.Migrations
                 name: "Assessments");
 
             migrationBuilder.DropTable(
-                name: "Employers");
-
-            migrationBuilder.DropTable(
                 name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "Teachers");
+
+            migrationBuilder.DropTable(
+                name: "Vacancies");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -685,6 +715,9 @@ namespace StudentAchievements.Migrations
 
             migrationBuilder.DropTable(
                 name: "Chats");
+
+            migrationBuilder.DropTable(
+                name: "Employers");
 
             migrationBuilder.DropTable(
                 name: "FormEducations");

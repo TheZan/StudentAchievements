@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StudentAchievements.Areas.Authorization.Models;
 using StudentAchievements.Areas.Message.Models;
+using StudentAchievements.Areas.Vacancies.Models;
 
 namespace StudentAchievements.Models
 {
@@ -34,5 +35,6 @@ namespace StudentAchievements.Models
         public DbSet<Score> Scores { get; set; }
         public DbSet<Chat> Chats { get;set; }
         public DbSet<Message> Messages { get;set; }
+        public DbSet<Vacancy> Vacancies { get;set; }
     }
 }
