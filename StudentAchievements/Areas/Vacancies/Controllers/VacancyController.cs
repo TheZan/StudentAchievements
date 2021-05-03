@@ -17,7 +17,7 @@ using StudentAchievements.Areas.Vacancies.Models.ViewModels;
 namespace StudentAchievements.Areas.Vacancies.Controllers
 {
     [Area("Vacancies")]
-    [Authorize(Roles = "Employer, Student")]
+    [Authorize(Roles = "Employer, Student, Admin")]
     public class VacancyController : Controller
     {
         private IDataRepository dataRepository;
@@ -130,24 +130,28 @@ namespace StudentAchievements.Areas.Vacancies.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer, Admin")]
         public IActionResult ShowRemoveVacancy(int id) => PartialView("DeleteVacancy", id);
 
         [HttpPost]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer, Admin")]
         public async Task<IActionResult> RemoveVacancy(int id)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var vacancy = await dataRepository.Vacancies.FirstOrDefaultAsync(p => p.Id == id);
                 await dataRepository.DeleteVacancy(vacancy);
             }
+            if (User.IsInRole("Employer"))
+            {
+                return RedirectToAction("GetMyVacancy");
+            }
 
-            return RedirectToAction("GetMyVacancy");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer, Admin")]
         public async Task<IActionResult> EditVacancy(int id)
         {
             var vacancy = await dataRepository.Vacancies.FirstOrDefaultAsync(p => p.Id == id);
@@ -166,7 +170,7 @@ namespace StudentAchievements.Areas.Vacancies.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer, Admin")]
         public async Task<IActionResult> EditVacancy(EditVacancyViewModel model)
         {
             if (ModelState.IsValid)
@@ -182,7 +186,12 @@ namespace StudentAchievements.Areas.Vacancies.Controllers
                 await context.SaveChangesAsync();
             }
 
-            return RedirectToAction("GetMyVacancy");
+            if (User.IsInRole("Employer"))
+            {
+                return RedirectToAction("GetMyVacancy");
+            }
+
+            return RedirectToAction("Index");
         }
 
         [Authorize(Roles = "Student")]
@@ -197,6 +206,20 @@ namespace StudentAchievements.Areas.Vacancies.Controllers
             await messenger.SendMessage(userOne, userTwo, message);
 
             return RedirectToAction("Index", "Message");
+        }
+
+        public IActionResult Back()
+        {
+            if (User.IsInRole("Employer"))
+            {
+                return RedirectToAction("Index", "Employer", new { area = "Employer" });
+            }
+            else if (User.IsInRole("Student"))
+            {
+                return RedirectToAction("Index", "Student", new { area = "Student" });
+            }
+
+            return RedirectToAction("Index", "Admin", new { area = "Admin" });
         }
     }
 }
