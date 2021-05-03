@@ -45,8 +45,10 @@ namespace StudentAchievements.Areas.Vacancies.Controllers
             var vacancies = dataRepository.Vacancies;
             if (!String.IsNullOrEmpty(searchString))
             {
-                vacancies = vacancies.Where(s => s.Name.Contains(searchString)
-                                       || s.Content.Contains(searchString));
+                searchString = searchString.ToLower();
+
+                vacancies = vacancies.Where(s => s.Name.ToLower().Contains(searchString)
+                                       || s.Content.ToLower().Contains(searchString));
             }
 
             int pageSize = 10;
@@ -84,8 +86,10 @@ namespace StudentAchievements.Areas.Vacancies.Controllers
                 var vacancies = dataRepository.Vacancies.Where(e => e.EmployerId == employer.Id);
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    vacancies = vacancies.Where(s => s.Name.Contains(searchString)
-                                           || s.Content.Contains(searchString));
+                    searchString = searchString.ToLower();
+
+                    vacancies = vacancies.Where(s => s.Name.ToLower().Contains(searchString)
+                                           || s.Content.ToLower().Contains(searchString));
                 }
 
                 int pageSize = 10;

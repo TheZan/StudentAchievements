@@ -69,13 +69,17 @@ namespace StudentAchievements.Areas.Employer.Controllers
                                                                                                                         .Include(a => a.Assessments)
                                                                                                                         .ThenInclude(s => s.Score);
 
-             
+
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                searchStudents = searchStudents.Where(s => s.User.Name.Contains(searchString)
-                                       || s.User.Email.Contains(searchString)
-                                       || s.Group.Direction.Name.Contains(searchString));
+                searchString = searchString.ToLower();
+                
+                searchStudents = searchStudents.Where(s => s.User.Name.ToLower().Contains(searchString)
+                                       || s.User.Email.ToLower().Contains(searchString)
+                                       || s.Group.Direction.Name.ToLower().Contains(searchString)
+                                       || s.Achievements.Where(p => p.Name.ToLower().Contains(searchString)
+                                       || p.Description.ToLower().Contains(searchString)).Any());
             }
 
             switch (sortOrder)
@@ -122,7 +126,7 @@ namespace StudentAchievements.Areas.Employer.Controllers
 
             var studentList = await PaginatedList<StudentAchievements.Areas.Authorization.Models.Student>.CreateAsync(searchStudents.AsNoTracking(), pageNumber ?? 1, pageSize);
 
-            var model = new StudentListViewModel(){ Students = studentList };
+            var model = new StudentListViewModel() { Students = studentList };
 
             return View(model);
         }
@@ -158,9 +162,9 @@ namespace StudentAchievements.Areas.Employer.Controllers
                     {
                         ReceiverId = student.User.Id,
                         SenderId = employer.Id
-                    } 
+                    }
                 });
-            } 
+            }
 
             return StatusCode(StatusCodes.Status404NotFound);
         }
@@ -174,7 +178,7 @@ namespace StudentAchievements.Areas.Employer.Controllers
             var student = await userRepository.Students.FirstOrDefaultAsync(p => p.User == userOne);
 
             await messenger.SendMessage(userOne, userTwo, model.Message);
-            
+
             return RedirectToAction("ViewStudentProfile", new { id = student.Id });
         }
 
@@ -182,8 +186,8 @@ namespace StudentAchievements.Areas.Employer.Controllers
         public async Task<IActionResult> EditProfile()
         {
             var currentUser = await userRepository.Employers.Include(p => p.User).FirstOrDefaultAsync(p => p.User.Email == User.Identity.Name);
-            
-            if(currentUser != null)
+
+            if (currentUser != null)
             {
                 var model = new EmployerSettingsViewModel()
                 {
